@@ -1,0 +1,226 @@
+/* reset css */
+html, body, p, h1, h2, h3, h4, h5, h6,
+ul, li, ol, dl, dd, dt,
+form, fieldset, legend, img {
+    margin  : 0;
+    padding : 0;
+}
+section, article, nav, header, footer { display : block; }
+address, caption, cite, code, dfn, th, var,i,em {
+    font-style  : normal;
+    font-weight : normal;
+}
+table,tr,td{
+  padding: 0;
+}
+em, i { font-weight : normal; }
+table         { border-collapse : collapse;  border-spacing: 0;}
+fieldset, img { border : none; }
+ul, ol        { list-style : none; }
+select, input { vertical-align : middle; outline : none; }
+h1, h2, h3, h4, h5, strong, em { font-weight : normal; }
+h1,h2{font-size: 1.5em;}
+h3{font-size: 1.17em;}
+h4,h5,h6{font-size: 1em;}
+select, input, textarea {
+    font-size   : 100%;
+    margin      : 0;
+    padding     : 0;
+    outline     : none;
+    font-family : arial, sans-serif;
+}
+textarea {
+    resize   : none;
+    overflow : auto;
+    word-break : break-all;
+    word-wrap  : break-word;
+}
+body {
+    color : #000;
+    font: 14px/20px arial,STHeiti,simsun,sans-serif;
+    overflow-x: hidden;
+}
+
+a:link, a:visited , a:hover , a:active {
+  text-decoration: none;
+  color: inherit;
+}
+::-moz-selection{background:#ed1b23; color:#fff;}
+::selection {background:#ed1b23; color:#fff;}
+a:focus {
+    outline : none;
+}
+a {
+  color: inherit;
+  *color: #909090;
+}
+.clearfix {
+    *zoom : 1;
+}
+.clearfix::after {
+    content : ' ';
+    display : block;
+    clear   : both;
+    height  : 0;
+}
+.fr {float:right;}
+.fl {float:left;}
+
+/* loading css */
+.lpn-mask{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  z-index: 3000000;
+  text-align : center;
+  white-space: nowrap;
+  _position : absolute;
+  _top  : expression( ( ignoreMe  = document.documentElement.scrollTop  ) + 'px' );
+  _left : expression( ( ignoreMe2 = document.documentElement.scrollLeft ) + 'px' );
+}
+span.lpn-ghost {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em;
+}
+.lpn-panel {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 4px;
+  border-radius: 4px;
+  white-space: normal;
+}
+.lpn-content{
+  display: inline-block;
+}
+#loading-mask{
+  background : #dfdfdf url('../images/loading-bg.png') no-repeat center center;
+}
+#loading-mask .lpn-panel{
+  padding: 30px 0;
+  width: 100%;
+}
+.process-wrap{
+  height: 2px;
+  background: #aaa;
+}
+#process-bar{
+  height:2px;font-size:0px;line-height:0px;background:red;
+  width:0;
+}
+#process-num{
+  color: red;
+  text-align: center;
+}
+
+/*---> main bg  */
+.main-bg .bg{
+  position: absolute;
+  bottom: 256px;
+}
+.main-bg .road{
+  position: absolute;
+  bottom: 0;
+}
+/*---> main logo  */
+.main-logo{
+  position: absolute;
+  top: 17px;
+  left: 0;
+}
+.main-com-logo{
+  position: absolute;
+  top: 17px;
+  right: 15px;
+}
+/*---> */
+
+.main-board{
+  background: url('../images/p-bg.png') no-repeat;
+  width: 686px;
+  height: 102px;
+  position: absolute;
+  bottom: 45px;
+  left: 50%;
+  margin-left: -343px;
+  color: #999;
+}
+
+.main-board .board-l{
+  position: absolute;
+  width: 130px;
+  height: 70px;
+  top: 17px;
+  left: 44px;
+  opacity: 0.5;
+  background: blue;
+}
+.main-board .board-m-t{
+  position: absolute;
+  left: 279px;
+  top: 20px;
+  width: 267px;
+  height: 25px;
+  opacity: 0.5;
+  background: blue;
+}
+.main-board .board-m-t .b-bar{
+  height: 4px;
+  width: 88%;
+  top: 50%;
+  position: absolute;
+  background: red;
+  margin-top: -2px;
+  left: 6%;
+}
+.main-board .board-m-t .b-car,
+.main-board .board-m-t .b-robot
+{
+  width: 5px;
+  height: 10px;
+  background: green;
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  margin-top: -5px;
+}
+.main-board .board-m-t .b-robot{
+  left: 200px;
+}
+.main-board .board-m-b{
+  position: absolute;
+  left: 269px;
+  top: 53px;
+  width: 267px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  opacity: 0.5;
+  background: blue;
+}
+.main-board .board-m-b a{
+  margin: 0 15px;
+}
+
+.main-board .board-r{
+  position: absolute;
+  height: 57px;
+  top: 22px;
+  width: 84px;
+  right: 54px;
+  line-height: 90px;
+  text-indent: 1.5em;
+  opacity: 0.5;
+  background: blue;
+}
+
+.video-wrap{
+  width: 775px;
+  height: 460px;
+  margin-top: -30px;
+  background: url(../images/video-bg.png) no-repeat;
+}

@@ -1,0 +1,27 @@
+body {
+    color : #000;
+    font: 14px/20px simhei,arial,STHeiti,sans-serif;
+    overflow-x: hidden;
+}
+
+header nav a#t_nav5 {width:60px;}
+header nav a span {display:block;text-indent:-999em;background:url(../images/nav_ie.gif) no-repeat;}
+header nav a#t_nav1 span {width:27px;background-position:-14px 0;}
+header nav a#t_nav2 span {width:55px;background-position:-84px 0;opacity:0.5;filter:alpha(opacity=50)}
+header nav a#t_nav3 span {width:55px;background-position:-169px 0;opacity:0.5;filter:alpha(opacity=50)}
+header nav a#t_nav4 span {width:55px;background-position:-258px 0;}
+header nav a#t_nav5 span {width:55px;background-position:-345px 0;}
+
+
+header nav a#t_nav1:hover span {background-position:-14px -40px;}
+/*header nav a#t_nav2:hover span {width:55px;background-position:-84px -40px;}
+header nav a#t_nav3:hover span {width:55px;background-position:-169px -40px;}*/
+header nav a#t_nav4:hover span {background-position:-258px -40px;}
+header nav a#t_nav5:hover span {background-position:-345px -40px;}
+
+
+header nav a#t_nav1.menu-home-sel span {background-position:-14px -40px;}
+header nav a#t_nav2.menu-sel span {background-position:-84px -40px;}
+header nav a#t_nav3.menu-sel span {background-position:-169px -40px;}
+header nav a#t_nav4.menu-sel span {background-position:-258px -40px;}
+header nav a#t_nav5.menu-sel span {background-position:-345px -40px;}
