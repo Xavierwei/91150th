@@ -126,7 +126,7 @@ define(function( require , exports , model ){
         speed       : 0
         , duration  : 2000
         , animate   : null
-        , callback  : null
+        , speedCallBack  : null
         , distance  : 0
     }
 
@@ -190,25 +190,110 @@ define(function( require , exports , model ){
         clearInterval( _caTimer );
     }
 
+    var M = require('../app/motion-blur');
+
     var gameStatus = 0;
     var GAME_PLAYING = 1;
     var GAME_PAUSE = 2;
     var GAME_OVER = 3;
 
+
+    var $counter = $('#counter');
+    var $startBtn = $('#start-btn')
+        .click(function(){
+            var t = this;
+            var i = 0;
+            // motion blur
+            new Animate( [ 0 ] , [ 140 ] , 300 , '' , function( arr ){
+                M.motionBlur( t , ~~arr[ 0 ] );
+                i++;
+                $(t).css('opacity', Math.pow(1/i, 1/4));
+            } , function(){
+                // hide start btn
+                $(t).hide();
+                ready();
+            } );
+        });
+    var counter = function( callback ){
+        var $nums = $counter.find('.num');
+        var len = $nums.length - 1;
+        var showNum = function( ){
+            if( len == 0 ) {
+                // TODO start the game
+                callback && callback();
+                return;
+            };
+            var $t = $nums.eq( len-- )
+                .fadeIn();
+            setTimeout( function(){
+                new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
+                    M.motionBlur( $t[0] , ~~arr[ 0 ] );
+                } , function(){
+                    $t.hide();
+                    showNum();
+                });
+            } , 800 );
+        }
+
+        showNum();
+    }
+
+    var setConfig = function( cfg ){
+        extend( status , cfg );
+    }
+    // ready for game , at this status , you should do follow list:
+    // 1.reset cars position
+    // 2.counter the seconds
+    // 3.driver car to the right position
+    var ready = function( cfg ){
+        // 2.counter the seconds
+        // show counter btn
+        $counter.show();
+        // add shake effect to mouse
+        $counter.find('.c-mouse')
+            .addClass('shake');
+
+        var $cbg = $counter.find('.c-bg');
+
+        M.motionBlur( $cbg[0] , 140 );
+        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
+            M.motionBlur( $cbg[0] , ~~arr[ 0 ] );
+        } , function(){
+            $cbg.attr('src' , $cbg.attr('osrc'));
+            // counter nums
+            counter( start );
+        });
+
+        // 1. reset cars
+        var $cars = $('.main-cars img')
+            .each(function(){
+                $(this)
+                    .css('left' , - $(this).width())
+                    .animate({
+                        left : 0
+                    } , 1000 + 1000 * Math.random() , '' , function(){
+
+                    });
+            });
+    }
     // export interface
     var start = function( cfg ){
-        extend( status , cfg );
         // add event listener
         document.addEventListener('mousemove' , mousemoveEvent , false);
         // speed exchange fn
-        speedExchange( cfg.callback );
+        speedExchange( status.speedCallBack );
         // change status
         gameStatus = GAME_PLAYING;
     }
     var play = function(){
         if( gameStatus == GAME_PLAYING ) return;
         lastPostion = null;
-        start();
+        // add event listener
+        document.addEventListener('mousemove' , mousemoveEvent , false);
+        // speed exchange fn
+        speedExchange( status.speedCallBack );
+        // change status
+        gameStatus = GAME_PLAYING;
     }
 
     var pause = function(){
@@ -222,7 +307,8 @@ define(function( require , exports , model ){
     }
 
     extend( exports , {
-        start   : start
+        setConfig : setConfig
+        , start   : start
         , play  : play
         , pause : pause
         , over  : over

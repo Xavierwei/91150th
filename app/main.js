@@ -56,10 +56,19 @@ define(function(require, exports, module) {
         }
     };
 
-    $loadingBar = processBar( $('#process-bar') , $('#process-num') )
+    // loading bar
+    var $loadingBar = processBar( $('#process-bar') , $('#process-num') )
         .start();
 
+    // disabled contextmenu
+    $(document).contextmenu(function(){return false;});
 
-
+    var game = require('../app/game');
+    game.setConfig({
+        duration  : 2000
+        , speedCallBack  : function( speed ){
+            $('.board-l').html( speed );
+        }
+    });
 
 });

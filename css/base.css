@@ -129,11 +129,13 @@ span.lpn-ghost {
 /*---> main logo  */
 .main-logo{
   position: absolute;
+  z-index: 99999;
   top: 17px;
   left: 0;
 }
 .main-com-logo{
   position: absolute;
+  z-index: 99999;
   top: 17px;
   right: 15px;
 }
@@ -144,6 +146,7 @@ span.lpn-ghost {
   width: 686px;
   height: 102px;
   position: absolute;
+  z-index: 9999;
   bottom: 45px;
   left: 50%;
   margin-left: -343px;
@@ -218,6 +221,78 @@ span.lpn-ghost {
   color: #C2C2C2;
   left: 20px;
 }
+.main-cars img{
+  position: absolute;
+  bottom: 0;
+  right: 100%;
+}
+
+/*  main -metas */
+@-webkit-keyframes shake{
+    0% {
+        margin-left: 0px;
+        opacity: 1;
+    }
+    25%{
+        margin-left: -100px;
+        opacity: 0.5;
+    }
+    75%{
+        margin-left: 100px;
+        opacity: 0.5;
+    }
+    100%{
+        margin-left: 0px;
+    }
+}
+.main-metas{
+  position: absolute;
+  width: 500px;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  margin-left: -250px;
+  margin-top: -112px;
+  text-align: center;
+}
+.main-metas .start{
+  cursor: pointer;
+}
+.main-metas .counter{
+  display: none;
+  margin-top: -40px;
+}
+.main-metas .c-mouse{
+  margin-top: -25px;
+}
+.shake {
+            -webkit-animation-name: shake;
+        -webkit-animation-duration: 0.2s;
+ -webkit-animation-iteration-count: 4;
+ -webkit-animation-timing-function: linear;
+        -moz-animation-name: shake;
+        -moz-animation-duration: 0.2s;
+ -moz-animation-iteration-count: 4;
+ -moz-animation-timing-function: linear;
+        -ms-animation-name: shake;
+        -ms-animation-duration: 0.2s;
+ -ms-animation-iteration-count: 4;
+ -ms-animation-timing-function: linear;
+        -o-animation-name: shake;
+        -o-animation-duration: 0.2s;
+ -o-animation-iteration-count: 4;
+ -o-animation-timing-function: linear;
+}
+.main-metas .num{
+  display: none;
+  position: absolute;
+  top: -11px;
+  left: 242px;
+}
+
+
+
+
 .video-mask{
   background: rgba( 0 , 0 , 0 , 0.3 );
 }
