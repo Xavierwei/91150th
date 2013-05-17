@@ -63,12 +63,102 @@ define(function(require, exports, module) {
     // disabled contextmenu
     $(document).contextmenu(function(){return false;});
 
+    // game logic application
     var game = require('../app/game');
+    var M = require('../app/motion-blur');
+    var A = require('../src/Animate');
+    var Animate = A.Animate;
+    var lastSpeed = 0;
     game.setConfig({
         duration  : 2000
         , speedCallBack  : function( speed ){
-            $('.board-l').html( speed );
+            if( lastSpeed != speed ){
+                $('.board-l').html( speed );
+                lastSpeed = speed;
+            }
         }
     });
 
+    var counter = function( callback ){
+        var $nums = $counter.find('.num');
+        var len = $nums.length - 1;
+        ~(function showNum( ){
+            if( len == 0 ) {
+                // hide the counter panel
+                $counter.fadeOut();
+                game.start();
+                return;
+            }
+            var $t = $nums.eq( len-- )
+                .fadeIn();
+            setTimeout( function(){
+                new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
+                    M.motionBlur( $t[0] , ~~arr[ 0 ] );
+                } , function(){
+                    $t.hide();
+                    showNum();
+                });
+            } , 800 );
+        })();
+    }
+    // ready for game , at this status , you should do follow list:
+    // 1.reset cars position
+    // 2.counter the seconds
+    // 3.driver car to the right position
+    var ready = function(  ){
+        // 1. reset cars
+        var $cars = $('.main-cars .car')
+            .each(function(){
+                // 3.driver car to the right position
+                $(this)
+                    .css('left' , - $(this).width())
+                    .animate({
+                        left : 0
+                    } , 1000 + 1000 * Math.random() , '' , function(){
+
+                    });
+            });
+        // 2.counter the seconds
+        // show counter btn
+        $counter.show();
+        // add shake effect to mouse
+        $counter.find('.c-mouse')
+            .addClass('shake');
+
+        var $cbg = $counter.find('.c-bg');
+
+        M.motionBlur( $cbg[0] , 140 );
+        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
+            M.motionBlur( $cbg[0] , ~~arr[ 0 ] );
+        } , function(){
+            $cbg.attr('src' , $cbg.attr('osrc'));
+            // counter nums
+            counter();
+        });
+    }
+
+    var $counter = $('#counter');
+    var $startBtn = $('#start-btn')
+        .click(function(){
+            var t = this;
+            var i = 0;
+            // motion blur
+            new Animate( [ 0 ] , [ 140 ] , 300 , '' , function( arr ){
+                M.motionBlur( t , ~~arr[ 0 ] );
+                i++;
+                $(t).css( 'opacity' , Math.pow( 1 / i , 1 / 4 ) );
+            } , function(){
+                // hide start btn
+                $(t).hide();
+                ready();
+            } );
+        });
+
+    // click share btn to pause the game
+    var i = 0;
+    $('#share-btn')
+        .click(function(){
+            i++;
+            game[ i % 2 ? 'play' : 'pause' ]();
+        });
 });
