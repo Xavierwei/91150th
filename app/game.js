@@ -121,7 +121,8 @@ define(function( require , exports , model ){
                         });
                     }
                     // count robot
-                    var tmp = 0.5 + Math.random() * 0.5;
+
+                    var tmp = _caTimes > 20 ? 0.4 + Math.random() * 0.4 : 2;
                     if( _robotAnimate ){
                         _robotAnimate.turnTo( [ tmp * config.maxSpeed ] );
                     } else {

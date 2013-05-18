@@ -92,7 +92,7 @@ define(function(require, exports, module) {
     var winWidth = $( window ).width();
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
-    var p , l ;
+    var p1 , p2 , p , l ;
 
     game.setConfig({
         duration  : 2000
@@ -115,14 +115,15 @@ define(function(require, exports, module) {
                 */
 
             // TODO.. move bg
-            $bg[0].style.marginLeft = - status.distance / 3 + 'px';
+            $bg[0].style.marginLeft = - status.distance / 3 % 500 + 'px';
             /*stop( true , false )
                 .animate({
                     marginLeft: - status.distance / 20
                 });
             */
             // change car dot position
-            $carDot.css('left' , 6 + status.speed / GAME_MAX_SPEED * 12 + '%');
+            p1 = 6 + status.speed / GAME_MAX_SPEED * 12;
+            $carDot.css('left' , p1 + '%');
 
             // .. motion road ,
             motionValue = ~~ ( status.speed / 20 ) * 5 ;
@@ -142,13 +143,14 @@ define(function(require, exports, module) {
              //.. judge if game over
             if( status.gameStatus != 3 ){
                 p = ( status.robotDistance - status.distance ) / GAME_MAX_DISTANCE;
+                p2 = p1 + p * 88 ;
                 // change robot car position
                 $cars.eq(1)
                     .css({
-                        left: p * 4 * winWidth
+                        left: p * 10 * winWidth
                     });
                 // change robot dot position
-                $robotDot.css('left' , 6 + p * 88 + '%' );
+                $robotDot.css('left' , p2 + '%' );
                 //TODO.. change bar background
 
                 // show time
@@ -265,8 +267,8 @@ define(function(require, exports, module) {
             .hide();
         // TODO ..5. reset bar
 
-        // TODO ..6. reset road
-
+        // reset road
+        M.motionBlur( $road[0] ,  0  , 0 , true );
         // reset board
         $speedBoard.html('000');
         $timeBoard.html('00:00:0');
