@@ -36,11 +36,10 @@
  </head>
  <body>
     <!---// loading start -->
-    <section id="loading-mask" style="display:none;" class="lpn-mask">
+    <section id="loading-mask" class="lpn-mask">
       <span class="lpn-ghost"></span>
       <div class="lpn-panel">
         <div class="lpn-content">
-          <img src="images/logo.png" /><br/>
           <img style="margin-top:30px;" src="images/com-logo.png" />
           <div class="process-wrap">
             <div id="process-bar"></div>
@@ -49,7 +48,7 @@
         </div>
       </div>
     </section>
-    <section id="video-mask" style="display:none;" class="video-mask lpn-mask">
+    <section id="video-mask" class="video-mask lpn-mask">
       <span class="lpn-ghost"></span>
       <div class="lpn-panel">
         <div class="video-wrap">
@@ -62,21 +61,22 @@
     <!---// moving start -->
     <section class="main">
       <div class="main-bg">
+        <span id="fps" style="position:absolute;top:0;left:0;color:yellow;z-index:9999999999;">fps: 0</span>
         <img src="images/bg.jpg" class="bg" />
-        <img src="images/road.jpg" class="road" />
+        <img src="images/road.jpg" class="road" id="road" />
       </div>
       <div class="main-top">
         <img class="main-logo" src="images/m-logo.png" />
         <img class="main-com-logo" src="images/m-com-logo.png" />
       </div>
       <div class="main-board">
-        <div class="board-l">000</div>
+        <div class="board-l" id="speed-board">000</div>
         <div class="board-m-t">
           <div class="b-bar">
 
           </div>
-          <div class="b-car"></div>
-          <div class="b-robot"></div>
+          <div class="b-car" id="car-dot"></div>
+          <div class="b-robot" id="robot-dot"></div>
         </div>
         <div class="board-m-b">
           <a href="">保时捷911境界</a><a href="">保时捷官网</a>
@@ -96,9 +96,6 @@
           <img class="c-bg" src="images/ready.png" alt="" />
           <img class="c-mouse" src="images/mouse-show.png" alt="" />
 
-          <img class="num" src="images/c5.png" alt="" />
-          <img class="num" src="images/c5.png" alt="" />
-          <img class="num" src="images/c5.png" alt="" />
           <img class="num" src="images/c5.png" alt="" />
           <img class="num" src="images/c5.png" alt="" />
         </div>

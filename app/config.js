@@ -20,6 +20,10 @@ seajs.config({
         src: '../../src/jquery-plugin/validate/jquery.validate',
         deps: ['jquery']
     }
+    ,'jquery.queryloader' :{
+        src: '../../src/jquery-plugin/jquery.queryloader2',
+        deps: ['jquery']
+    }
     ,'jquery.ani' : {
         src: '../../src/jquery-plugin/ani/ani',
         deps: ['jquery.easing']

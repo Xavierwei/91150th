@@ -16,9 +16,10 @@ define(function( require , exports , model ){
     var config = {
         // time for reduce speed
         duration  : 2000
-        // time for speed up to MAX_SPEED
+        // time for speed up to config.maxSpeed
         , speedUpDuration : 10000
         , speedCallBack  : null
+        , maxSpeed : 400
     }
     // save the game status
     // so that , user can pause the game ,
@@ -69,40 +70,60 @@ define(function( require , exports , model ){
         // last detect distance of the mouse
         var _caLastDis = _caDis.concat([]);
         var _caSpeeds = 0;
-        var MAX_SPEED = 400;
         var _disDuration = 7 / 1000;
         var _winWdth = window.innerWidth;
         var _animate = null;
         var _robotAnimate = null;
+
         var speedExchange = function( cb ){
-            _caTimer = setInterval(function(){
+            // for debug
+            var fpsStartTime = +new Date();
+            var fpsTimes = 0;
+            var $fp = $('#fps');
+            _caTimer = setTimeout(function(){
                 _caTimes++;
-                var spx = ( _caDis[0] - _caLastDis[0] );
-                var spy = ( _caDis[1] - _caLastDis[1] );
+                var spx =  _caDis[0] - _caLastDis[0] ;
+                var spy =  _caDis[1] - _caLastDis[1] ;
                 var speed = Math.round( Math.sqrt(spx * spx + spy * spy) ) / _winWdth;
 
+                // for debug
+                var lastSpeed = 0;
                 _caSpeeds += speed;
                 if( _caTimes % _caCollectTimes == 0 ){
                     var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
 
                     if( _animate ){
-                        //status.animate.duration =  mouseSpeed * MAX_SPEED > status.speed ?
+                        //status.animate.duration =  mouseSpeed * config.maxSpeed > status.speed ?
                          //   status.speedUpDuration * mouseSpeed  : status.duration;
-                        _animate.turnTo( [ mouseSpeed * MAX_SPEED ] );
+                         console.log( 'turn to ' + mouseSpeed * config.maxSpeed );
+                        _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
                     } else {
-                        _animate = new Animate( [0] , [ mouseSpeed * MAX_SPEED ] , config.duration , '' , function(arr){
+                        _animate = new Animate( [0] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){
+                            ////////////////////////////// for debug
+                            fpsTimes++;
+                            if( new Date() - fpsStartTime > 1000 ){
+                                $fp.html('fps:' + fpsTimes );
+                                fpsStartTime = new Date();
+                                fpsTimes = 0;
+                            }
+
+                            ////////////////////////////// for debug
                             status.speed = ~~arr[0];
                             // count the distance of car
                             status.distance += status.speed * _disDuration;
-                            cb && cb( status.speed );
+                            if( status.speed - lastSpeed > 40 ){
+                                debugger;
+                            }
+                            lastSpeed = status.speed;
+                            cb && cb( status );
                         });
                     }
                     // count robot
                     var tmp = 0.6 + Math.random() * 0.4;
                     if( _robotAnimate ){
-                        _robotAnimate.turnTo( [ tmp * MAX_SPEED ] );
+                        _robotAnimate.turnTo( [ tmp * config.maxSpeed ] );
                     } else {
-                        _robotAnimate = new Animate( [0] , [ tmp * MAX_SPEED ] , config.duration , '' , function(arr){
+                        _robotAnimate = new Animate( [10] , [ tmp * config.maxSpeed ] , config.duration / 2 , '' , function(arr){
                             status.robotSpeed = ~~arr[0];
                             // count the distance of car
                             status.robotDistance += status.robotSpeed * _disDuration;
@@ -112,16 +133,15 @@ define(function( require , exports , model ){
                 }
 
                 _caLastDis = _caDis.concat([]);
+
+                _caTimer = setTimeout( arguments.callee , _caDur );
             } , _caDur);
         }
 
         var stopSpeedExchange = function(){
-            clearInterval( _caTimer );
+            clearTimeout( _caTimer );
             _animate.pause();
             _robotAnimate.pause();
-
-            // console.log status
-            console.log( status );
         }
 
         return {
@@ -156,6 +176,10 @@ define(function( require , exports , model ){
         // change status
         status.gameStatus = GAME_PLAYING;
     }
+    // set game starttime value
+    // bind mousemove event listener
+    // set interval to count the car speed
+    // change game status
     var play = function(){
         if( status.gameStatus == GAME_PLAYING ) return;
         if( status.gameStatus == GAME_PAUSE ){
@@ -169,6 +193,10 @@ define(function( require , exports , model ){
         status.gameStatus = GAME_PLAYING;
     }
 
+    // count the game time
+    // change game status to GAME_PAUSE
+    // pause all animate , timeout and interval
+    // remove the mousemove event listener
     var pause = function(){
         if( status.gameStatus != GAME_PLAYING )
             return;
@@ -178,20 +206,39 @@ define(function( require , exports , model ){
         speedExchange.stop();
         document.removeEventListener('mousemove' , speedExchange.move , false);
     }
-    var over = function(){
+    // game over , remove mousemove event listener
+    // set game status to GAME_OVER
+    // count the game time
+    var over = function(){return;
         if( status.gameStatus != GAME_PLAYING ){
             return;
         }
         status.time += + new Date() - status.startTime;
         status.gameStatus = GAME_OVER;
+        speedExchange.stop();
         document.removeEventListener('mousemove' , speedExchange.move , false);
+    }
+    // delete all animate
+    // clear all setInterval
+    // clear all setTimeout
+    var reset = function(){
+        // reset status
+        extend( status  , {
+            speed       : 0
+            , robotSpeed: 0
+            , time      : 0
+            , distance  : 0
+            , startTime : 0
+            , robotDistance : 0
+            , gameStatus : 0
+        });
+        // pause all the animate , interval and timeout
+        speedExchange.stop();
     }
 
     extend( exports , {
         setConfig : setConfig
-        , getStatus: function(){
-            return status;
-        }
+        , reset   : reset
         , start   : start
         , play  : play
         , pause : pause

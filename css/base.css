@@ -74,7 +74,7 @@ a {
   width: 100%;
   height: 100%;
   bottom: 0;
-  z-index: 3000000;
+  z-index: 999999;
   text-align : center;
   white-space: nowrap;
   _position : absolute;
@@ -101,7 +101,8 @@ span.lpn-ghost {
   background : #dfdfdf url('../images/loading-bg.png') no-repeat center center;
 }
 #loading-mask .lpn-panel{
-  padding: 30px 0;
+  background: white;
+  padding: 90px 0;
   width: 100%;
 }
 .process-wrap{
@@ -122,7 +123,7 @@ span.lpn-ghost {
   position: absolute;
   bottom: 256px;
 }
-.main-bg .road{
+.main-bg .road , .main-bg #can-road{
   position: absolute;
   bottom: 0;
 }
@@ -182,17 +183,16 @@ span.lpn-ghost {
 .main-board .board-m-t .b-car,
 .main-board .board-m-t .b-robot
 {
+  display: none;
   width: 5px;
   height: 10px;
   background: green;
   position: absolute;
-  left: 30px;
+  left: 0px;
   top: 50%;
   margin-top: -5px;
 }
-.main-board .board-m-t .b-robot{
-  left: 200px;
-}
+
 .main-board .board-m-b{
   position: absolute;
   left: 269px;
@@ -296,6 +296,7 @@ span.lpn-ghost {
 
 .video-mask{
   background: rgba( 0 , 0 , 0 , 0.3 );
+  z-index: 999998;
 }
 .video-wrap{
   width: 775px;
