@@ -98,7 +98,6 @@ define(function( require , exports , model ){
                     if( _animate ){
                         //status.animate.duration =  mouseSpeed * config.maxSpeed > status.speed ?
                          //   status.speedUpDuration * mouseSpeed  : status.duration;
-                         console.log( 'turn to ' + mouseSpeed * config.maxSpeed );
                         _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
                     } else {
                         _animate = new Animate( [0] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){

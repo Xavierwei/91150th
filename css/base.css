@@ -45,8 +45,7 @@ a:link, a:visited , a:hover , a:active {
   text-decoration: none;
   color: inherit;
 }
-::-moz-selection{background:#ed1b23; color:#fff;}
-::selection {background:#ed1b23; color:#fff;}
+
 a:focus {
     outline : none;
 }

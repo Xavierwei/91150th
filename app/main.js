@@ -125,10 +125,11 @@ define(function(require, exports, module) {
             $carDot.css('left' , 6 + status.speed / GAME_MAX_SPEED * 12 + '%');
 
             // .. motion road ,
-            motionValue = ~~ (status.speed / 40 ) * 10;
+            motionValue = ~~ ( status.speed / 20 ) * 5 ;
             if( lastMotionValue != motionValue ){
 
-                //M.motionBlur( $road[0] , Math.min( motionValue + 3 , 73 ) , 0 , true );
+                M.motionBlur( $road[0] , status.speed == 0 ? 0 :
+                        Math.min( motionValue + 3 , 30 ) , 0 , true );
 
                 lastMotionValue = motionValue;
                 motionValue = 0;
@@ -307,12 +308,12 @@ define(function(require, exports, module) {
 
     // save road cache
     !(function(){
-        var motionStart = 3 , motionMax = 80 , motionStep = 10;
+        var motionStart = 3 , motionMax = 30 , motionStep = 3;
         var currMotion = motionStart;
         var $tmpNode = $road.clone();
         $tmpNode.load(function(){
-            if( currMotion + motionStep < motionMax )
-                M.motionBlur( this , currMotion , 0 );
+            if( currMotion + motionStep <= motionMax )
+                M.motionBlur( this , currMotion , 0 , false , true );
             currMotion += motionStep;
         });
     })();

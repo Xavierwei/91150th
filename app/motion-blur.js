@@ -86,9 +86,9 @@ define(function( require , exports , model ){
             img.addEventListener( 'load' , renderCanvasWidthAndHeight , false );
         }
         function renderCanvasWidthAndHeight( ){
-            img.style.display = 'none';
             canvas.width = img.width;
             canvas.height = img.height;
+            img.style.display = 'none';
         }
 
         cache[ canKey ] = canvas;
@@ -106,7 +106,7 @@ define(function( require , exports , model ){
 
 
     var cache = {};
-    exports.motionBlur = function( img , radius , offset , useCanvas ){
+    exports.motionBlur = function( img , radius , offset , useCanvas , onlyCache ){
         if( !isSupportCanvas ) return;
         // get image id
         var id = img.getAttribute('id');
@@ -133,8 +133,9 @@ define(function( require , exports , model ){
         var newData = ctx.createImageData( width , height );
 
         var callback = function(){
-
             cache[ pixCacheKey ] = newData;
+            // if onlyCache return directly
+            if( onlyCache ) return;
 
             ctx.putImageData( newData , 0 , 0 );
             if( useCanvas ){
@@ -142,9 +143,7 @@ define(function( require , exports , model ){
                 tCan.getContext('2d').putImageData( newData , 0 , 0 );
             } else {
                 img.setAttribute( 'osrc' , cache[ 'src-' + id ] );
-                console.time('~~~~~~');
                 img.setAttribute( 'src' , can.toDataURL() );
-                console.timeEnd('~~~~~~');
             }
         }
 
@@ -152,13 +151,9 @@ define(function( require , exports , model ){
         var pixCacheKey = [ 'pix' , radius  , offset , id ].join('-');
         if( cache[ pixCacheKey ] ){
             newData = cache[ pixCacheKey ];
-            console.log( 'get from cache "' + pixCacheKey + '"' );
-
             callback();
-
             return;
         }
-        console.log( 'get from motionBlur "' + pixCacheKey + '"' );
         // motion blur image
         motionBlur( pixData , newData , radius , offset , 0 , callback );
     }
