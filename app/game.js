@@ -76,10 +76,13 @@ define(function( require , exports , model ){
         var _robotAnimate = null;
 
         var speedExchange = function( cb ){
+            stopSpeedExchange();
+            status.robotDistance = 3;
             // for debug
             var fpsStartTime = +new Date();
             var fpsTimes = 0;
             var $fp = $('#fps');
+
             _caTimer = setTimeout(function(){
                 _caTimes++;
                 var spx =  _caDis[0] - _caLastDis[0] ;
@@ -119,7 +122,7 @@ define(function( require , exports , model ){
                         });
                     }
                     // count robot
-                    var tmp = 0.6 + Math.random() * 0.4;
+                    var tmp = 0.4 + Math.random() * 0.6;
                     if( _robotAnimate ){
                         _robotAnimate.turnTo( [ tmp * config.maxSpeed ] );
                     } else {
@@ -138,10 +141,16 @@ define(function( require , exports , model ){
             } , _caDur);
         }
 
-        var stopSpeedExchange = function(){
+        var stopSpeedExchange = function( ){
             clearTimeout( _caTimer );
-            _animate.pause();
-            _robotAnimate.pause();
+            if( _animate ){
+                _animate.pause();
+                _animate = null;
+            }
+            if( _robotAnimate ){
+                _robotAnimate.pause();
+                _robotAnimate = null;
+            }
         }
 
         return {
@@ -209,13 +218,13 @@ define(function( require , exports , model ){
     // game over , remove mousemove event listener
     // set game status to GAME_OVER
     // count the game time
-    var over = function(){return;
+    var over = function(){
         if( status.gameStatus != GAME_PLAYING ){
             return;
         }
         status.time += + new Date() - status.startTime;
         status.gameStatus = GAME_OVER;
-        speedExchange.stop();
+        // speedExchange.stop();
         document.removeEventListener('mousemove' , speedExchange.move , false);
     }
     // delete all animate

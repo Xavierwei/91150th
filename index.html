@@ -57,12 +57,27 @@
         <div class="video-skip">跳过</div>
       </div>
     </section>
+    <section id="result-mask" style="display:none;" class="result-mask lpn-mask">
+      <span class="lpn-ghost"></span>
+      <div class="lpn-panel">
+        <div class="result">
+          <div class="r-text">
+            本次游戏<br/>
+            时间 00:00:00<br/>
+            共计追逐距离 00000m
+          </div>
+          <div class="r-again"></div>
+          <div class="r-share"></div>
+          <div class="r-close"></div>
+        </div>
+      </div>
+    </section>
     <!--- \\ loading end -->
     <!---// moving start -->
     <section class="main">
       <div class="main-bg">
         <span id="fps" style="position:absolute;top:0;left:0;color:yellow;z-index:9999999999;">fps: 0</span>
-        <img src="images/bg.jpg" class="bg" />
+        <img src="images/bg.jpg" class="bg css-animate" id="bg" />
         <img src="images/road.jpg" class="road" id="road" />
       </div>
       <div class="main-top">
@@ -71,6 +86,7 @@
       </div>
       <div class="main-board">
         <div class="board-l" id="speed-board">000</div>
+        <div class="board-time" id="time-board">00:00:0</div>
         <div class="board-m-t">
           <div class="b-bar">
 
@@ -87,8 +103,8 @@
         <a href="">©2013保时捷中国 法律公告</a>
       </div>
       <div class="main-cars">
-        <div class="car"><img src="images/car.png" alt="" /></div>
-        <div style="bottom: -90px;" class="car"><img src="images/car.png" alt="" /></div>
+        <div class="car css-animate"><img src="images/car.png" alt="" /></div>
+        <div style="bottom: -90px;" class="car css-animate"><img src="images/car.png" alt="" /></div>
       </div>
       <div class="main-metas">
         <img class="start" id="start-btn" src="images/start.png" alt="" />

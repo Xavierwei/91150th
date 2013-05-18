@@ -51,6 +51,28 @@ define(function(require, exports, module) {
 
     }
 
+    var $resultPanel = $('#result-mask');
+    $resultPanel.find('.r-close')
+        .click(function(){
+            $resultPanel.animate({
+                top: '-100%'
+            } , 2000 , 'easeOutElastic' , function(){});
+        })
+        .end()
+        .find('.r-again')
+        .click(function(){
+            $resultPanel.animate({
+                top: '-100%'
+            } , 2000 , 'easeOutElastic' , function(){
+                //... go to ready status
+                $(this).css('top' , 0)
+                    .hide();
+
+            });
+            reset();
+        });
+    // TODO.. init share button
+
     // disabled contextmenu
     // $(document).contextmenu(function(){return false;});
 
@@ -85,50 +107,68 @@ define(function(require, exports, module) {
             //l = ~~ ( 200 * status.speed / GAME_MAX_SPEED / 10 ) * 10;
             // change car position
             $cars.eq(0)
-                .stop( true , false )
+                .css('left' , status.speed / GAME_MAX_SPEED * 200 );
+                /*//.stop( true , false )
                 .animate({
                     left: status.speed > GAME_MAX_SPEED / 2 ? 200 : 0
-                } , 10000 );
+                } , 5000 );
+                */
+
+            // TODO.. move bg
+            $bg[0].style.marginLeft = - status.distance / 20 + 'px';
+            /*stop( true , false )
+                .animate({
+                    marginLeft: - status.distance / 20
+                });
+            */
             // change car dot position
-            $carDot.css('left' , 6 + Math.min( status.distance / GAME_MAX_SPEED , 1 ) * 12 + '%');
+            $carDot.css('left' , 6 + status.speed / GAME_MAX_SPEED * 12 + '%');
 
             // .. motion road ,
             motionValue = ~~ (status.speed / 40 ) * 10;
             if( lastMotionValue != motionValue ){
 
-                M.motionBlur( $road[0] , Math.min( motionValue + 3 , 73 ) , 0 , true );
+                //M.motionBlur( $road[0] , Math.min( motionValue + 3 , 73 ) , 0 , true );
 
                 lastMotionValue = motionValue;
                 motionValue = 0;
             }
 
-            return;
              //TODO.. judge if game over
             if( status.gameStatus != 3 ){
                 p = ( status.robotDistance - status.distance ) / GAME_MAX_DISTANCE;
                 // change robot car position
                 $cars.eq(1)
                     .css({
-                        left: p * 2 * winWidth
+                        left: p * 4 * winWidth
                     });
                 // change robot dot position
                 $robotDot.css('left' , 6 + p * 88 + '%' );
                 //TODO.. change bar background
 
-
-                if( status.distance > status.robotDistance ){
-                    game.over();
-                    console.log('success');
-                    // TODO.. show victory panel
-                } else if ( status.robotDistance - status.distance > GAME_MAX_DISTANCE ){
-                    game.over();
-                    console.log('failure');
-                    // TODO..  show failure panel
+                // show time
+                var time = status.time + ( +new Date() - status.startTime );
+                var m = ~~ ( time / 1000 / 60 );
+                var s = ~~ ( time / 1000 % 60 );
+                var ss = ~~ ( time % 1000 / 100 );
+                $timeBoard.html([ m > 9 ? m : '0' + m ,
+                     s > 9 ? s : '0' + s ,
+                     ss ].join(':'));
+                if( status.distance > status.robotDistance
+                    ||  status.robotDistance - status.distance > GAME_MAX_DISTANCE ){
+                    gameOver( status );
                 }
             }
         }
     });
-
+    var gameOver = function( result ){
+        game.over();
+        var tHtml = $timeBoard.html() + result.time % 10;
+        $resultPanel.find('.r-text')
+            .html('本次游戏<br/>时间 ' + tHtml + '<br/>共计追逐距离 ' + ~~result.distance + 'm' )
+            .end()
+            .fadeIn();
+    }
     var counter = function( callback ){
         var $nums = $counter.find('.num');
         var len = $nums.length - 1;
@@ -157,11 +197,13 @@ define(function(require, exports, module) {
     // 3.driver car to the right position
     var ready = function(  ){
         // 1. reset cars
-        $cars.each(function( index ){
+        $cars.show()
+            .each(function( index ){
             // 3.driver car to the right position
             var delay = 1000 * Math.random();
             var dur = 1000 + 500 * Math.random();
             $(this)
+                .removeClass( animateClass )
                 .css('left' , - $(this).width())
                 .delay( delay )
                 .animate({
@@ -173,6 +215,7 @@ define(function(require, exports, module) {
             // run car dot
             var $dot = index == 0 ? $carDot : $robotDot;
             $dot.show()
+                .css( 'left' , 0 )
                 .delay( delay )
                 .animate({
                     left : '6%'
@@ -200,27 +243,46 @@ define(function(require, exports, module) {
         // reset the game
         game.reset();
         // ..1. reset start btn
-        $startBtn.css('src' , $startBtn.attr('osrc'))
+        $startBtn.attr('src' , $startBtn.attr('osrc'))
+            .css('opacity' , 1)
+            .removeClass( lockClass )
             .show();
         // ..2. reset ready panel
         $counter.hide()
-            .css('src' , $startBtn.attr('osrc'));
+            .attr('src' , $startBtn.attr('osrc'));
         // ..3. reset cars position
-        $cars.hide();
+        $cars.hide()
+            .each(function( i ){
+                $(this).css( 'left' , i == 0 ? -car1width : -car2width );
+            });
         // ..4. reset car dots position
         $carDot.add( $robotDot )
             .hide();
         // TODO ..5. reset bar
 
         // TODO ..6. reset road
-        $road.css('src' , $road.attr('osrc'));
+
+        // reset board
+        $speedBoard.html('000');
+        $timeBoard.html('00:00:0');
+        // reset bg
+        $bg.remove( animateClass )
+            .css( 'marginLeft' , 0 )
+            .addClass( animateClass );
     }
 
     var lockClass = '__disabled__';
+    var animateClass = 'css-animate';
+
     var $cars = $('.main-cars .car');
+    var car1width = $cars.eq(0).width() , car2width = $cars.eq(1).width();
+    // hide the car
+    $cars.hide();
 
     var $speedBoard = $('#speed-board');
+    var $timeBoard = $('#time-board');
     var $road = $('#road');
+    var $bg = $('#bg');
     var $carDot = $('#car-dot');
     var $robotDot = $('#robot-dot');
     var $counter = $('#counter');
