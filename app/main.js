@@ -91,7 +91,7 @@ define(function(require, exports, module) {
     var motionTimes = 0;
     var winWidth = $( window ).width();
     var GAME_MAX_SPEED = 400;
-    var GAME_MAX_DISTANCE = 1000;
+    var GAME_MAX_DISTANCE = 4000;
     var p , l ;
 
     game.setConfig({
@@ -115,7 +115,7 @@ define(function(require, exports, module) {
                 */
 
             // TODO.. move bg
-            $bg[0].style.marginLeft = - status.distance / 20 + 'px';
+            $bg[0].style.marginLeft = - status.distance / 3 + 'px';
             /*stop( true , false )
                 .animate({
                     marginLeft: - status.distance / 20
@@ -130,12 +130,16 @@ define(function(require, exports, module) {
 
                 M.motionBlur( $road[0] , status.speed == 0 ? 0 :
                         Math.min( motionValue + 3 , 30 ) , 0 , true );
-
                 lastMotionValue = motionValue;
                 motionValue = 0;
             }
 
-             //TODO.. judge if game over
+            // move the road
+            var canvas = $road[0].previousSibling;
+            if( canvas && canvas.tagName == 'CANVAS' ){
+                canvas.style.marginLeft = - status.distance * 50 % 500 + 'px';
+            }
+             //.. judge if game over
             if( status.gameStatus != 3 ){
                 p = ( status.robotDistance - status.distance ) / GAME_MAX_DISTANCE;
                 // change robot car position
