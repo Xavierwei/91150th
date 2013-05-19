@@ -240,14 +240,14 @@ span.lpn-ghost {
 .main-cars .car .end-wheel{
   background: url(../images/wheel.png) no-repeat;
   position: absolute;
-  height: 100px;
-  width: 100px;
-  top: 114px;
-  left: 199px;
+  height: 95px;
+  width: 95px;
+  top: 116px;
+  left: 201px;
 }
 .main-cars .car .front-wheel{
-  top: 116px;
-  left: 633px;
+  top: 117px;
+  left: 635px;
 }
 /*  main -metas */
 @-webkit-keyframes shake{
@@ -458,7 +458,7 @@ span.lpn-ghost {
     background-position: -140px -89px;
 }
 .speed13{
-    background-position: -210 -89px;
+    background-position: -210px -89px;
 }
 .speed14{
     background-position: -285px -89px;
@@ -479,34 +479,34 @@ span.lpn-ghost {
     background-position: -645px -89px;
 }
 
-.speed10{
+.speed20{
     background-position: 0 -178px;
 }
-.speed11{
+.speed21{
     background-position: -70px -178px;
 }
-.speed12{
+.speed22{
     background-position: -140px -178px;
 }
-.speed13{
-    background-position: -210 -178px;
+.speed23{
+    background-position: -210px -178px;
 }
-.speed14{
+.speed24{
     background-position: -285px -178px;
 }
-.speed15{
-    background-position: -357px -178;
+.speed25{
+    background-position: -357px -178px;
 }
-.speed16{
+.speed26{
     background-position: -427px -178px;
 }
-.speed17{
+.speed27{
     background-position: -500px -178px;
 }
-.speed18{
+.speed28{
     background-position: -574px -178px;
 }
-.speed19{
+.speed29{
     background-position: -645px -178px;
 }
 

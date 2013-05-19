@@ -17,7 +17,7 @@ define(function( require , exports , model ){
         // time for reduce speed
         duration  : 2000
         // time for speed up to config.maxSpeed
-        , speedUpDuration : 10000
+        , speedUpDuration : 4000
         , speedCallBack  : null
         , maxSpeed : 400
     }
@@ -70,13 +70,13 @@ define(function( require , exports , model ){
         // last detect distance of the mouse
         var _caLastDis = _caDis.concat([]);
         var _caSpeeds = 0;
-        var _disDuration = 9 / 1000;
+        var _disDuration = 6 / 1000;
         var _winWdth = window.innerWidth;
         var _animate = null;
         var _robotAnimate = null;
 
         var speedExchange = function( cb ){
-            stopSpeedExchange();
+            stopSpeedExchange( true );
             status.robotDistance = 3;
             // for debug
             var fpsStartTime = +new Date();
@@ -84,6 +84,11 @@ define(function( require , exports , model ){
             var $fp = $('#fps');
 
             _caTimer = setTimeout(function(){
+                // if game over
+                if( status.speed == 0 && status.gameStatus == GAME_OVER ){
+                    stopSpeedExchange();
+                    return;
+                }
                 _caTimes++;
                 var spx =  _caDis[0] - _caLastDis[0] ;
                 var spy =  _caDis[1] - _caLastDis[1] ;
@@ -113,6 +118,7 @@ define(function( require , exports , model ){
                             status.speed = ~~arr[0];
                             // count the distance of car
                             status.distance += status.speed * _disDuration;
+
                             if( status.speed - lastSpeed > 40 ){
                                 debugger;
                             }
@@ -141,15 +147,18 @@ define(function( require , exports , model ){
             } , _caDur);
         }
 
-        var stopSpeedExchange = function( ){
+        var stopSpeedExchange = function( clearAnimate ){
             clearTimeout( _caTimer );
             if( _animate ){
                 _animate.pause();
-                _animate = null;
+                // . why set to null ? , for restart game
+                if( clearAnimate )
+                    _animate = null;
             }
             if( _robotAnimate ){
                 _robotAnimate.pause();
-                _robotAnimate = null;
+                if( clearAnimate )
+                    _robotAnimate = null;
             }
         }
 

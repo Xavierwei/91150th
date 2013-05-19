@@ -16,6 +16,20 @@ define(function(require, exports, module) {
     require('jquery.easing');
     require('modernizr');
 
+    // extend jquery
+    $.fn.rotate = function( deg ){
+        deg = 'rotate(' + deg + 'deg)';
+        $( this )
+            .css({
+                '-webkit-transform' : deg,
+                   '-moz-transform' : deg,
+                    '-ms-transform' : deg,
+                     '-o-transform' : deg,
+                        'transform' : deg
+            });
+        return this;
+    }
+
     // loading bar
     var $probar = $('#process-bar');
     var $pronum = $('#process-num');
@@ -86,13 +100,13 @@ define(function(require, exports, module) {
     var lastSpeed = 0;
     // cache last motion arguments
     // reduce the Consume of image motion
-    var lastMotionValue = 0;
+    var lastMotionValue = -1;
     var motionValue = 0;
     var motionTimes = 0;
     var winWidth = $( window ).width();
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
-    var p1 , p2 , p , l , wheelDeg ;
+    var p1 , p2 , p , l ;
     game.setConfig({
         duration  : 2000
         , speedCallBack  : function( status ){
@@ -105,25 +119,12 @@ define(function(require, exports, module) {
                 lastSpeed = status.speed;
             }
 
-            //l = ~~ ( 200 * status.speed / GAME_MAX_SPEED / 10 ) * 10;
+            l = ~~ ( status.speed / GAME_MAX_SPEED * 200 );
             // change car position
             $cars.eq(0)
-                .css('left' , status.speed / GAME_MAX_SPEED * 200 );
+                .css('left' , l );
             // change car wheels
-            wheelDeg = 'rotate(' + status.distance * 40 + 'deg)';
-            $car1Wheels.
-                css({
-                    '-webkit-transform' : wheelDeg,
-                    '-moz-transform' : wheelDeg,
-                    '-ms-transform' : wheelDeg,
-                    '-o-transform' : wheelDeg,
-                    'transform' : wheelDeg
-                });
-                /*//.stop( true , false )
-                .animate({
-                    left: status.speed > GAME_MAX_SPEED / 2 ? 200 : 0
-                } , 5000 );
-                */
+            $car1Wheels.rotate( status.distance * 40 );
 
             // TODO.. move bg
             $bg[0].style.marginLeft = - status.distance / 3 % 500 + 'px';
@@ -149,7 +150,7 @@ define(function(require, exports, module) {
             // move the road
             var canvas = $road[0].previousSibling;
             if( canvas && canvas.tagName == 'CANVAS' ){
-                canvas.style.marginLeft = - status.distance * 50 % 500 + 'px';
+                canvas.style.marginLeft = - status.distance * 100 % 500 + 'px';
             }
              //.. judge if game over
             if( status.gameStatus != 3 ){
@@ -158,17 +159,9 @@ define(function(require, exports, module) {
                 // change robot car position
                 $cars.eq(1)
                     .css({
-                        left: p * 10 * winWidth
+                        left: l + Math.min( 4 * p * GAME_MAX_DISTANCE  ,  winWidth )
                     });
-                wheelDeg = 'rotate(' + status.robotDistance * 40 + 'deg)';
-                $car2Wheels.
-                    css({
-                        '-webkit-transform' : wheelDeg,
-                        '-moz-transform' : wheelDeg,
-                        '-ms-transform' : wheelDeg,
-                        '-o-transform' : wheelDeg,
-                        'transform' : wheelDeg
-                    });
+                $car2Wheels.rotate( status.robotDistance * 40 );
                 // change robot dot position
                 $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
                 //TODO.. change bar background
@@ -188,6 +181,7 @@ define(function(require, exports, module) {
             }
         }
     });
+
     var gameOver = function( result ){
         game.over();
         var tHtml = $timeBoard.html() + result.time % 10;
@@ -235,7 +229,7 @@ define(function(require, exports, module) {
                 .delay( delay )
                 .animate({
                     left : 0
-                } , dur , '' , function(){
+                } , dur , 'easeOutQuart' , function(){
 
                 });
 
@@ -246,7 +240,14 @@ define(function(require, exports, module) {
                 .delay( delay )
                 .animate({
                     left : '6%'
-                } , dur);
+                } , dur , 'easeOutQuart');
+            var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
+            setTimeout( function(){
+                new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
+                    $wheels.rotate( arr[0] );
+                });
+            } , delay );
+
         });
         // 2.counter the seconds
         // show counter btn
@@ -260,6 +261,12 @@ define(function(require, exports, module) {
         M.motionBlur( $cbg[0] , 140 );
         new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
             M.motionBlur( $cbg[0] , ~~arr[ 0 ] );
+            // fix for last motion bugs, when
+            if( ~~arr[ 0 ] < 2 ){
+                setTimeout(function(){
+                    M.motionBlur( $cbg[0] , 0 );
+                } , 18 );
+            }
         } , function(){
             $cbg.attr('src' , $cbg.attr('osrc'));
             // counter nums

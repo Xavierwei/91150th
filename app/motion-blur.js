@@ -7,6 +7,7 @@ define(function( require , exports , model ){
             for (var i = 0 , len = pixes.data.length ; i < len; i++) {
                 newPix.data[ i ] = pixes.data[ i ];
             }
+            cb && cb();
             return;
         }
         startline = startline || 0;

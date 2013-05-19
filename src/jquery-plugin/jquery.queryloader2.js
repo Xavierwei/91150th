@@ -32,7 +32,7 @@
     var imgLoadFinished = function(){
         imageLoadedNum++;
         // show loading status
-        option.onLoading( ~~ ( imageLoadedNum / imageCounter ) * 100 );
+        option.onLoading( ~~ ( imageLoadedNum / imageCounter * 100 ) );
         if( imageLoadedNum == imageCounter ){
             var dur = new Date() - startTime;
             // complete all iamges
