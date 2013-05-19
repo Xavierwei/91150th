@@ -99,9 +99,9 @@ define(function(require, exports, module) {
             // render car speed
 
             if( lastSpeed != status.speed ){
-                $speeds[0].className = 'speed' + ~~ (status.speed / 100 );
-                $speeds[1].className = 'speed' + ~~ (status.speed / 10 % 10 );
-                $speeds[2].className = 'speed' + ~~ (status.speed % 10 );
+                $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
+                $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
+                $speeds[2].className = 'speed2' + ~~ (status.speed % 10 );
                 lastSpeed = status.speed;
             }
 
