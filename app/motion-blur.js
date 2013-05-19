@@ -7,7 +7,7 @@ define(function( require , exports , model ){
             for (var i = 0 , len = pixes.data.length ; i < len; i++) {
                 newPix.data[ i ] = pixes.data[ i ];
             }
-            cb && cb();
+            cb && cb( newPix );
             return;
         }
         startline = startline || 0;
@@ -67,7 +67,7 @@ define(function( require , exports , model ){
                 newPix.data[ k + 3 ] = ~~ total[ 3 ] / len;
             }
         }
-        cb && cb();
+        cb && cb( newPix );
     }
 
     var getImageCanvas = function( img ){
@@ -109,6 +109,7 @@ define(function( require , exports , model ){
         return pixData;
     }
 
+
     var can = null;
     var ctx = null;
     // Detect canvas support
@@ -123,44 +124,43 @@ define(function( require , exports , model ){
 
     exports.motionBlur = function( img , radius , offset , useCanvas , onlyCache ){
         if( !isSupportCanvas ) return;
+
+        offset = offset || 0;
         // get image id
         var id = img.getAttribute('id');
         if( !id ){
             id = 'can-img-' + ( +new Date());
             img.setAttribute( 'id' , id );
         }
-        var tCan = null;
-        if( useCanvas ){
-            tCan = getImageCanvas( img );
-        }
         // get pixdata
         var pixData = getImageData( img );
-        var newData = ctx.createImageData( width , height );
-
-        var callback = function(){
+        var newData = ctx.createImageData( pixData.width , pixData.height );
+        var pixCacheKey = [ 'pix' , radius  , offset , id ].join('-');
+        var callback = function( newData ){
             cache[ pixCacheKey ] = newData;
             // if onlyCache return directly
             if( onlyCache ) return;
-
-            ctx.putImageData( newData , 0 , 0 );
             if( useCanvas ){
                 var tCan = getImageCanvas( img );
                 tCan.getContext('2d').putImageData( newData , 0 , 0 );
             } else {
+                can.width = newData.width;
+                can.height = newData.height;
+                ctx.putImageData( newData , 0 , 0 );
                 img.setAttribute( 'osrc' , cache[ 'src-' + id ] );
                 img.setAttribute( 'src' , can.toDataURL() );
             }
         }
-
-        offset = offset || 0;
-        var pixCacheKey = [ 'pix' , radius  , offset , id ].join('-');
-        if( cache[ pixCacheKey ] ){
-            newData = cache[ pixCacheKey ];
-            callback();
-            return;
+        if( img.className == 'c-bg' ){
+            console.log( pixCacheKey );
         }
 
-        // motion blur image
-        motionBlur( pixData , newData , radius , offset , 0 , callback );
+        // get from cache
+        if( cache[ pixCacheKey ] ){
+            callback( cache[ pixCacheKey ] );
+        } else {
+            // motion blur image
+            motionBlur( pixData , newData , radius , offset , 0 , callback );
+        }
     }
 });

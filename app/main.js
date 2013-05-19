@@ -272,10 +272,10 @@ define(function(require, exports, module) {
 
         var $cbg = $counter.find('.c-bg');
 
-        new Animate( [ 140 ] , [ 0 ] , 3000 , '' , function( arr ){
+        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
             M.motionBlur( $cbg[0] , ~~ arr[ 0 ] , 0 , true );
         } , function(){
-            $cbg.attr('src' , $cbg.attr('osrc'));
+            // $cbg.attr('src' , $cbg.attr('osrc'));
             // counter nums
             counter();
         });
