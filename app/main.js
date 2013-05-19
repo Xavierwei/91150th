@@ -95,42 +95,41 @@ define(function(require, exports, module) {
     var M = require('../app/motion-blur');
     var A = require('../src/Animate');
     var Animate = A.Animate;
-    // cache last speed
-    // reduce HTMLElement change times
-    var lastSpeed = 0;
     // cache last motion arguments
     // reduce the Consume of image motion
     var lastMotionValue = -1;
     var motionValue = 0;
     var motionTimes = 0;
-    var winWidth = $( window ).width();
+    var winWidth = $(window).width();
+    var screenWidth = screen.width;
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
     var p1 , p2 , p , l , dur;
+
     game.setConfig({
         duration  : 2000
         , speedCallBack  : function( status ){
             // render car speed
+            $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
+            $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
+            $speeds[2].className = 'speed2' + ~~ (status.speed % 10 );
 
-            if( lastSpeed != status.speed ){
-                $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
-                $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
-                $speeds[2].className = 'speed2' + ~~ (status.speed % 10 );
-                lastSpeed = status.speed;
-            }
-
-            l = ~~ ( status.speed / GAME_MAX_SPEED * 200 );
+            l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
             dur = status.robotDistance - status.distance;
             p = dur / GAME_MAX_DISTANCE;
 
             // change car position
-            $cars.eq(0)
-                .css('left' , l )
-                [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
+            if( status.gameStatus == 1 ){
+                $cars.eq(0)
+                    .stop( true , false )
+                    .css('left' , l )
+                    [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
+            }
             // change robot car position
             $cars.eq(1)
+                .stop( true , false )
                 .css({
-                    left: l + Math.min( 10 * p * GAME_MAX_DISTANCE  ,  winWidth )
+                    left: l + Math.min( 10 * p * GAME_MAX_DISTANCE  ,  screenWidth )
                 })
                 [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
             // change car wheels
@@ -171,7 +170,7 @@ define(function(require, exports, module) {
                     dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
                     dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
             // show time
-            if( status.gameStatus != 3 ){
+            if( status.gameStatus != 3 && status.gameStatus != 0 ){
                 var time = status.time + ( +new Date() - status.startTime );
                 var m = ~~ ( time / 1000 / 60 );
                 var s = ~~ ( time / 1000 % 60 );
@@ -204,7 +203,7 @@ define(function(require, exports, module) {
             if( len == -1 ){
                 // hide the counter panel
                 $counter.fadeOut();
-                game.start();
+                game.start( true );
                 return;
             }
             // reset nums
@@ -214,48 +213,56 @@ define(function(require, exports, module) {
                     M.motionBlur( $t[0] , ~~arr[ 0 ] );
                 } , function(){
                     $t.hide();
+                    // when count to four,  start the robot
+                    // and drive 'my car' to the sence
+                    if( len == 5 ){
+                        game.start();
+                    }
+                    if( len == 3 ){
+                        // drive ’my car ‘ to sence
+                        _driveCarToSence( $cars.eq(0) , 0 );
+                    }
                     showNum();
                 });
             } , 800 );
         })();
+    }
+
+    var _driveCarToSence = function( $car , index ){
+        var delay = 1000 * Math.random();
+        var dur = 1000 + 500 * Math.random();
+        $car.show()
+            .removeClass( animateClass )
+            .css('left' , - $(this).width())
+            .delay( delay )
+            .animate({
+                left : (winWidth - ( index == 0 ? car1width : car2width ) ) / 2
+            } , dur , 'easeOutQuart' , function(){
+
+            });
+
+        // run car dot
+        var $dot = index == 0 ? $carDot : $robotDot;
+        $dot.show()
+            .css( 'left' , 0 )
+            .delay( delay )
+            .animate({
+                left : '6%'
+            } , dur , 'easeOutQuart');
+        var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
+        setTimeout( function(){
+            new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
+                $wheels.rotate( arr[0] );
+            });
+        } , delay );
     }
     // ready for game , at this status , you should do follow list:
     // 1.reset cars position
     // 2.counter the seconds
     // 3.driver car to the right position
     var ready = function(  ){
-        // 1. reset cars
-        $cars.show()
-            .each(function( index ){
-            // 3.driver car to the right position
-            var delay = 1000 * Math.random();
-            var dur = 1000 + 500 * Math.random();
-            $(this)
-                .removeClass( animateClass )
-                .css('left' , - $(this).width())
-                .delay( delay )
-                .animate({
-                    left : 0
-                } , dur , 'easeOutQuart' , function(){
-
-                });
-
-            // run car dot
-            var $dot = index == 0 ? $carDot : $robotDot;
-            $dot.show()
-                .css( 'left' , 0 )
-                .delay( delay )
-                .animate({
-                    left : '6%'
-                } , dur , 'easeOutQuart');
-            var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
-            setTimeout( function(){
-                new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
-                    $wheels.rotate( arr[0] );
-                });
-            } , delay );
-
-        });
+        // 1. drive robot to sence
+        _driveCarToSence( $cars.eq(1) , 1 );
         // 2.counter the seconds
         // show counter btn
         $counter.show();

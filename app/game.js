@@ -49,7 +49,7 @@ define(function( require , exports , model ){
     var speedExchange = (function(){
 
         var __lp = null;
-        var mousemoveEvent = function( ev ){
+        var _mousemoveEvent = function( ev ){
             if( !__lp ){
                 __lp = [ ev.pageX , ev.pageY ];
                 return;
@@ -75,21 +75,73 @@ define(function( require , exports , model ){
         var _animate = null;
         var _robotAnimate = null;
 
-        var startSpeedExchange = function( cb ){
-            stopSpeedExchange( true );
+        var _startSpeedExchange = function( cb ){
+            _stopSpeedExchange( true );
             status.robotDistance = 3;
-            speedExchange( cb );
+            _speedExchange( cb );
         }
-        var speedExchange = function( cb ){
-            // for debug
-            var fpsStartTime = +new Date();
-            var fpsTimes = 0;
-            var $fp = $('#fps');
 
+        // for debug
+        var _dfpsStartTime;
+        var _dfpsTimes = 0;
+        var _d$fp = $('#fps');
+        var __robotExchange = function( cb ){
+             // count robot
+            var tmp = _caTimes > 20 ? 0.4 + Math.random() * 0.4 : 2;
+            // if game is over, reset the roboto speed and animation duration
+            if( status.gameStatus == GAME_OVER ){
+                tmp = 0;
+                _robotAnimate.duration = config.duration * 2;
+            }
+
+            if( _robotAnimate ){
+                _robotAnimate.turnTo( [ tmp * config.maxSpeed ] );
+            } else {
+                _robotAnimate = new Animate( [10] , [ tmp * config.maxSpeed ] , config.duration / 2 , '' , function(arr){
+                    status.robotSpeed = ~~arr[0];
+                    // count the distance of car
+                    status.robotDistance += status.robotSpeed * _disDuration;
+
+                    cb && cb();
+                });
+            }
+        }
+        var __myCarExchange = function( cb ){
+            var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
+
+            if( _animate ){
+                // if game over , stop the car , reset the durations
+                if( status.gameStatus == GAME_OVER ){
+                    mouseSpeed = 0;
+                    _animate.duration = config.duration * 2;
+                }
+                _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
+            } else {
+                _animate = new Animate( [0] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){
+                    ////////////////////////////// for debug
+                    _dfpsTimes++;
+                    if( new Date() - _dfpsStartTime > 1000 ){
+                        _d$fp.html('fps:' + _dfpsTimes );
+                        _dfpsStartTime = new Date();
+                        _dfpsTimes = 0;
+                    }
+
+                    ////////////////////////////// for debug
+                    status.speed = ~~arr[0];
+                    // count the distance of car
+                    status.distance += status.speed * _disDuration;
+
+                    cb && cb( status );
+                });
+            }
+        }
+        var _speedExchange = function( myCarCb ){
+            _dfpsStartTime = + new Date();
+            _dfpsTimes = 0;
             _caTimer = setTimeout(function(){
                 // if game over
                 if( status.speed == 0 && status.gameStatus == GAME_OVER ){
-                    stopSpeedExchange();
+                    _stopSpeedExchange();
                     return;
                 }
                 _caTimes++;
@@ -97,58 +149,10 @@ define(function( require , exports , model ){
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
                 var speed = Math.round( spx + spy ) / _winWdth;
 
-                // for debug
-                var lastSpeed = 0;
                 _caSpeeds += speed;
                 if( _caTimes % _caCollectTimes == 0 ){
-                    var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
-
-                    if( _animate ){
-                        // if game over , stop the car , reset the durations
-                        if( status.gameStatus == GAME_OVER ){
-                            mouseSpeed = 0;
-                            _animate.duration = config.duration * 2;
-                        }
-                        _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
-                    } else {
-                        _animate = new Animate( [0] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){
-                            ////////////////////////////// for debug
-                            fpsTimes++;
-                            if( new Date() - fpsStartTime > 1000 ){
-                                $fp.html('fps:' + fpsTimes );
-                                fpsStartTime = new Date();
-                                fpsTimes = 0;
-                            }
-
-                            ////////////////////////////// for debug
-                            status.speed = ~~arr[0];
-                            // count the distance of car
-                            status.distance += status.speed * _disDuration;
-
-                            if( status.speed - lastSpeed > 40 ){
-                                debugger;
-                            }
-                            lastSpeed = status.speed;
-                            cb && cb( status );
-                        });
-                    }
-                    // count robot
-                    var tmp = _caTimes > 20 ? 0.4 + Math.random() * 0.4 : 2;
-                    // if game is over, reset the roboto speed and animation duration
-                    if( status.gameStatus == GAME_OVER ){
-                        tmp = 0;
-                        _robotAnimate.duration = config.duration * 2;
-                    }
-
-                    if( _robotAnimate ){
-                        _robotAnimate.turnTo( [ tmp * config.maxSpeed ] );
-                    } else {
-                        _robotAnimate = new Animate( [10] , [ tmp * config.maxSpeed ] , config.duration / 2 , '' , function(arr){
-                            status.robotSpeed = ~~arr[0];
-                            // count the distance of car
-                            status.robotDistance += status.robotSpeed * _disDuration;
-                        });
-                    }
+                    __myCarExchange( myCarCb );
+                    __robotExchange( );
                     _caSpeeds = 0;
                 }
 
@@ -158,7 +162,7 @@ define(function( require , exports , model ){
             } , _caDur);
         }
 
-        var stopSpeedExchange = function( clearAnimate ){
+        var _stopSpeedExchange = function( clearAnimate ){
             clearTimeout( _caTimer );
             if( _animate ){
                 _animate.pause();
@@ -174,10 +178,10 @@ define(function( require , exports , model ){
         }
 
         return {
-            start: startSpeedExchange
-            , play: speedExchange
-            , stop: stopSpeedExchange
-            , move: mousemoveEvent
+            start: _startSpeedExchange
+            , play: _speedExchange
+            , stop: _stopSpeedExchange
+            , move: _mousemoveEvent
         }
     })();
 
@@ -186,25 +190,32 @@ define(function( require , exports , model ){
     }
 
     // export interface
-    var start = function( ){
-        // reset status
-        extend( status  , {
-            speed       : 0
-            , robotSpeed: 0
-            , time      : 0
-            , distance  : 0
-            , startTime : 0
-            , robotDistance : 0
-            , gameStatus : 0
-        });
-        // record start time
-        status.startTime = + new Date();
-        // add event listener
-        document.addEventListener('mousemove' , speedExchange.move , false);
-        // speed exchange fn
-        speedExchange.start( config.speedCallBack );
-        // change status
-        status.gameStatus = GAME_PLAYING;
+    var start = function( bPlayMyCar ){
+        // only the arguments is true , my car will running
+        if( bPlayMyCar ){
+            // reset status
+            extend( status  , {
+                 speed       : 0
+                 , time      : 0
+                 , distance  : 0
+                 , startTime : 0
+                 , gameStatus : 0
+            });
+            // record start time
+            status.startTime = + new Date();
+            // add event listener
+            document.addEventListener('mousemove' , speedExchange.move , false);
+            // change status
+            status.gameStatus = GAME_PLAYING;
+        } else {
+            // reset status
+            extend( status  , {
+                robotSpeed: 0
+                , robotDistance : 0
+            });
+            // speed exchange fn
+            speedExchange.start( config.speedCallBack );
+        }
     }
     // set game starttime value
     // bind mousemove event listener
@@ -261,6 +272,7 @@ define(function( require , exports , model ){
             , startTime : 0
             , robotDistance : 0
             , gameStatus : 0
+            , playing   : false
         });
         // pause all the animate , interval and timeout
         speedExchange.stop();
