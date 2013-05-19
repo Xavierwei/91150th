@@ -236,6 +236,19 @@ span.lpn-ghost {
   right: 100%;
 }
 
+.main-cars .car .front-wheel,
+.main-cars .car .end-wheel{
+  background: url(../images/wheel.png) no-repeat;
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  top: 114px;
+  left: 199px;
+}
+.main-cars .car .front-wheel{
+  top: 116px;
+  left: 633px;
+}
 /*  main -metas */
 @-webkit-keyframes shake{
     0% {

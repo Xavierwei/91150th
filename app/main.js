@@ -92,7 +92,7 @@ define(function(require, exports, module) {
     var winWidth = $( window ).width();
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
-    var p1 , p2 , p , l ;
+    var p1 , p2 , p , l , wheelDeg ;
     game.setConfig({
         duration  : 2000
         , speedCallBack  : function( status ){
@@ -109,6 +109,16 @@ define(function(require, exports, module) {
             // change car position
             $cars.eq(0)
                 .css('left' , status.speed / GAME_MAX_SPEED * 200 );
+            // change car wheels
+            wheelDeg = 'rotate(' + status.distance * 40 + 'deg)';
+            $car1Wheels.
+                css({
+                    '-webkit-transform' : wheelDeg,
+                    '-moz-transform' : wheelDeg,
+                    '-ms-transform' : wheelDeg,
+                    '-o-transform' : wheelDeg,
+                    'transform' : wheelDeg
+                });
                 /*//.stop( true , false )
                 .animate({
                     left: status.speed > GAME_MAX_SPEED / 2 ? 200 : 0
@@ -149,6 +159,15 @@ define(function(require, exports, module) {
                 $cars.eq(1)
                     .css({
                         left: p * 10 * winWidth
+                    });
+                wheelDeg = 'rotate(' + status.robotDistance * 40 + 'deg)';
+                $car2Wheels.
+                    css({
+                        '-webkit-transform' : wheelDeg,
+                        '-moz-transform' : wheelDeg,
+                        '-ms-transform' : wheelDeg,
+                        '-o-transform' : wheelDeg,
+                        'transform' : wheelDeg
                     });
                 // change robot dot position
                 $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
@@ -283,6 +302,8 @@ define(function(require, exports, module) {
     var animateClass = 'css-animate';
 
     var $cars = $('.main-cars .car');
+    var $car1Wheels = $cars.eq(0).find('.front-wheel,.end-wheel');
+    var $car2Wheels = $cars.eq(1).find('.front-wheel,.end-wheel');
     var car1width = $cars.eq(0).width() , car2width = $cars.eq(1).width();
     // hide the car
     $cars.hide();
