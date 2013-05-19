@@ -75,9 +75,12 @@ define(function( require , exports , model ){
         var _animate = null;
         var _robotAnimate = null;
 
-        var speedExchange = function( cb ){
+        var startSpeedExchange = function( cb ){
             stopSpeedExchange( true );
             status.robotDistance = 3;
+            speedExchange( cb );
+        }
+        var speedExchange = function( cb ){
             // for debug
             var fpsStartTime = +new Date();
             var fpsTimes = 0;
@@ -171,7 +174,8 @@ define(function( require , exports , model ){
         }
 
         return {
-            start: speedExchange
+            start: startSpeedExchange
+            , play: speedExchange
             , stop: stopSpeedExchange
             , move: mousemoveEvent
         }
@@ -214,7 +218,7 @@ define(function( require , exports , model ){
         // add event listener
         document.addEventListener( 'mousemove' , speedExchange.move , false );
         // speed exchange fn
-        speedExchange.start( config.speedCallBack );
+        speedExchange.play( config.speedCallBack );
         // change status
         status.gameStatus = GAME_PLAYING;
     }

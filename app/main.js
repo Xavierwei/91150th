@@ -120,18 +120,34 @@ define(function(require, exports, module) {
             }
 
             l = ~~ ( status.speed / GAME_MAX_SPEED * 200 );
+            dur = status.robotDistance - status.distance;
+            p = dur / GAME_MAX_DISTANCE;
+
             // change car position
             $cars.eq(0)
-                .css('left' , l );
+                .css('left' , l )
+                [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
+            // change robot car position
+            $cars.eq(1)
+                .css({
+                    left: l + Math.min( 10 * p * GAME_MAX_DISTANCE  ,  winWidth )
+                })
+                [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
             // change car wheels
-            $car1Wheels.rotate( status.distance * 50 );
+            $car1Wheels.rotate( status.distance * 60 );
+            $car2Wheels.rotate( status.robotDistance * 60 )
 
             //  move bg
             $bg[0].style.marginLeft = - status.distance / 3 % 500 + 'px';
 
+
+
             // change car dot position
             p1 = 6 + status.speed / GAME_MAX_SPEED * 12;
+            p2 = p1 + p * 88 ;
             $carDot.css('left' , p1 + '%');
+            // change robot dot position
+            $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
 
             // .. motion road ,
             motionValue = ~~ ( status.speed / 20 ) * 3 ;
@@ -148,17 +164,8 @@ define(function(require, exports, module) {
             if( canvas && canvas.tagName == 'CANVAS' ){
                 canvas.style.marginLeft = - status.distance * 100 % 500 + 'px';
             }
-            dur = status.robotDistance - status.distance;
-            p = dur / GAME_MAX_DISTANCE;
-            p2 = p1 + p * 88 ;
-            // change robot car position
-            $cars.eq(1)
-                .css({
-                    left: l + Math.min( 10 * p * GAME_MAX_DISTANCE  ,  winWidth )
-                });
-            $car2Wheels.rotate( status.robotDistance * 50 );
-            // change robot dot position
-            $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
+
+
             //. change bar background
             $bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
                     dur < GAME_MAX_DISTANCE * 0.65 ? 1 :

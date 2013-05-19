@@ -262,6 +262,12 @@ span.lpn-ghost {
   top: 117px;
   left: 635px;
 }
+
+/* for pause car */
+.main-cars .wheelblur .front-wheel,
+.main-cars .wheelblur .end-wheel{
+  background-position: -117px 0;
+}
 /*  main -metas */
 @-webkit-keyframes shake{
     0% {
