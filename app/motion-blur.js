@@ -95,6 +95,19 @@ define(function( require , exports , model ){
         cache[ canKey ] = canvas;
         return canvas;
     }
+    var getImageData = function( img ){
+        var id = img.id;
+        var pixData = cache[ id ];
+        if( !pixData ){
+            can.width = img.width;
+            can.height = img.height;
+            ctx.drawImage( img , 0 , 0 );
+            pixData = ctx.getImageData( 0 , 0 , img.width , img.height );
+            cache[ id ] = pixData;
+            cache[ 'src-' + id ] = img.getAttribute('src');
+        }
+        return pixData;
+    }
 
     var can = null;
     var ctx = null;
@@ -107,6 +120,7 @@ define(function( require , exports , model ){
 
 
     var cache = {};
+
     exports.motionBlur = function( img , radius , offset , useCanvas , onlyCache ){
         if( !isSupportCanvas ) return;
         // get image id
@@ -115,21 +129,12 @@ define(function( require , exports , model ){
             id = 'can-img-' + ( +new Date());
             img.setAttribute( 'id' , id );
         }
-
-        var pixData = cache[ id ];
-
-        var width = img.width;
-        var height = img.height;
-        // reset canvas
-        can.width = width;
-        can.height = height;
-        if( !pixData ){
-            ctx.drawImage( img , 0 , 0 );
-            pixData = ctx.getImageData( 0 , 0 , width , height );
-            cache[ id ] = pixData;
-            cache[ 'src-' + id ] = img.getAttribute('src');
+        var tCan = null;
+        if( useCanvas ){
+            tCan = getImageCanvas( img );
         }
-
+        // get pixdata
+        var pixData = getImageData( img );
         var newData = ctx.createImageData( width , height );
 
         var callback = function(){

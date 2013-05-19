@@ -272,15 +272,8 @@ define(function(require, exports, module) {
 
         var $cbg = $counter.find('.c-bg');
 
-        M.motionBlur( $cbg[0] , 140 );
-        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
-            M.motionBlur( $cbg[0] , ~~arr[ 0 ] );
-            // fix for last motion bugs, when
-            if( ~~ arr[ 0 ] < 2 ){
-                setTimeout(function(){
-                    M.motionBlur( $cbg[0] , 0 );
-                } , 18 );
-            }
+        new Animate( [ 140 ] , [ 0 ] , 3000 , '' , function( arr ){
+            M.motionBlur( $cbg[0] , ~~ arr[ 0 ] , 0 , true );
         } , function(){
             $cbg.attr('src' , $cbg.attr('osrc'));
             // counter nums
