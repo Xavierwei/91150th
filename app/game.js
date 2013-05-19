@@ -70,6 +70,7 @@ define(function( require , exports , model ){
         // last detect distance of the mouse
         var _caLastDis = _caDis.concat([]);
         var _caSpeeds = 0;
+        var _roSpeeds = 0;
         var _disDuration = 6 / 1000;
         var _winWdth = window.innerWidth;
         var _animate = null;
@@ -77,7 +78,6 @@ define(function( require , exports , model ){
 
         var _startSpeedExchange = function( cb ){
             _stopSpeedExchange( true );
-            status.robotDistance = 3;
             _speedExchange( cb );
         }
 
@@ -86,22 +86,21 @@ define(function( require , exports , model ){
         var _dfpsTimes = 0;
         var _d$fp = $('#fps');
         var __robotExchange = function( cb ){
-             // count robot
-            var tmp = _caTimes > 20 ? 0.4 + Math.random() * 0.4 : 2;
+
+            var speed = _roSpeeds / _caCollectTimes;
             // if game is over, reset the roboto speed and animation duration
             if( status.gameStatus == GAME_OVER ){
-                tmp = 0;
+                speed = 0;
                 _robotAnimate.duration = config.duration * 2;
             }
 
             if( _robotAnimate ){
-                _robotAnimate.turnTo( [ tmp * config.maxSpeed ] );
+                _robotAnimate.turnTo( [ speed * config.maxSpeed ] );
             } else {
-                _robotAnimate = new Animate( [10] , [ tmp * config.maxSpeed ] , config.duration / 2 , '' , function(arr){
+                _robotAnimate = new Animate( [0] , [ 300 ] , config.duration , '' , function(arr){
                     status.robotSpeed = ~~arr[0];
                     // count the distance of car
                     status.robotDistance += status.robotSpeed * _disDuration;
-
                     cb && cb();
                 });
             }
@@ -144,16 +143,21 @@ define(function( require , exports , model ){
                     _stopSpeedExchange();
                     return;
                 }
-                _caTimes++;
+
                 var spx =  Math.abs( _caDis[0] - _caLastDis[0] );
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
-                var speed = Math.round( spx + spy ) / _winWdth;
+                var speed = Math.round( spx + spy ) / _winWdth * 1.5;
+                // count robot
+                var tmp = _caTimes > 30 ? 0.4 + Math.random() * 0.5 : 1.5 ;
 
                 _caSpeeds += speed;
+                _roSpeeds += tmp;
+                _caTimes++;
                 if( _caTimes % _caCollectTimes == 0 ){
                     __myCarExchange( myCarCb );
                     __robotExchange( );
                     _caSpeeds = 0;
+                    _roSpeeds = 0;
                 }
 
                 _caLastDis = _caDis.concat([]);

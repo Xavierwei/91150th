@@ -151,9 +151,6 @@ define(function( require , exports , model ){
                 img.setAttribute( 'src' , can.toDataURL() );
             }
         }
-        if( img.className == 'c-bg' ){
-            console.log( pixCacheKey );
-        }
 
         // get from cache
         if( cache[ pixCacheKey ] ){

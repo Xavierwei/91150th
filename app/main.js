@@ -44,7 +44,7 @@ define(function(require, exports, module) {
             $('#loading-mask')
                 .animate({
                     top : '-100%'
-                } , 2000 , 'easeOutElastic' , function(){
+                } , 3000 , 'easeOutElastic' , function(){
                     $(this).hide();
                     initVideoPlay();
                 });
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
         .click(function(){
             $videoPanel.animate({
                 top: '-100%'
-            } , 2000 , 'easeOutElastic' , function(){
+            } , 3000 , 'easeOutElastic' , function(){
                 $videoPanel.hide();
             });
         });
@@ -114,27 +114,31 @@ define(function(require, exports, module) {
             $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
             $speeds[2].className = 'speed2' + ~~ (status.speed % 10 );
 
-            l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
+            l = 0;
             dur = status.robotDistance - status.distance;
             p = dur / GAME_MAX_DISTANCE;
 
             // change car position
-            if( status.gameStatus == 1 ){
+            // GAME_PLAYING  and GAME_OVER all need to modify the car position
+            // and car wheel blur status
+            if( status.gameStatus == 1 || status.gameStatus == 3 ){
+                l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
                 $cars.eq(0)
                     .stop( true , false )
                     .css('left' , l )
                     [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
+                // change car wheels
+                $car1Wheels.rotate( status.distance * 40 );
             }
             // change robot car position
+
             $cars.eq(1)
                 .stop( true , false )
                 .css({
-                    left: l + Math.min( 10 * p * GAME_MAX_DISTANCE  ,  screenWidth )
+                    left: l + Math.min( 10 * Math.sqrt( p ) * GAME_MAX_DISTANCE  , 2 * screenWidth )
                 })
-                [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
-            // change car wheels
-            $car1Wheels.rotate( status.distance * 60 );
-            $car2Wheels.rotate( status.robotDistance * 60 )
+                [ status.robotSpeed > 30 && status.distance > screenWidth ? 'addClass' : 'removeClass' ]('wheelblur');
+            $car2Wheels.rotate( status.robotDistance * 10 );
 
             //  move bg
             $bg[0].style.marginLeft = - status.distance / 3 % 500 + 'px';
@@ -142,7 +146,7 @@ define(function(require, exports, module) {
 
 
             // change car dot position
-            p1 = 6 + status.speed / GAME_MAX_SPEED * 12;
+            p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             p2 = p1 + p * 88 ;
             $carDot.css('left' , p1 + '%');
             // change robot dot position
@@ -215,10 +219,10 @@ define(function(require, exports, module) {
                     $t.hide();
                     // when count to four,  start the robot
                     // and drive 'my car' to the sence
-                    if( len == 5 ){
-                        game.start();
-                    }
-                    if( len == 3 ){
+                    //if( len == 5 ){
+                    //    game.start();
+                    //}
+                    if( len == 4 ){
                         // drive ’my car ‘ to sence
                         _driveCarToSence( $cars.eq(0) , 0 );
                     }
@@ -262,7 +266,11 @@ define(function(require, exports, module) {
     // 3.driver car to the right position
     var ready = function(  ){
         // 1. drive robot to sence
-        _driveCarToSence( $cars.eq(1) , 1 );
+        //_driveCarToSence( $cars.eq(1) , 1 );
+        // drive robot along
+        $cars.eq(1).show().css('left' , - car2width);
+        $robotDot.show().css('left' , '6%');
+        game.start();
         // 2.counter the seconds
         // show counter btn
         $counter.show();
