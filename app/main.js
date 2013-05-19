@@ -106,7 +106,7 @@ define(function(require, exports, module) {
     var winWidth = $( window ).width();
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
-    var p1 , p2 , p , l ;
+    var p1 , p2 , p , l , dur;
     game.setConfig({
         duration  : 2000
         , speedCallBack  : function( status ){
@@ -124,21 +124,17 @@ define(function(require, exports, module) {
             $cars.eq(0)
                 .css('left' , l );
             // change car wheels
-            $car1Wheels.rotate( status.distance * 40 );
+            $car1Wheels.rotate( status.distance * 50 );
 
-            // TODO.. move bg
+            //  move bg
             $bg[0].style.marginLeft = - status.distance / 3 % 500 + 'px';
-            /*stop( true , false )
-                .animate({
-                    marginLeft: - status.distance / 20
-                });
-            */
+
             // change car dot position
             p1 = 6 + status.speed / GAME_MAX_SPEED * 12;
             $carDot.css('left' , p1 + '%');
 
             // .. motion road ,
-            motionValue = ~~ ( status.speed / 20 ) * 5 ;
+            motionValue = ~~ ( status.speed / 20 ) * 3 ;
             if( lastMotionValue != motionValue ){
 
                 M.motionBlur( $road[0] , status.speed == 0 ? 0 :
@@ -152,21 +148,23 @@ define(function(require, exports, module) {
             if( canvas && canvas.tagName == 'CANVAS' ){
                 canvas.style.marginLeft = - status.distance * 100 % 500 + 'px';
             }
-             //.. judge if game over
+            dur = status.robotDistance - status.distance;
+            p = dur / GAME_MAX_DISTANCE;
+            p2 = p1 + p * 88 ;
+            // change robot car position
+            $cars.eq(1)
+                .css({
+                    left: l + Math.min( 10 * p * GAME_MAX_DISTANCE  ,  winWidth )
+                });
+            $car2Wheels.rotate( status.robotDistance * 50 );
+            // change robot dot position
+            $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
+            //. change bar background
+            $bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
+                    dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
+                    dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
+            // show time
             if( status.gameStatus != 3 ){
-                p = ( status.robotDistance - status.distance ) / GAME_MAX_DISTANCE;
-                p2 = p1 + p * 88 ;
-                // change robot car position
-                $cars.eq(1)
-                    .css({
-                        left: l + Math.min( 4 * p * GAME_MAX_DISTANCE  ,  winWidth )
-                    });
-                $car2Wheels.rotate( status.robotDistance * 40 );
-                // change robot dot position
-                $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
-                //TODO.. change bar background
-
-                // show time
                 var time = status.time + ( +new Date() - status.startTime );
                 var m = ~~ ( time / 1000 / 60 );
                 var s = ~~ ( time / 1000 % 60 );
@@ -175,7 +173,7 @@ define(function(require, exports, module) {
                      s > 9 ? s : '0' + s ,
                      ss ].join(':'));
                 if( status.distance > status.robotDistance
-                    ||  status.robotDistance - status.distance > GAME_MAX_DISTANCE ){
+                    ||  dur > GAME_MAX_DISTANCE ){
                     gameOver( status );
                 }
             }
@@ -202,6 +200,8 @@ define(function(require, exports, module) {
                 game.start();
                 return;
             }
+            // reset nums
+            M.motionBlur( $t[0] , 0 );
             setTimeout( function(){
                 new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
                     M.motionBlur( $t[0] , ~~arr[ 0 ] );
@@ -262,7 +262,7 @@ define(function(require, exports, module) {
         new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
             M.motionBlur( $cbg[0] , ~~arr[ 0 ] );
             // fix for last motion bugs, when
-            if( ~~arr[ 0 ] < 2 ){
+            if( ~~ arr[ 0 ] < 2 ){
                 setTimeout(function(){
                     M.motionBlur( $cbg[0] , 0 );
                 } , 18 );
@@ -272,6 +272,9 @@ define(function(require, exports, module) {
             // counter nums
             counter();
         });
+
+        // pre motion road
+        M.motionBlur( $road[0] , 0 , 0 , true );
     }
     var reset = function(){
         // reset the game
@@ -292,17 +295,18 @@ define(function(require, exports, module) {
         // ..4. reset car dots position
         $carDot.add( $robotDot )
             .hide();
-        // TODO ..5. reset bar
+        // ..5. reset bar
+        $bar[0].className = 'b-bar0';
 
         // reset road
         M.motionBlur( $road[0] ,  0  , 0 , true );
-        // reset board
-        $speedBoard.html('000');
+        // reset speed board
+        $speeds[0].className = 'speed00';
+        $speeds[1].className = 'speed10';
+        $speeds[2].className = 'speed20';
         $timeBoard.html('00:00:0');
         // reset bg
-        $bg.remove( animateClass )
-            .css( 'marginLeft' , 0 )
-            .addClass( animateClass );
+        $bg.css( 'marginLeft' , 0 );
     }
 
     var lockClass = '__disabled__';
@@ -316,6 +320,7 @@ define(function(require, exports, module) {
     $cars.hide();
 
     var $speedBoard = $('#speed-board');
+    var $bar = $('#b-bar');
     var $speeds = $speedBoard.find('em');
     var $timeBoard = $('#time-board');
     var $road = $('#road');
@@ -346,12 +351,13 @@ define(function(require, exports, module) {
     !(function(){
         var motionStart = 3 , motionMax = 30 , motionStep = 3;
         var currMotion = motionStart;
-        var $tmpNode = $road.clone();
-        $tmpNode.load(function(){
-            if( currMotion + motionStep <= motionMax )
-                M.motionBlur( this , currMotion , 0 , false , true );
-            currMotion += motionStep;
-        });
+        for (var i = motionStart; i <= 30; i+=motionStep ) {
+            (function( radius ){
+                setTimeout( function(){
+                    M.motionBlur( $road[0] , radius , 0 , false , true );
+                } , radius / 3 * 100 );
+            })(i);
+        };
     })();
     // click share btn to pause the game
     var i = 0;

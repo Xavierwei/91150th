@@ -179,22 +179,35 @@ span.lpn-ghost {
   width: 267px;
   height: 25px;
 }
-.main-board .board-m-t .b-bar{
-  height: 4px;
+.main-board .board-m-t .b-bar0,
+.main-board .board-m-t .b-bar1,
+.main-board .board-m-t .b-bar2,
+.main-board .board-m-t .b-bar3{
+  height: 3px;
   width: 88%;
   top: 50%;
   position: absolute;
-  background: red;
   margin-top: -2px;
   left: 6%;
+  background: url(../images/carbar.png) no-repeat;
 }
+.main-board .board-m-t .b-bar1{
+  background-position: 0 -3px;
+}
+.main-board .board-m-t .b-bar2{
+  background-position: 0 -6px;
+}
+.main-board .board-m-t .b-bar3{
+  background-position: 0 -9px;
+}
+
+
 .main-board .board-m-t .b-car,
 .main-board .board-m-t .b-robot
 {
   display: none;
-  width: 5px;
-  height: 10px;
-  background: green;
+  width: 9px;
+  height: 11px;
   position: absolute;
   left: 0px;
   top: 50%;

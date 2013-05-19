@@ -90,9 +90,9 @@ define(function( require , exports , model ){
                     return;
                 }
                 _caTimes++;
-                var spx =  _caDis[0] - _caLastDis[0] ;
-                var spy =  _caDis[1] - _caLastDis[1] ;
-                var speed = Math.round( Math.sqrt(spx * spx + spy * spy) ) / _winWdth;
+                var spx =  Math.abs( _caDis[0] - _caLastDis[0] );
+                var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
+                var speed = Math.round( spx + spy ) / _winWdth;
 
                 // for debug
                 var lastSpeed = 0;
@@ -101,8 +101,11 @@ define(function( require , exports , model ){
                     var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
 
                     if( _animate ){
-                        //status.animate.duration =  mouseSpeed * config.maxSpeed > status.speed ?
-                         //   status.speedUpDuration * mouseSpeed  : status.duration;
+                        // if game over , stop the car , reset the durations
+                        if( status.gameStatus == GAME_OVER ){
+                            mouseSpeed = 0;
+                            _animate.duration = config.duration * 2;
+                        }
                         _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
                     } else {
                         _animate = new Animate( [0] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){
@@ -127,8 +130,13 @@ define(function( require , exports , model ){
                         });
                     }
                     // count robot
-
                     var tmp = _caTimes > 20 ? 0.4 + Math.random() * 0.4 : 2;
+                    // if game is over, reset the roboto speed and animation duration
+                    if( status.gameStatus == GAME_OVER ){
+                        tmp = 0;
+                        _robotAnimate.duration = config.duration * 2;
+                    }
+
                     if( _robotAnimate ){
                         _robotAnimate.turnTo( [ tmp * config.maxSpeed ] );
                     } else {

@@ -127,7 +127,6 @@ define(function( require , exports , model ){
             ctx.drawImage( img , 0 , 0 );
             pixData = ctx.getImageData( 0 , 0 , width , height );
             cache[ id ] = pixData;
-
             cache[ 'src-' + id ] = img.getAttribute('src');
         }
 
@@ -155,6 +154,7 @@ define(function( require , exports , model ){
             callback();
             return;
         }
+
         // motion blur image
         motionBlur( pixData , newData , radius , offset , 0 , callback );
     }
