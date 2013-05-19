@@ -22,6 +22,7 @@ define( function( require , exports , model ){
         this.begin();
     }
 
+    var timeoutDuration = 1000 / 60;
     Animate.prototype = {
         begin: function(){
             if(this._t) return ;
@@ -43,7 +44,7 @@ define( function( require , exports , model ){
                 }
                 // run step to update
                 that.step(currValues);
-            },13);
+            }, timeoutDuration );
         },
         // go to end of the animation
         end: function(){
@@ -81,7 +82,7 @@ define( function( require , exports , model ){
                 }
                 // run step to update
                 that.step(currValues);
-            } , 13);
+            } , timeoutDuration);
         },
         pause: function(){
             clearInterval(this._t);

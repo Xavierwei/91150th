@@ -370,6 +370,71 @@ span.lpn-ghost {
   cursor: pointer;
 }
 
+.speed00,
+.speed01,
+.speed02,
+.speed03,
+.speed04,
+.speed05,
+.speed06,
+.speed07,
+.speed08,
+.speed09,
+.speed10,
+.speed11,
+.speed12,
+.speed13,
+.speed14,
+.speed15,
+.speed16,
+.speed17,
+.speed18,
+.speed19,
+.speed20,
+.speed21,
+.speed22,
+.speed23,
+.speed24,
+.speed25,
+.speed26,
+.speed27,
+.speed28,
+.speed29{
+  background: url(../images/number.png) no-repeat;
+  display: inline-block;
+  width: 45px;
+  height: 63px;
+  margin-right: -3px;
+  background-position: 3px 0;
+}
+.speed01{
+  background-position: -70px 0px;
+}
+.speed02{
+  background-position: -140px 0px;
+}
+.speed03{
+  background-position: -210px 0px;
+}
+.speed04{
+  background-position: -285px 0px;
+}
+.speed05{
+  background-position: -357px 0px;
+}
+.speed06{
+  background-position: -427px 0px;
+}
+.speed07{
+  background-position: -500px 0px;
+}
+.speed08{
+  background-position: -574px 0px;
+}
+.speed09{
+  background-position: -645px 0px;
+}
+
 /********add css animate plugin**********/
 
 .css-animate {

@@ -93,14 +93,15 @@ define(function(require, exports, module) {
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
     var p1 , p2 , p , l ;
-
     game.setConfig({
         duration  : 2000
         , speedCallBack  : function( status ){
             // render car speed
 
             if( lastSpeed != status.speed ){
-                $speedBoard.html( status.speed );
+                $speeds[0].className = 'speed' + ~~ (status.speed / 100 );
+                $speeds[1].className = 'speed' + ~~ (status.speed / 10 % 10 );
+                $speeds[2].className = 'speed' + ~~ (status.speed % 10 );
                 lastSpeed = status.speed;
             }
 
@@ -150,7 +151,7 @@ define(function(require, exports, module) {
                         left: p * 10 * winWidth
                     });
                 // change robot dot position
-                $robotDot.css('left' , p2 + '%' );
+                $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
                 //TODO.. change bar background
 
                 // show time
@@ -178,16 +179,16 @@ define(function(require, exports, module) {
     }
     var counter = function( callback ){
         var $nums = $counter.find('.num');
-        var len = $nums.length - 1;
+        var len = $nums.length;
         ~(function showNum( ){
-            if( len == 0 ) {
+            var $t = $nums.eq( --len )
+                .fadeIn();
+            if( len == -1 ){
                 // hide the counter panel
                 $counter.fadeOut();
                 game.start();
                 return;
             }
-            var $t = $nums.eq( len-- )
-                .fadeIn();
             setTimeout( function(){
                 new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
                     M.motionBlur( $t[0] , ~~arr[ 0 ] );
@@ -287,6 +288,7 @@ define(function(require, exports, module) {
     $cars.hide();
 
     var $speedBoard = $('#speed-board');
+    var $speeds = $speedBoard.find('em');
     var $timeBoard = $('#time-board');
     var $road = $('#road');
     var $bg = $('#bg');

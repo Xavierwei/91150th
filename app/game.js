@@ -70,7 +70,7 @@ define(function( require , exports , model ){
         // last detect distance of the mouse
         var _caLastDis = _caDis.concat([]);
         var _caSpeeds = 0;
-        var _disDuration = 7 / 1000;
+        var _disDuration = 9 / 1000;
         var _winWdth = window.innerWidth;
         var _animate = null;
         var _robotAnimate = null;
