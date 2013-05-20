@@ -91,13 +91,13 @@ define(function( require , exports , model ){
             // if game is over, reset the roboto speed and animation duration
             if( status.gameStatus == GAME_OVER ){
                 speed = 0;
-                _robotAnimate.duration = config.duration * 2;
+                _robotAnimate.duration = config.duration * 1.5;
             }
 
             if( _robotAnimate ){
                 _robotAnimate.turnTo( [ speed * config.maxSpeed ] );
             } else {
-                _robotAnimate = new Animate( [0] , [ 300 ] , config.duration , '' , function(arr){
+                _robotAnimate = new Animate( [0] , [ 400 ] , config.duration , '' , function(arr){
                     status.robotSpeed = ~~arr[0];
                     // count the distance of car
                     status.robotDistance += status.robotSpeed * _disDuration;
@@ -112,7 +112,7 @@ define(function( require , exports , model ){
                 // if game over , stop the car , reset the durations
                 if( status.gameStatus == GAME_OVER ){
                     mouseSpeed = 0;
-                    _animate.duration = config.duration * 2;
+                    _animate.duration = config.duration * 1.5;
                 }
                 _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
             } else {
@@ -148,7 +148,7 @@ define(function( require , exports , model ){
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
                 var speed = Math.round( spx + spy ) / _winWdth * 1.5;
                 // count robot
-                var tmp = _caTimes > 30 ? 0.4 + Math.random() * 0.5 : 1.5 ;
+                var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;
 
                 _caSpeeds += speed;
                 _roSpeeds += tmp;

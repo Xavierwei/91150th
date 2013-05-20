@@ -104,7 +104,7 @@ define(function(require, exports, module) {
     var screenWidth = screen.width;
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
-    var p1 , p2 , p , l , dur;
+    var p1 , p2 , p , l , dur , rl ;
 
     game.setConfig({
         duration  : 2000
@@ -128,17 +128,24 @@ define(function(require, exports, module) {
                     .css('left' , l )
                     [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
                 // change car wheels
-                $car1Wheels.rotate( status.distance * 40 );
+                $car1Wheels.rotate( status.distance * 80 );
             }
+
             // change robot car position
 
+            // need to reduce car2width for first starting
+            if( status.gameStatus == 0 ){
+                rl = l + Math.min( 10 * Math.sqrt( Math.abs(p) ) * GAME_MAX_DISTANCE  , 2 * screenWidth ) - car2width ;
+            } else {
+                rl = l + 10 * p * GAME_MAX_DISTANCE;
+            }
             $cars.eq(1)
                 .stop( true , false )
                 .css({
-                    left: l + Math.min( 10 * Math.sqrt( p ) * GAME_MAX_DISTANCE  , 2 * screenWidth )
+                    left: rl
                 })
-                [ status.robotSpeed > 30 && status.distance > screenWidth ? 'addClass' : 'removeClass' ]('wheelblur');
-            $car2Wheels.rotate( status.robotDistance * 10 );
+                [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
+            $car2Wheels.rotate( status.robotDistance * 80 );
 
             //  move bg
             $bg[0].style.marginLeft = - status.distance / 3 % 500 + 'px';
@@ -236,7 +243,6 @@ define(function(require, exports, module) {
         var delay = 1000 * Math.random();
         var dur = 1000 + 500 * Math.random();
         $car.show()
-            .removeClass( animateClass )
             .css('left' , - $(this).width())
             .delay( delay )
             .animate({
@@ -325,7 +331,6 @@ define(function(require, exports, module) {
     }
 
     var lockClass = '__disabled__';
-    var animateClass = 'css-animate';
 
     var $cars = $('.main-cars .car');
     var $car1Wheels = $cars.eq(0).find('.front-wheel,.end-wheel');
@@ -370,7 +375,7 @@ define(function(require, exports, module) {
             (function( radius ){
                 setTimeout( function(){
                     M.motionBlur( $road[0] , radius , 0 , false , true );
-                } , radius / 3 * 100 );
+                } , radius * 200 );
             })(i);
         };
     })();

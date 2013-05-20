@@ -38,7 +38,7 @@ define( function( require , exports , model ){
                     return;
                 }
                 var easing = Animate.easing[that.easing] ||
-                    ( jQuery && jQuery.easing[that.easing] ) ||
+                    ( window.jQuery && window.jQuery.easing[that.easing] ) ||
                     Animate.easing.linear,
                     currValues = [];
                 for (var i = 0,len = queue.length; i < len; i++){
@@ -78,7 +78,7 @@ define( function( require , exports , model ){
                     return;
                 }
                 var easing = Animate.easing[that.easing] ||
-                    ( jQuery && jQuery.easing[that.easing] ) ||
+                    ( window.jQuery && window.jQuery.easing[that.easing] ) ||
                     Animate.easing.linear,
                     currValues = [];
                 for (var i = 0,len = queue.length; i < len; i++){
