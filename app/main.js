@@ -170,13 +170,9 @@ define(function(require, exports, module) {
             }
 
             // move the road
-            var canvas = $road[0].previousSibling;
-            if( canvas && canvas.tagName == 'CANVAS' ){
-                canvas.style.marginLeft = - status.distance * 100 % 500 + 'px';
-            }
+            $roadCan[0].style.marginLeft = - status.distance * 100 % currRoadConfig.width + 'px';
 
-
-            //. change bar background
+            // change bar background
             $bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
                     dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
                     dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
@@ -395,26 +391,25 @@ define(function(require, exports, module) {
         , width: 0
         , img: null
     }];
+    var currRoadConfig = roadConfig[0];
     var motionRoad = function( status , radius ){
         // city road
         var motionCache = M.getMotionCache();
         var index = 0;
 
-        if( status.distance < 1000 ){
+        if( status.distance < 100 ){
             index = 0;
         } else if( status.distance < 2000 ){ // mountain road
             index = 1;
         } else { // for sea road
             index = 2;
         }
-        var road = roadConfig[index];
+        currRoadConfig = roadConfig[index];
         var canvas = $roadCan[0];
-        var width = ( Math.ceil( screenWidth / road.width ) + 1 ) * road.width;
+        var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 1 ) * currRoadConfig.width;
         // reset road width and height
         canvas.width = width;
-        //var pixData = motionCache[[ 'pix' , radius  , 0 , road.id ].join('-')];
-        //var ctx = canvas.getContext;
-        M.motionBlur( road.img , radius , 0 , canvas );
+        M.motionBlur( currRoadConfig.img , radius , 0 , canvas );
     }
     // save road cache
     !(function(){
