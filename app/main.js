@@ -36,12 +36,12 @@ define(function(require, exports, module) {
     var $videoPanel = $('#video-mask');
     // query loading
     $(document.body).queryLoader2({
+        minimumTime: 1000,
         onLoading : function( percentage ){
             $probar.css( 'width' , percentage + '%' );
             $pronum.html( percentage + '%' );
         },
         onComplete: function(){
-            return;
             $('#loading-mask')
                 .animate({
                     top : '-100%'
@@ -96,11 +96,7 @@ define(function(require, exports, module) {
     var M = require('../app/motion-blur');
     var A = require('../src/Animate');
     var Animate = A.Animate;
-    // cache last motion arguments
-    // reduce the Consume of image motion
-    var lastMotionValue = -1;
-    var motionValue = 0;
-    var motionTimes = 0;
+
     var winWidth = $(window).width();
     var screenWidth = screen.width;
     var GAME_MAX_SPEED = 400;
@@ -148,11 +144,6 @@ define(function(require, exports, module) {
                 [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
             $car2Wheels.rotate( status.robotDistance * 80 );
 
-            //  move bg
-            $bg[0].style.marginLeft = - status.distance / 3 % 500 + 'px';
-
-
-
             // change car dot position
             p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             p2 = p1 + p * 88 ;
@@ -160,15 +151,8 @@ define(function(require, exports, module) {
             // change robot dot position
             $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
 
-            // .. motion road ,
-            motionValue = ~~ ( status.speed / 20 ) * 3 ;
-            if( lastMotionValue != motionValue ){
-                motionRoad( status , status.speed == 0 ? 0 :
-                        Math.min( motionValue + 3 , 30 ) );
-
-                lastMotionValue = motionValue;
-                motionValue = 0;
-            }
+            //  move bg and motion road
+            moveBgAndMotionRoad( status );
 
             // move the road
             $roadCan[0].style.marginLeft = - status.distance * 100 % currRoadConfig.width + 'px';
@@ -301,7 +285,7 @@ define(function(require, exports, module) {
                     , height: 256
                 })
                 .insertBefore($road.hide());
-        motionRoad( {distance:0} , 0 );
+        motionRoad( 0 );
     }
     var reset = function(){
         // reset the game
@@ -325,15 +309,21 @@ define(function(require, exports, module) {
         // ..5. reset bar
         $bar[0].className = 'b-bar0';
 
-        // reset road
-        motionRoad( {distance:0} , 0 );
+
         // reset speed board
         $speeds[0].className = 'speed00';
         $speeds[1].className = 'speed10';
         $speeds[2].className = 'speed20';
         $timeBoard.html('00:00:0');
         // reset bg
-        $bg.css( 'marginLeft' , 0 );
+        $bg.css( 'marginLeft' , 0 )
+            .attr(bgConfig[0].src);
+        lastBgIndex = 0;
+        lastBgDistance = 0;
+
+        // reset road
+        motionRoad( 0 );
+
     }
 
     var lockClass = '__disabled__';
@@ -374,6 +364,58 @@ define(function(require, exports, module) {
 
 
     /*
+     * bg config
+     */
+    var bgConfig = [{
+        src: 'bg1.jpg',
+        width: 2919
+    },{
+        src: 'bg2.jpg',
+        width: 3132
+    },{
+        src: 'bg3.jpg',
+        width: 3540
+    }];
+    var lastBgIndex = 0;
+    var lastBgDistance = 0;
+    // cache last motion arguments
+    // reduce the Consume of image motion
+    var lastMotionValue = -1;
+    var motionValue = 0;
+    var moveBgAndMotionRoad = function( status ){
+        var bgIndex = 0 , mod = bgConfig[0].width + bgConfig[1].width + bgConfig[2].width - 3 * winWidth;
+        if( status.distance % mod < bgConfig[0].width - winWidth )
+            bgIndex = 0;
+        else if(status.distance % mod < bgConfig[0].width + bgConfig[1].width - 2 * winWidth){
+            bgIndex = 1;
+        } else {
+            bgIndex = 2;
+        }
+
+        motionValue = ~~ ( status.speed / 20 ) * 3 ;
+
+        if( lastBgIndex != bgIndex ){
+            $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
+            $bg[0].style.marginLeft = '0px';
+            lastBgDistance = status.distance;
+            lastBgIndex = bgIndex;
+            // .. motion road ,
+            // run motionRoad function, so that it will change the road right now.
+            motionRoad( status.speed == 0 ? 0 :
+                        Math.min( motionValue + 3 , 30 ) );
+        } else {
+            $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) % mod + 'px';
+            // .. motion road ,
+            if( lastMotionValue != motionValue ){
+                motionRoad( status.speed == 0 ? 0 :
+                        Math.min( motionValue + 3 , 30 ) );
+
+                lastMotionValue = motionValue;
+                motionValue = 0;
+            }
+        }
+    }
+    /*
      * motion the road, dur to the game status and radius
      */
     var roadConfig = [{
@@ -392,19 +434,13 @@ define(function(require, exports, module) {
         , width: 0
         , img: null
     }];
+
     var currRoadConfig = roadConfig[0];
-    var motionRoad = function( status , radius ){
+    var motionRoad = function( radius ){
         // city road
         var motionCache = M.getMotionCache();
-        var index = 0;
+        var index = lastBgIndex;
 
-        if( status.distance < 100 ){
-            index = 0;
-        } else if( status.distance < 2000 ){ // mountain road
-            index = 1;
-        } else { // for sea road
-            index = 2;
-        }
         currRoadConfig = roadConfig[index];
         var canvas = $roadCan[0];
         var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 1 ) * currRoadConfig.width;
