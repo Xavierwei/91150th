@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript"
+            src="./lib/sea/sea-debug.js"
+            data-config="../../app/config"
+            data-main="../../app/gallery"></script>
+</head>
+<style>
+    body {background:#000;}
+    .photo {position: absolute; -webkit-backface-visibility: hidden;-webkit-transform: skew(-22deg,0);transform: skew(-22deg,0);float:left;width:357px;height:216px;overflow:hidden;margin:0 0 0 5px;cursor:pointer;}
+    .photo img {display: inline-block;-webkit-transform: skew(22deg,0);transform: skew(22deg,0);margin:0 0 0 -50px;display:block;}
+    .photo:hover {-webkit-transform: skew(0,0);transform: skew(0,0);overflow:visible;z-index:9999;}
+    .photo:hover img {-webkit-transform: skew(0,0);transform: skew(0,0); border:3px solid #fff;}
+</style>
+<body>
+
+<div class="photo">
+    <img src="pic/s1.jpg" />
+</div>
+<div class="photo">
+    <img src="pic/s1.jpg" />
+</div>
+<div class="photo">
+    <img src="pic/s1.jpg" />
+</div>
+<div class="photo">
+    <img src="pic/s1.jpg" />
+</div>
+<div class="photo">
+    <img src="pic/s1.jpg" />
+</div>
+<div class="photo">
+    <img src="pic/s1.jpg" />
+</div>
+
+
+</body>
+</html>
