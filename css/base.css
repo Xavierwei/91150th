@@ -121,7 +121,7 @@ span.lpn-ghost {
 /*---> main bg  */
 .main-bg .bg{
   position: absolute;
-  bottom: 246px;
+  bottom: 236px;
 }
 .main-bg .road{
   background: url(../images/road-1.png);
