@@ -41,6 +41,7 @@ define(function(require, exports, module) {
             $pronum.html( percentage + '%' );
         },
         onComplete: function(){
+            return;
             $('#loading-mask')
                 .animate({
                     top : '-100%'
