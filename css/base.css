@@ -430,6 +430,13 @@ span.lpn-ghost {
     top: 147px;
     left: 468px;
 }
+.result .r-distance {
+    position: absolute;
+    width: 162px;
+    height: 41px;
+    top: 207px;
+    left: 370px;
+}
 .result .r-share{
   position: absolute;
   width: 372px;
@@ -664,35 +671,296 @@ span.lpn-ghost {
     background-position: -370px 0px;
 }
 .time10{
-    background-position: -43px -61px;
+    background-position: 0 -61px;
 }
 .time11{
-    background-position: -83px -61px;
+    background-position: -43px -61px;
 }
 .time12{
-    background-position: -124px -61px;
+    background-position: -83px -61px;
 }
 .time13{
-    background-position: -164px -61px;
+    background-position: -124px -61px;
 }
 .time14{
-    background-position: -205px -61px;
+    background-position: -164px -61px;
 }
 .time15{
-    background-position: -245px -61px;
+    background-position: -205px -61px;
 }
 .time16{
-    background-position: -289px -61px;
+    background-position: -245px -61px;
 }
 .time17{
-    background-position: -327px -61px;
+    background-position: -289px -61px;
 }
 .time18{
+    background-position: -327px -61px;
+}
+.time19{
     background-position: -370px -61px;
 }
 
 
+.distance00,
+.distance01,
+.distance02,
+.distance03,
+.distance04,
+.distance05,
+.distance06,
+.distance07,
+.distance08,
+.distance09,
+.distance10,
+.distance11,
+.distance12,
+.distance13,
+.distance14,
+.distance15,
+.distance16,
+.distance17,
+.distance18,
+.distance19,
+.distance20,
+.distance21,
+.distance22,
+.distance23,
+.distance24,
+.distance25,
+.distance26,
+.distance27,
+.distance28,
+.distance29,
+.distance30,
+.distance31,
+.distance32,
+.distance33,
+.distance34,
+.distance35,
+.distance36,
+.distance37,
+.distance38,
+.distance39,
+.distance40,
+.distance41,
+.distance42,
+.distance43,
+.distance44,
+.distance45,
+.distance46,
+.distance47,
+.distance48,
+.distance49,
+.distance50,
+.distance51,
+.distance52,
+.distance53,
+.distance54,
+.distance55,
+.distance56,
+.distance57,
+.distance58,
+.distance59,
+.distance60,
+.distance61,
+.distance62,
+.distance63,
+.distance64,
+.distance65,
+.distance66,
+.distance67,
+.distance68,
+.distance69
+{
+    background: url(../images/number_result2.png) no-repeat;
+    display: inline-block;
+    width: 26px;
+    height: 51px;
+    background-position: 0 0;
+}
 
+.distance01{
+    background-position: -43px 0px;
+}
+.distance02{
+    background-position: -83px 0px;
+}
+.distance03{
+    background-position: -124px 0px;
+}
+.distance04{
+    background-position: -164px 0px;
+}
+.distance05{
+    background-position: -205px 0px;
+}
+.distance06{
+    background-position: -245px 0px;
+}
+.distance07{
+    background-position: -289px 0px;
+}
+.distance08{
+    background-position: -327px 0px;
+}
+.distance09{
+    background-position: -370px 0px;
+}
+.distance10{
+     background-position: 0px -61px;
+ }
+.distance11{
+    background-position: -43px -61px;
+}
+.distance12{
+    background-position: -83px -61px;
+}
+.distance13{
+    background-position: -124px -61px;
+}
+.distance14{
+    background-position: -164px -61px;
+}
+.distance15{
+    background-position: -205px -61px;
+}
+.distance16{
+    background-position: -245px -61px;
+}
+.distance17{
+    background-position: -289px -61px;
+}
+.distance18{
+    background-position: -327px -61px;
+}
+.distance19{
+    background-position: -370px -61px;
+}
+
+.distance20{
+    background-position: 0px -121px;
+}
+.distance21{
+    background-position: -43px -121px;
+}
+.distance22{
+    background-position: -83px -121px;
+}
+.distance23{
+    background-position: -124px -121px;
+}
+.distance24{
+    background-position: -164px -121px;
+}
+.distance25{
+    background-position: -205px -121px;
+}
+.distance26{
+    background-position: -245px -121px;
+}
+.distance27{
+    background-position: -289px -121px;
+}
+.distance28{
+    background-position: -327px -121px;
+}
+.distance29{
+    background-position: -370px -121px;
+}
+
+.distance30{
+    background-position: 0px -182px;
+}
+.distance31{
+    background-position: -43px -182px;
+}
+.distance32{
+    background-position: -83px -182px;
+}
+.distance33{
+    background-position: -124px -182px;
+}
+.distance34{
+    background-position: -164px -182px;
+}
+.distance35{
+    background-position: -205px -182px;
+}
+.distance36{
+    background-position: -245px -182px;
+}
+.distance37{
+    background-position: -289px -182px;
+}
+.distance38{
+    background-position: -327px -182px;
+}
+.distance39{
+    background-position: -370px -182px;
+}
+
+.distance40{
+    background-position: 0px -242px;
+}
+.distance41{
+    background-position: -43px -242px;
+}
+.distance42{
+    background-position: -83px -242px;
+}
+.distance43{
+    background-position: -124px -242px;
+}
+.distance44{
+    background-position: -164px -242px;
+}
+.distance45{
+    background-position: -205px -242px;
+}
+.distance46{
+    background-position: -245px -242px;
+}
+.distance47{
+    background-position: -289px -242px;
+}
+.distance48{
+    background-position: -327px -242px;
+}
+.distance49{
+    background-position: -370px -242px;
+}
+
+.distance50{
+    background-position: 0px -303px;
+}
+.distance51{
+    background-position: -43px -303px;
+}
+.distance52{
+    background-position: -83px -303px;
+}
+.distance53{
+    background-position: -124px -303px;
+}
+.distance54{
+    background-position: -164px -303px;
+}
+.distance55{
+    background-position: -205px -303px;
+}
+.distance56{
+    background-position: -245px -303px;
+}
+.distance57{
+    background-position: -289px -303px;
+}
+.distance58{
+    background-position: -327px -303px;
+}
+.distance59{
+    background-position: -370px -303px;
+}
 /********add css animate plugin**********/
 
 .css-animate {
