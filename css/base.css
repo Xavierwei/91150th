@@ -409,7 +409,27 @@ span.lpn-ghost {
   background: url(../images/result-panel.png) no-repeat;
   position: relative;
 }
-
+.result .r-time1{
+    position: absolute;
+    width: 86px;
+    height: 41px;
+    top: 147px;
+    left: 254px;
+}
+.result .r-time2{
+    position: absolute;
+    width: 86px;
+    height: 41px;
+    top: 147px;
+    left: 362px;
+}
+.result .r-time3{
+    position: absolute;
+    width: 86px;
+    height: 41px;
+    top: 147px;
+    left: 468px;
+}
 .result .r-share{
   position: absolute;
   width: 372px;
@@ -586,6 +606,92 @@ span.lpn-ghost {
 .speed29{
     background-position: -645px -178px;
 }
+
+
+
+.time00,
+.time01,
+.time02,
+.time03,
+.time04,
+.time05,
+.time06,
+.time07,
+.time08,
+.time09,
+.time10,
+.time11,
+.time12,
+.time13,
+.time14,
+.time15,
+.time16,
+.time17,
+.time18,
+.time19{
+    background: url(../images/number_result1.png) no-repeat;
+    display: inline-block;
+    width: 26px;
+    height: 51px;
+    background-position: 0 0;
+}
+
+.time01{
+    background-position: -43px 0px;
+}
+.time02{
+    background-position: -83px 0px;
+}
+.time03{
+    background-position: -124px 0px;
+}
+.time04{
+    background-position: -164px 0px;
+}
+.time05{
+    background-position: -205px 0px;
+}
+.time06{
+    background-position: -245px 0px;
+}
+.time07{
+    background-position: -289px 0px;
+}
+.time08{
+    background-position: -327px 0px;
+}
+.time09{
+    background-position: -370px 0px;
+}
+.time10{
+    background-position: -43px -61px;
+}
+.time11{
+    background-position: -83px -61px;
+}
+.time12{
+    background-position: -124px -61px;
+}
+.time13{
+    background-position: -164px -61px;
+}
+.time14{
+    background-position: -205px -61px;
+}
+.time15{
+    background-position: -245px -61px;
+}
+.time16{
+    background-position: -289px -61px;
+}
+.time17{
+    background-position: -327px -61px;
+}
+.time18{
+    background-position: -370px -61px;
+}
+
+
 
 /********add css animate plugin**********/
 
