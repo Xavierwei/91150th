@@ -121,9 +121,14 @@ span.lpn-ghost {
 /*---> main bg  */
 .main-bg .bg{
   position: absolute;
-  bottom: 256px;
+  bottom: 246px;
+}
+.main-bg .road{
+  background: url(../images/road-1.png);
+  width: 100%;
 }
 .main-bg .road , .main-bg #can-road{
+  height: 256px;
   position: absolute;
   bottom: 0;
 }
@@ -245,6 +250,7 @@ span.lpn-ghost {
 }
 .main-cars .car{
   position: absolute;
+  display: none;
   bottom: 0;
   right: 100%;
 }

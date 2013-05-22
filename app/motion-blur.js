@@ -140,7 +140,20 @@ define(function( require , exports , model ){
             cache[ pixCacheKey ] = newData;
             // if onlyCache return directly
             if( onlyCache ) return;
-            if( useCanvas ){
+            if( typeof useCanvas === 'object' &&
+                useCanvas.tagName == 'CANVAS' ){
+                var w = useCanvas.width;
+                var h = useCanvas.height;
+                var iw = newData.width;
+                var ih = newData.height;
+                var tmpctx = useCanvas.getContext('2d');
+                for( var i = 0 ; i < w ; i += iw ){
+                    for (var j = 0 ; j < h; j += ih) {
+                        tmpctx.putImageData( newData , i , j );
+                    }
+                }
+                useCanvas.getContext('2d').putImageData( newData , 0 , 0 );
+            } else if ( useCanvas ){
                 var tCan = getImageCanvas( img );
                 tCan.getContext('2d').putImageData( newData , 0 , 0 );
             } else {
@@ -159,5 +172,9 @@ define(function( require , exports , model ){
             // motion blur image
             motionBlur( pixData , newData , radius , offset , 0 , callback );
         }
+    }
+
+    exports.getMotionCache = function(){
+        return cache;
     }
 });

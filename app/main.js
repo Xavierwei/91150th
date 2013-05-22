@@ -162,9 +162,9 @@ define(function(require, exports, module) {
             // .. motion road ,
             motionValue = ~~ ( status.speed / 20 ) * 3 ;
             if( lastMotionValue != motionValue ){
+                motionRoad( status , status.speed == 0 ? 0 :
+                        Math.min( motionValue + 3 , 30 ) );
 
-                M.motionBlur( $road[0] , status.speed == 0 ? 0 :
-                        Math.min( motionValue + 3 , 30 ) , 0 , true );
                 lastMotionValue = motionValue;
                 motionValue = 0;
             }
@@ -294,8 +294,17 @@ define(function(require, exports, module) {
             counter();
         });
 
+
         // pre motion road
-        M.motionBlur( $road[0] , 0 , 0 , true );
+        if( !$roadCan )
+            $roadCan = $('<canvas>')
+                .attr({
+                    id: 'can-road'
+                    , width: screenWidth
+                    , height: 256
+                })
+                .insertBefore($road.hide());
+        motionRoad( {distance:0} , 0 );
     }
     var reset = function(){
         // reset the game
@@ -320,7 +329,7 @@ define(function(require, exports, module) {
         $bar[0].className = 'b-bar0';
 
         // reset road
-        M.motionBlur( $road[0] ,  0  , 0 , true );
+        motionRoad( {distance:0} , 0 );
         // reset speed board
         $speeds[0].className = 'speed00';
         $speeds[1].className = 'speed10';
@@ -336,14 +345,13 @@ define(function(require, exports, module) {
     var $car1Wheels = $cars.eq(0).find('.front-wheel,.end-wheel');
     var $car2Wheels = $cars.eq(1).find('.front-wheel,.end-wheel');
     var car1width = $cars.eq(0).width() , car2width = $cars.eq(1).width();
-    // hide the car
-    $cars.hide();
 
     var $speedBoard = $('#speed-board');
     var $bar = $('#b-bar');
     var $speeds = $speedBoard.find('em');
     var $timeBoard = $('#time-board');
     var $road = $('#road');
+    var $roadCan = null;
     var $bg = $('#bg');
     var $carDot = $('#car-dot');
     var $robotDot = $('#robot-dot');
@@ -367,18 +375,74 @@ define(function(require, exports, module) {
             } );
         });
 
+
+    /*
+     * motion the road, dur to the game status and radius
+     */
+    var roadConfig = [{
+        id: 'road-1'
+        , src: 'road-1.png'
+        , width: 0
+        , img: null
+    } , {
+        id: 'road-2'
+        , src: 'road-2.png'
+        , width: 0
+        , img: null
+    } , {
+        id: 'road-3'
+        , src: 'road-3.png'
+        , width: 0
+        , img: null
+    }];
+    var motionRoad = function( status , radius ){
+        // city road
+        var motionCache = M.getMotionCache();
+        var index = 0;
+
+        if( status.distance < 1000 ){
+            index = 0;
+        } else if( status.distance < 2000 ){ // mountain road
+            index = 1;
+        } else { // for sea road
+            index = 2;
+        }
+        var road = roadConfig[index];
+        var canvas = $roadCan[0];
+        var width = ( Math.ceil( screenWidth / road.width ) + 1 ) * road.width;
+        // reset road width and height
+        canvas.width = width;
+        //var pixData = motionCache[[ 'pix' , radius  , 0 , road.id ].join('-')];
+        //var ctx = canvas.getContext;
+        M.motionBlur( road.img , radius , 0 , canvas );
+    }
     // save road cache
     !(function(){
+
         var motionStart = 3 , motionMax = 30 , motionStep = 3;
-        var currMotion = motionStart;
-        for (var i = motionStart; i <= 30; i+=motionStep ) {
-            (function( radius ){
-                setTimeout( function(){
-                    M.motionBlur( $road[0] , radius , 0 , false , true );
-                } , radius * 200 );
-            })(i);
-        };
+        var cacheMotionBlur = function( img ){
+            for (var i = motionStart; i <= 30; i+=motionStep ) {
+                (function( radius ){
+                    setTimeout( function(){
+                        M.motionBlur( img , radius , 0 , false , true );
+                    } , radius * 200 );
+                })(i);
+            };
+        }
+        $.each(roadConfig , function( i ){
+            var img = document.createElement('img');
+            img.id = roadConfig[i].id;
+            img.onload = function(){
+                cacheMotionBlur( img );
+                roadConfig[i].width = this.width;
+            }
+            img.setAttribute( 'src' , './images/' + roadConfig[i].src );
+
+            roadConfig[i].img = img;
+        });
     })();
+
+
     // click share btn to pause the game
     var i = 0;
     $('#share-btn')
