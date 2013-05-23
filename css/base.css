@@ -103,6 +103,7 @@ span.lpn-ghost {
 }
 #loading-mask .lpn-panel{
   background: white;
+  overflow:hidden;
   padding: 90px 0;
   width: 100%;
 }
@@ -154,6 +155,7 @@ span.lpn-ghost {
 }
 
 /*---> main bg  */
+.main {opacity:0;}
 .main-bg .bg{
   position: absolute;
   bottom: 236px;
@@ -172,13 +174,14 @@ span.lpn-ghost {
   position: absolute;
   z-index: 99999;
   top: 17px;
-  left: 0;
+  left: -200px;
 }
 .main-com-logo{
   position: absolute;
   z-index: 99999;
   top: 17px;
   right: 15px;
+  display:none;
 }
 /*---> */
 
@@ -189,7 +192,7 @@ span.lpn-ghost {
   position: absolute;
   z-index: 9999;
   bottom: 45px;
-  left: 50%;
+  left: -50%;
   margin-left: -343px;
   color: #999;
 }
@@ -333,7 +336,7 @@ span.lpn-ghost {
   width: 500px;
   z-index: 9999;
   top: 50%;
-  left: 50%;
+  left: -50%;
   margin-left: -250px;
   margin-top: -112px;
   text-align: center;

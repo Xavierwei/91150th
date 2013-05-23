@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 
     // require jquery ani plugin
     require('jquery.fancybox');
+    require('jquery.easing');
 
     $('.photo').each(function(i){
         var left = (i%3)*360;
@@ -19,7 +20,6 @@ define(function(require, exports, module) {
     $('.photo a').fancybox({
         openMethod : 'dropIn',
         padding: 0,
-        playSpeed: 2000,
         tpl: {
             wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"></div><div class="fancybox-inner"></div></div></div></div>'
         },
@@ -38,7 +38,8 @@ define(function(require, exports, module) {
                 top: '+=400px',
                 opacity: 1
             }, {
-                duration: F.current.openSpeed,
+                easing: 'easeOutQuart',
+                duration: 800,
                 complete: F._afterZoomIn
             });
         };

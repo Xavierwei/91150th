@@ -47,13 +47,15 @@ define(function(require, exports, module) {
             $pronum.html( percentage + '%' );
         },
         onComplete: function(){
+            $('#loading-mask .lpn-panel').animate({padding:0, height:1},300,'easeOutQuart');
             $('#loading-mask')
-                .animate({
-                    top : '-100%'
-                } , 3000 , 'easeOutElastic' , function(){
+                .delay(300).animate({'opacity':0},1000,'easeOutQuart',function(){
                     $(this).hide();
-                    initVideoPlay();
                 });
+            $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
+                initVideoPlay();
+                initAnimation();
+            });
         }
     });
 
@@ -62,13 +64,18 @@ define(function(require, exports, module) {
         .click(function(){
             $videoPanel.animate({
                 top: '-100%'
-            } , 3000 , 'easeOutElastic' , function(){
+            } , 2000 , 'easeOut' , function(){
                 $videoPanel.hide();
             });
         });
     var initVideoPlay = function(){
         // TODO... start to play video
 
+    }
+    var initAnimation = function(){
+        $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
+        $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
+        $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
     }
 
     var $resultPanel = $('#result-mask');
@@ -341,6 +348,8 @@ define(function(require, exports, module) {
     var ready = function(  ){
         // 1. drive robot to sence
         //_driveCarToSence( $cars.eq(1) , 1 );
+
+        $('.main-board').animate({left:'50%'},1200,'easeOutQuart');
         // drive robot along
         $cars.eq(1).show().css('left' , - car2width);
         $robotDot.show().css('left' , '6%');
@@ -360,6 +369,7 @@ define(function(require, exports, module) {
             // $cbg.attr('src' , $cbg.attr('osrc'));
             // counter nums
             counter();
+
         });
 
 
@@ -432,21 +442,30 @@ define(function(require, exports, module) {
     var $counter = $('#counter');
     var $startBtn = $('#start-btn')
         .click(function(){
-            var $t = $( this );
-            if( $t.hasClass( lockClass ) ) return;
-            $t.addClass( lockClass );
-            var i = 0;
-            // motion blur
-            new Animate( [ 0 ] , [ 140 ] , 300 , '' , function( arr ){
-                M.motionBlur( $t[0] , ~~arr[ 0 ] );
-                i++;
-                $t.css( 'opacity' , Math.pow( 1 / i , 1 / 4 ) );
-            } , function(){
-                // hide start btn
-                $t.hide()
-                    .addClass( lockClass );;
+//            var $t = $( this );
+//            if( $t.hasClass( lockClass ) ) return;
+//            $t.addClass( lockClass );
+//            var i = 0;
+//            // motion blur
+//            new Animate( [ 0 ] , [ 140 ] , 300 , '' , function( arr ){
+//                M.motionBlur( $t[0] , ~~arr[ 0 ] );
+//                i++;
+//                $t.css( 'opacity' , Math.pow( 1 / i , 1 / 4 ) );
+//            } , function(){
+//                // hide start btn
+//                $t.hide()
+//                    .addClass( lockClass );;
+//                ready();
+//            } );
+            $(this).animate({'margin-left':2000,opacity:0},500,'easeInQuart',function(){
+                $(this).hide();
                 ready();
-            } );
+            });
+        })
+        .hover(function(){
+            $(this).addClass('animated tada');
+        },function(){
+            $(this).removeClass('animated tada');
         });
 
 
