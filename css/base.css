@@ -284,6 +284,7 @@ span.lpn-ghost {
 }
 .main-cars .car{
   position: absolute;
+  z-index: 9999;
   display: none;
   bottom: 0;
   right: 100%;
