@@ -36,7 +36,7 @@ textarea {
     word-wrap  : break-word;
 }
 body {
-    color : #000;
+    color : #fff;
     font: 14px/20px arial,STHeiti,simsun,sans-serif;
     overflow-x: hidden;
 }
@@ -382,10 +382,13 @@ span.lpn-ghost {
 .video-mask{
   background: rgba( 0 , 0 , 0 , 0.3 );
   z-index: 999998;
+  display:none;
 }
 .video-wrap{
   width: 775px;
-  height: 460px;
+  /*height: 460px;*/
+  height:0;
+  overflow:hidden;
   margin-top: -40px;
   background: url(../images/video-bg.png) no-repeat;
 }
@@ -397,15 +400,16 @@ span.lpn-ghost {
 }
 .video-skip{
   color: white;
-  width: 99px;
-  height: 34px;
-  line-height: 34px;
-  background: url(../images/skip-bg.png) no-repeat;
-  margin-top: -18px;
+  width: 29px;
+  height: 17px;
+  line-height: 29px;
+  background: url(../images/video_skip.png) no-repeat;
+  margin-top: -13px;
   clear: both;
   float: right;
   margin-right: 21px;
   cursor: pointer;
+  display:none;
 }
 
 .result{
@@ -1010,3 +1014,4 @@ span.lpn-ghost {
   text-shadow: 1px 1px 2px black;
   padding-right: 20px;
 }
+
