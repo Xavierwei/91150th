@@ -10,10 +10,10 @@ define(function(require, exports, module) {
 
     $('.photo').each(function(i){
         var left = (i%3)*360;
-        var top = parseInt(i/3)*218;
+        var top = parseInt(i/3)*219;
         if(parseInt(i/3) == 1)
         {
-            left -= 88;
+            left -= 79;
         }
         $(this).css({left:left,top:top});
     });
