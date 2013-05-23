@@ -33,6 +33,10 @@ seajs.config({
         src: '../../m/src/jquery.mobile-1.3.0',
         deps: ['jquery']
     }
+    ,'jquery.fancybox': {
+        src: '../../src/jquery-plugin/slider/jquery.fancybox.pack',
+        deps: ['jquery']
+    }
     // for ie6 fix png
     ,'uglyFuckIe6' : {
         src: '../../src/DD_belatedPNG_0.0.8a-min',
