@@ -154,9 +154,6 @@ define(function(require, exports, module) {
             //  move bg and motion road
             moveBgAndMotionRoad( status );
 
-            // move the road
-            $roadCan[0].style.marginLeft = - status.distance * 100 % currRoadConfig.width + 'px';
-
             // change bar background
             $bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
                     dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
@@ -368,13 +365,13 @@ define(function(require, exports, module) {
      */
     var bgConfig = [{
         src: 'bg1.jpg',
-        width: 2919
+        width: 3005
     },{
         src: 'bg2.jpg',
-        width: 3132
+        width: 3172
     },{
         src: 'bg3.jpg',
-        width: 3540
+        width: 3521
     }];
     var lastBgIndex = 0;
     var lastBgDistance = 0;
@@ -414,6 +411,9 @@ define(function(require, exports, module) {
                 motionValue = 0;
             }
         }
+
+        // move the road
+        $roadCan[0].style.marginLeft = - status.distance * 100 % currRoadConfig.width + 'px';
     }
     /*
      * motion the road, dur to the game status and radius
