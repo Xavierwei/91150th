@@ -34,7 +34,7 @@
 */
 </script>
  </head>
- <body>
+ <body onselectstart="return false">
     <!---// loading start -->
     <section id="loading-mask" class="lpn-mask">
       <span class="lpn-ghost"></span>
@@ -86,80 +86,10 @@
           <div class="r-time1"><span class="time00"></span><span class="time00"></span></div>
           <div class="r-time2"><span class="time00"></span><span class="time00"></span></div>
           <div class="r-time3"><span class="time00"></span><span class="time00"></span></div>
-          <div class="r-distance"><span class="distance03"></span><span class="distance16"></span><span class="distance26"></span><span class="distance36"></span><span class="distance46"></span><span class="distance56"></span></div>
+          <div class="r-distance"><span class="distance00"></span><span class="distance10"></span><span class="distance20"></span><span class="distance30"></span><span class="distance40"></span><span class="distance50"></span></div>
           <div class="r-share"></div>
           <div class="r-close"></div>
           <div class="r-list">
-            <table>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>name</td>
-                  <td>1:20:19</td>
-                  <td>888888m</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
           <div class="r-slider">
             <hr>
@@ -188,17 +118,28 @@
         <img class="main-com-logo" src="images/m-com-logo.png" />
       </div>
       <div class="main-board">
-        <div class="board-l" id="speed-board"><em class="speed00"></em><em class="speed10"></em><em class="speed20"></em></div>
-        <div class="board-time" id="time-board">00:00:0</div>
-        <div class="board-m-t">
-          <div id="b-bar" class="b-bar0"></div>
-          <img src="images/cardot.png" class="b-car" id="car-dot" />
-          <img src="images/cardot.png" class="b-robot" id="robot-dot" />
+        <div class="main-board-con" >
+          <div class="board-l" id="speed-board"><em class="speed00"></em><em class="speed10"></em><em class="speed20"></em></div>
+          <div class="board-time" id="time-board">00:00:0</div>
+          <div class="board-m-t">
+            <div id="b-bar" class="b-bar0"></div>
+            <img src="images/cardot.png" class="b-car" id="car-dot" />
+            <img src="images/cardot.png" class="b-robot" id="robot-dot" />
+          </div>
+          <div class="board-m-b">
+            <a href="">保时捷911境界</a><a href="">保时捷官网</a><a href="">排行榜</a>
+          </div>
+          <span class="board-r" id="share-btn">分享</span>
+          <div class="board-share" id="share-con">
+            <a href="" class="sina"></a>
+            <a href="" class="qzone"></a>
+            <a href="" class="kaixing"></a>
+            <a href="" class="qqwb"></a>
+            <a href="" class="renren"></a>
+            <a href="" class="tt"></a>
+          </div>
         </div>
-        <div class="board-m-b">
-          <a href="">保时捷911境界</a><a href="">保时捷官网</a>
-        </div>
-        <span class="board-r" id="share-btn">分享</span>
+        <img src="images/p-bg-r.png" id="main-board-bg-r" class="main-board-bg-r" />
       </div>
       <div class="main-bottom">
         <a href="">©2013保时捷中国 法律公告</a>
@@ -230,5 +171,29 @@
       </div>
     </section>
     <!---\\ moving end -->
+    <!--load jquery and plugin-->
+    <script type="text/javascript" src="./lib/jquery/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./src/jquery-plugin/jquery.queryloader2.js"></script>
+    <script>
+    // query loading
+    var $probar = $('#process-bar');
+    var $pronum = $('#process-num');
+    $(document.body).queryLoader2({
+        minimumTime: 1000,
+        onLoading : function( percentage ){
+            $probar.css( 'width' , percentage + '%' );
+            $pronum.html( percentage + '%' );
+        },
+        onComplete: function(){
+            $('#loading-mask')
+                .animate({
+                    top : '-100%'
+                } , 2000 , '' , function(){
+                    $(this).hide();
+                    //initVideoPlay();
+                });
+        }
+    });
+    </script>
  </body>
 </html>

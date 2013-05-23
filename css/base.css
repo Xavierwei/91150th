@@ -183,17 +183,25 @@ span.lpn-ghost {
 /*---> */
 
 .main-board{
-  background: url('../images/p-bg.png') no-repeat;
   width: 686px;
   height: 102px;
   position: absolute;
-  z-index: 9999;
+  z-index: 19999;
   bottom: 45px;
   left: 50%;
   margin-left: -343px;
   color: #999;
 }
-
+.main-board-con{
+  background: url('../images/p-bg-l.png') no-repeat;
+  height: 102px;
+}
+.main-board-bg-r{
+  position: absolute;
+  z-index: -1;
+  right: 10px;
+  top: 0;
+}
 .main-board .board-l{
   position: absolute;
   width: 130px;
@@ -264,7 +272,8 @@ span.lpn-ghost {
   line-height: 25px;
 }
 .main-board .board-m-b a{
-  margin: 0 15px;
+  margin: 0 8px;
+  font-size: 12px;
 }
 
 .main-board .board-r{
@@ -275,6 +284,41 @@ span.lpn-ghost {
   right: 54px;
   line-height: 90px;
   text-indent: 1.5em;
+  cursor: pointer;
+  background: url(../images/share.png) no-repeat 38px -71px;;
+}
+.main-board .board-share{
+  display: none;
+  position: absolute;
+  height: 57px;
+  top: 22px;
+  width: 144px;
+  right: -23px;
+}
+.main-board .board-share a{
+  float: left;
+  width: 36px;
+  background: url(../images/share.png) no-repeat;
+  height: 30px;
+  margin: 0 6px;
+}
+.main-board .board-share a.sina{
+  background-position: 4px 5px;
+}
+.main-board .board-share a.qzone{
+  background-position: -46px 5px;
+}
+.main-board .board-share a.kaixing{
+  background-position: -99px 5px;
+}
+.main-board .board-share a.qqwb{
+  background-position: 3px -26px;
+}
+.main-board .board-share a.renren{
+  background-position: -46px -26px;
+}
+.main-board .board-share a.tt{
+  background-position: -99px -26px;
 }
 .main-bottom{
   position: absolute;
@@ -477,8 +521,9 @@ span.lpn-ghost {
   width: 13px;
   height: 26px;
   background: #727272;
-  top: 83px;
+  top: 79px;
   right: 191px;
+  cursor: ns-resize;
 }
 .result .r-slider hr:first-child{
   margin-top: 8px;

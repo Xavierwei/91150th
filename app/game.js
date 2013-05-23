@@ -20,6 +20,7 @@ define(function( require , exports , model ){
         , speedUpDuration : 4000
         , speedCallBack  : null
         , maxSpeed : 400
+        , minRobotSpeed: 200
     }
     // save the game status
     // so that , user can pause the game ,
@@ -95,9 +96,9 @@ define(function( require , exports , model ){
             }
 
             if( _robotAnimate ){
-                _robotAnimate.turnTo( [ speed * config.maxSpeed ] );
+                _robotAnimate.turnTo( [ speed * ( config.maxSpeed - config.minRobotSpeed )  + config.minRobotSpeed ] );
             } else {
-                _robotAnimate = new Animate( [0] , [ 400 ] , config.duration , '' , function(arr){
+                _robotAnimate = new Animate( [0] , [ config.maxSpeed ] , config.duration , '' , function(arr){
                     status.robotSpeed = ~~arr[0];
                     // count the distance of car
                     status.robotDistance += status.robotSpeed * _disDuration;
@@ -148,7 +149,8 @@ define(function( require , exports , model ){
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
                 var speed = Math.round( spx + spy ) / _winWdth * 1.5;
                 // count robot
-                var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;
+                // var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;
+                var tmp = Math.random();
 
                 _caSpeeds += speed;
                 _roSpeeds += tmp;

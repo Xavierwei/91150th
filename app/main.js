@@ -17,9 +17,9 @@ define(function(require, exports, module) {
         });
     };
     // require jquery ani plugin
-    require('jquery.queryloader');
+    // require('jquery.queryloader');
     require('jquery.easing');
-    require('modernizr');
+    // require('modernizr');
 
     // extend jquery
     $.fn.rotate = function( deg ){
@@ -36,26 +36,7 @@ define(function(require, exports, module) {
     }
 
     // loading bar
-    var $probar = $('#process-bar');
-    var $pronum = $('#process-num');
     var $videoPanel = $('#video-mask');
-    // query loading
-    $(document.body).queryLoader2({
-        minimumTime: 1000,
-        onLoading : function( percentage ){
-            $probar.css( 'width' , percentage + '%' );
-            $pronum.html( percentage + '%' );
-        },
-        onComplete: function(){
-            $('#loading-mask')
-                .animate({
-                    top : '-100%'
-                } , 3000 , 'easeOutElastic' , function(){
-                    $(this).hide();
-                    initVideoPlay();
-                });
-        }
-    });
 
     // bind skip event
     $videoPanel.find('.video-skip')
@@ -95,22 +76,23 @@ define(function(require, exports, module) {
         .find('.r-slider')
         // when start to drag
         .on('mousedown' , function( ev ){
-            var min = 79, max = 289 , slider = this;
+            var min = 79, max = 289 , slider = this , off = $resultPanel.find('.result').offset();
             var $con = $resultPanel.find('.r-list');
             var height = $con.height();
             var conHeight = $con.find('table').height();
             // bind mouse move event
-            var posy = ev.pageY;
             $(document).on('mousemove.slide-drag', function(ev){
-                var value = Math.max( Math.min( ev.posY , max ) , min );
+
+                var value = Math.max( Math.min( ev.pageY - off.top , max ) , min );
+                console.log( 'mousemove ' + value);
                 slider.style.top = value + 'px';
                 // change the scroll value
-                $con.scrolTop( ( conHeight - height ) * ( value - min ) / ( max - min )  );
+                $con.scrollTop( ( conHeight - height ) * ( value - min ) / ( max - min )  );
             });
             $(document).on('mouseup.slide-drag', function(ev){
                 $(this)
-                    .off('mousemove.slide-drag')
-                    .off('mouseup.slide-drag');
+                    .off('.slide-drag');
+                console.log( 'mouseup ');
             });
         });
 
@@ -130,12 +112,14 @@ define(function(require, exports, module) {
                         winWidth = $(this).width();
                     }).width();
     var screenWidth = screen.width;
-    var GAME_MAX_SPEED = 400;
+    var GAME_MAX_SPEED = 312;
     var GAME_MAX_DISTANCE = 4000;
     var p1 , p2 , p , l , dur , rl ;
 
     game.setConfig({
         duration  : 2000
+        , maxSpeed: GAME_MAX_SPEED
+        , minRobotSpeed  : 200
         , speedCallBack  : function( status ){
             // render car speed
             $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
@@ -240,7 +224,7 @@ define(function(require, exports, module) {
 
         // TODO..  set loading status
         $resultPanel.find('.r-list')
-            .html('loading...');
+            //.html('loading...');
         //TODO.. ajax to get list
         //$.get('' , '' , function(r){
             //_renderList( r.data );
@@ -293,10 +277,12 @@ define(function(require, exports, module) {
                 } , function(){
                     $t.hide();
                     // when count to four,  start the robot
+                    if( len == 2 ){
+                        $cars.eq(1).show().css('left' , - car2width);
+                        $robotDot.show().css('left' , '6%');
+                        game.start();
+                    }
                     // and drive 'my car' to the sence
-                    //if( len == 5 ){
-                    //    game.start();
-                    //}
                     if( len == 4 ){
                         // drive ’my car ‘ to sence
                         _driveCarToSence( $cars.eq(0) , 0 );
@@ -342,9 +328,7 @@ define(function(require, exports, module) {
         // 1. drive robot to sence
         //_driveCarToSence( $cars.eq(1) , 1 );
         // drive robot along
-        $cars.eq(1).show().css('left' , - car2width);
-        $robotDot.show().css('left' , '6%');
-        game.start();
+
         // 2.counter the seconds
         // show counter btn
         $counter.show();
@@ -621,10 +605,27 @@ define(function(require, exports, module) {
 
 
     // click share btn to pause the game
-    var i = 0;
-    $('#share-btn')
-        .click(function(){
-            game[ i % 2 ? 'play' : 'pause' ]();
-            i++;
+    var $shareCon = $('#share-con')
+        .hover( null , function(){
+            $shareCon.stop(true , false).fadeOut( function(){
+                $shareBgR.stop( true , false )
+                    .animate({
+                        right: 10
+                    } , 500 , '' , function(){
+                        $shareBtn.fadeIn();
+                    } );
+            });
+
+        });
+    var $shareBgR = $('#main-board-bg-r');
+    var $shareBtn = $('#share-btn')
+        .hover(function(){
+            $shareBgR.stop( true , false )
+                .animate({
+                    right: -82
+                } , 500 , '' , function(){
+                    $shareBtn.fadeOut();
+                    $shareCon.stop(true , false).fadeIn();
+                });
         });
 });
