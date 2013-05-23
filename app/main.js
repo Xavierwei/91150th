@@ -373,35 +373,86 @@ define(function(require, exports, module) {
         src: 'bg3.jpg',
         width: 3521
     }];
+    var bgSenceConfig = [{
+        src: 'bg1-2.jpg',
+        width: 3377
+    } , {
+        src: 'bg2-3.jpg',
+        width: 3004
+    } , {
+        src: 'bg3-1.jpg',
+        width: 3071
+    }];
     var lastBgIndex = 0;
     var lastBgDistance = 0;
     // cache last motion arguments
     // reduce the Consume of image motion
     var lastMotionValue = -1;
     var motionValue = 0;
+    var changeSence = false;
+    var $senceBg = null;
     var moveBgAndMotionRoad = function( status ){
         var bgIndex = 0 , mod = bgConfig[0].width + bgConfig[1].width + bgConfig[2].width - 3 * winWidth;
-        if( status.distance % mod < bgConfig[0].width - winWidth )
+        if( status.distance % mod < bgConfig[0].width - winWidth ){
             bgIndex = 0;
-        else if(status.distance % mod < bgConfig[0].width + bgConfig[1].width - 2 * winWidth){
+        } else if (status.distance % mod < bgConfig[0].width + bgConfig[1].width - 2 * winWidth){
             bgIndex = 1;
         } else {
             bgIndex = 2;
         }
 
         motionValue = ~~ ( status.speed / 20 ) * 3 ;
+        if( lastBgIndex != bgIndex && !changeSence){
+            changeSence = true;
+            var animateTime = 1000;
+            // create sence
+            if( !$senceBg ){
+                $senceBg = $('<div></div>')
+                    .css({
+                        position: 'absolute'
+                        , zIndex: 1000
+                        , bottom: $bg.css('bottom')
+                    })
+                    .insertBefore( $bg );
+            }
+            var totalWidth = bgConfig[lastBgIndex].width + bgSenceConfig[lastBgIndex].width + bgConfig[bgIndex].width;
+            $senceBg.html('')
+                .append(
+                    $('<img />')
+                    .attr('src' , './images/' + bgConfig[lastBgIndex].src )
+                )
+                .append(
+                    $('<img />')
+                    .attr('src' , './images/' + bgSenceConfig[lastBgIndex].src )
+                )
+                .append(
+                    $('<img />')
+                    .attr('src' , './images/' + bgConfig[bgIndex].src )
+                )
+                .css({
+                    width: totalWidth
+                    , left: - ( bgConfig[lastBgIndex].width - winWidth )
+                })
+                .show()
+                .animate({
+                    left: - ( bgConfig[lastBgIndex].width + bgSenceConfig[lastBgIndex].width )
+                } , 2000 , '' , function(){
+                    changeSence = false;
+                    $(this).hide();
+                    lastBgDistance = status.distance;
+                    lastBgIndex = bgIndex;
 
-        if( lastBgIndex != bgIndex ){
-            $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
-            $bg[0].style.marginLeft = '0px';
-            lastBgDistance = status.distance;
-            lastBgIndex = bgIndex;
-            // .. motion road ,
-            // run motionRoad function, so that it will change the road right now.
-            motionRoad( status.speed == 0 ? 0 :
-                        Math.min( motionValue + 3 , 30 ) );
+                    $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
+                    $bg[0].style.marginLeft = '0px';
+                    // .. motion road ,
+                    // run motionRoad function, so that it will change the road right now.
+                    motionRoad( status.speed == 0 ? 0 :
+                                Math.min( motionValue + 3 , 30 ) );
+                });
         } else {
-            $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) % mod + 'px';
+            if( !changeSence ){
+                $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) % mod + 'px';
+            }
             // .. motion road ,
             if( lastMotionValue != motionValue ){
                 motionRoad( status.speed == 0 ? 0 :
