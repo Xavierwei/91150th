@@ -11,6 +11,11 @@ define(function(require, exports, module) {
             cb && cb.call(this , $(this));
         });
     };
+    var format = function(string,obj){
+        return string.replace(/#\{(.*?)\}/g , function($0 , $1){
+            return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
+        });
+    };
     // require jquery ani plugin
     require('jquery.queryloader');
     require('jquery.easing');
@@ -74,7 +79,7 @@ define(function(require, exports, module) {
             } , 2000 , 'easeOutElastic' , function(){});
         })
         .end()
-        .find('.r-again')
+        .find('.btn')
         .click(function(){
             $resultPanel.animate({
                 top: '-100%'
@@ -85,7 +90,30 @@ define(function(require, exports, module) {
 
             });
             reset();
+        })
+        .end()
+        .find('.r-slider')
+        // when start to drag
+        .on('mousedown' , function( ev ){
+            var min = 79, max = 289 , slider = this;
+            var $con = $resultPanel.find('.r-list');
+            var height = $con.height();
+            var conHeight = $con.find('table').height();
+            // bind mouse move event
+            var posy = ev.pageY;
+            $(document).on('mousemove.slide-drag', function(ev){
+                var value = Math.max( Math.min( ev.posY , max ) , min );
+                slider.style.top = value + 'px';
+                // change the scroll value
+                $con.scrolTop( ( conHeight - height ) * ( value - min ) / ( max - min )  );
+            });
+            $(document).on('mouseup.slide-drag', function(ev){
+                $(this)
+                    .off('mousemove.slide-drag')
+                    .off('mouseup.slide-drag');
+            });
         });
+
     // TODO.. init share button
 
     // disabled contextmenu
@@ -97,7 +125,10 @@ define(function(require, exports, module) {
     var A = require('../src/Animate');
     var Animate = A.Animate;
 
-    var winWidth = $(window).width();
+    var winWidth = $(window)
+                    .resize(function(){
+                        winWidth = $(this).width();
+                    }).width();
     var screenWidth = screen.width;
     var GAME_MAX_SPEED = 400;
     var GAME_MAX_DISTANCE = 4000;
@@ -177,11 +208,70 @@ define(function(require, exports, module) {
 
     var gameOver = function( result ){
         game.over();
-        var tHtml = $timeBoard.html() + result.time % 10;
-        $resultPanel.find('.r-text')
-            .html('本次游戏<br/>时间 ' + tHtml + '<br/>共计追逐距离 ' + ~~result.distance + 'm' )
-            .end()
-            .fadeIn();
+
+        $resultPanel.fadeIn();
+
+        var $times = $resultPanel
+            .find('.r-time1 span,.r-time2 span,.r-time3 span');
+
+        // count time
+        new Animate([0] , [result.time] , 1000 , '' , function( arr ){
+            var time = arr[0] ;
+            var m = ~~ ( time / 1000 / 60 );
+            var s = ~~ ( time / 1000 % 60 );
+            var ss = ~~ ( time % 1000 / 10 );
+            var str = [ m > 9 ? m : '0' + m ,
+                 s > 9 ? s : '0' + s ,
+                 ss ].join('');
+            $times.each(function( i ,dom ){
+                this.className = 'time0' + str[i];
+            });
+        });
+
+        var $diss = $resultPanel.find('.r-distance span');
+        // count distance
+        new Animate([0] , [result.distance] , 1000 , '' , function( arr ){
+            var dis = ~~arr[0] + '' ;
+            dis = new Array( 6 - dis.length ).join('0') + dis;
+            $diss.each(function( i ,dom ){
+                this.className = 'distance' + i + dis[i];
+            });
+        });
+
+        // TODO..  set loading status
+        $resultPanel.find('.r-list')
+            .html('loading...');
+        //TODO.. ajax to get list
+        //$.get('' , '' , function(r){
+            //_renderList( r.data );
+        //});
+
+
+    }
+    var _renderList = function( dataArr ){
+        var aHtml = ['<table><tbody>'];
+        var tpl = '<tr><td>#{i}</td><td>#{n}</td><td>#{t}</td><td>#{d}</td></tr>';
+
+        $.each( dataArr , function( i , data ){
+            var time = data.time ;
+            var m = ~~ ( time / 1000 / 60 );
+            var s = ~~ ( time / 1000 % 60 );
+            var ss = ~~ ( time % 1000 / 100 );
+            var str = [ m > 9 ? m : '0' + m ,
+                 s > 9 ? s : '0' + s ,
+                 ss ].join(':')
+            aHtml.push( format( tpl , {
+                i   : i
+                , n : data.name
+                , t : str
+                , d : data.distance + 'm'
+            } ) );
+        } );
+
+        aHtml.push('</tbody></table>');
+
+        $resultPanel.find('.r-list')
+            .html( aHtml.join('') );
     }
     var counter = function( callback ){
         var $nums = $counter.find('.num');
@@ -436,19 +526,23 @@ define(function(require, exports, module) {
                 .show()
                 .animate({
                     left: - ( bgConfig[lastBgIndex].width + bgSenceConfig[lastBgIndex].width )
-                } , 2000 , '' , function(){
+                } , 2000 , 'easeInCubic' , function(){
                     changeSence = false;
                     $(this).hide();
-                    lastBgDistance = status.distance;
-                    lastBgIndex = bgIndex;
+
 
                     $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
                     $bg[0].style.marginLeft = '0px';
-                    // .. motion road ,
-                    // run motionRoad function, so that it will change the road right now.
-                    motionRoad( status.speed == 0 ? 0 :
-                                Math.min( motionValue + 3 , 30 ) );
+
                 });
+            setTimeout(function(){
+                lastBgDistance = status.distance;
+                lastBgIndex = bgIndex;
+                // .. motion road ,
+                // run motionRoad function, so that it will change the road right now.
+                motionRoad( status.speed == 0 ? 0 :
+                            Math.min( motionValue + 3 , 30 ) );
+            } , 1500 );
         } else {
             if( !changeSence ){
                 $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) % mod + 'px';
