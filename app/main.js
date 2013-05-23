@@ -41,15 +41,23 @@ define(function(require, exports, module) {
     // bind skip event
     $videoPanel.find('.video-skip')
         .click(function(){
-            $videoPanel.animate({
-                top: '-100%'
-            } , 3000 , 'easeOutElastic' , function(){
-                $videoPanel.hide();
-            });
+            $videoPanel.fadeOut();
+            $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
         });
     var initVideoPlay = function(){
         // TODO... start to play video
 
+    }
+    var initAnimation = function(){
+        $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
+        $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
+        $videoPanel.delay(900).fadeIn(400);
+        $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
+        $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
+            $(this).animate({'opacity':1});
+        },function(){
+            $(this).animate({'opacity':.7});
+        });
     }
 
     var $resultPanel = $('#result-mask');
@@ -63,11 +71,10 @@ define(function(require, exports, module) {
         .find('.btn')
         .click(function(){
             $resultPanel.animate({
-                top: '-100%'
-            } , 2000 , 'easeOutElastic' , function(){
+                opacity: 0
+            } , 800 , 'easeOutQuart' , function(){
                 //... go to ready status
-                $(this).css('top' , 0)
-                    .hide();
+                $(this).hide();
 
             });
             reset();
@@ -265,7 +272,11 @@ define(function(require, exports, module) {
                 .fadeIn();
             if( len == -1 ){
                 // hide the counter panel
-                $counter.fadeOut();
+                $counter.find('.c-mouse').animate({'margin-left':1000,'opacity':0},400,'easeOutQuart');
+                $counter.find('.c-bg').delay(200).animate({'margin-left':1000,'opacity':0},400,'easeOutQuart',function(){
+                    $(this).parent().hide();
+                });
+                $t.hide();
                 game.start( true );
                 return;
             }
@@ -289,6 +300,9 @@ define(function(require, exports, module) {
                     }
                     showNum();
                 });
+//                $t.animate({'margin-left':20},function(){
+//                    $(this).hide();
+//                });
             } , 800 );
         })();
     }
@@ -327,6 +341,8 @@ define(function(require, exports, module) {
     var ready = function(  ){
         // 1. drive robot to sence
         //_driveCarToSence( $cars.eq(1) , 1 );
+
+        $('.main-board').animate({left:'50%'},1200,'easeOutQuart');
         // drive robot along
 
         // 2.counter the seconds
@@ -338,14 +354,15 @@ define(function(require, exports, module) {
 
         var $cbg = $counter.find('.c-bg');
 
-        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
-            M.motionBlur( $cbg[0] , ~~ arr[ 0 ] , 0 , true );
-        } , function(){
-            // $cbg.attr('src' , $cbg.attr('osrc'));
-            // counter nums
-            counter();
-        });
-
+//        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
+//            M.motionBlur( $cbg[0] , ~~ arr[ 0 ] , 0 , true );
+//        } , function(){
+//            // $cbg.attr('src' , $cbg.attr('osrc'));
+//            // counter nums
+//            counter();
+//
+//        });
+        counter();
 
         // pre motion road
         if( !$roadCan )
@@ -416,21 +433,31 @@ define(function(require, exports, module) {
     var $counter = $('#counter');
     var $startBtn = $('#start-btn')
         .click(function(){
-            var $t = $( this );
-            if( $t.hasClass( lockClass ) ) return;
-            $t.addClass( lockClass );
-            var i = 0;
-            // motion blur
-            new Animate( [ 0 ] , [ 140 ] , 300 , '' , function( arr ){
-                M.motionBlur( $t[0] , ~~arr[ 0 ] );
-                i++;
-                $t.css( 'opacity' , Math.pow( 1 / i , 1 / 4 ) );
-            } , function(){
-                // hide start btn
-                $t.hide()
-                    .addClass( lockClass );;
+//            var $t = $( this );
+//            if( $t.hasClass( lockClass ) ) return;
+//            $t.addClass( lockClass );
+//            var i = 0;
+//            // motion blur
+//            new Animate( [ 0 ] , [ 140 ] , 300 , '' , function( arr ){
+//                M.motionBlur( $t[0] , ~~arr[ 0 ] );
+//                i++;
+//                $t.css( 'opacity' , Math.pow( 1 / i , 1 / 4 ) );
+//            } , function(){
+//                // hide start btn
+//                $t.hide()
+//                    .addClass( lockClass );;
+//                ready();
+//            } );
+            $(this).removeClass('animated');
+            $(this).animate({'margin-left':2000,opacity:0},500,'easeInQuart',function(){
+                $(this).hide();
                 ready();
-            } );
+            });
+        })
+        .hover(function(){
+            $(this).addClass('animated tada');
+        },function(){
+            $(this).removeClass('animated tada');
         });
 
 

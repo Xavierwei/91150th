@@ -16,6 +16,7 @@
   <![endif]-->
 
   <link href="./css/base.css" rel="stylesheet" type="text/css" />
+     <link href="./css/animate.css" rel="stylesheet" type="text/css" />
   <!--[if IE]>
   <link href="./css/ie.css" rel="stylesheet" type="text/css" />
   <![endif]-->
@@ -75,7 +76,7 @@
         <div class="video-wrap">
           <video></video>
         </div>
-        <div class="video-skip">跳过</div>
+        <div class="video-skip"></div>
       </div>
     </section>
     <!--result panel-->
@@ -104,7 +105,7 @@
     <!---// moving start -->
     <section class="main">
       <div class="main-bg">
-        <span id="fps" style="position:absolute;top:0;left:0;color:yellow;z-index:9999999999;">fps: 0</span>
+        <span id="fps" style="display:none;position:absolute;top:0;left:0;color:yellow;z-index:9999999999;">fps: 0</span>
         <img src="images/bg1-2.jpg" style="display:none;" />
         <img src="images/bg2-3.jpg" style="display:none;" />
         <img src="images/bg3-1.jpg" style="display:none;" />
@@ -173,11 +174,13 @@
     <!---\\ moving end -->
     <!--load jquery and plugin-->
     <script type="text/javascript" src="./lib/jquery/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./lib/jquery-plugin/easing/jquery.easing.1.3.js"></script>
     <script type="text/javascript" src="./src/jquery-plugin/jquery.queryloader2.js"></script>
     <script>
     // query loading
     var $probar = $('#process-bar');
     var $pronum = $('#process-num');
+    // query loading
     $(document.body).queryLoader2({
         minimumTime: 1000,
         onLoading : function( percentage ){
@@ -185,13 +188,16 @@
             $pronum.html( percentage + '%' );
         },
         onComplete: function(){
+            $('#loading-mask .lpn-panel').animate({padding:0, height:1},300,'easeOutQuart');
             $('#loading-mask')
-                .animate({
-                    top : '-100%'
-                } , 2000 , '' , function(){
+                .delay(300).animate({'opacity':0},1000,'easeOutQuart',function(){
                     $(this).hide();
-                    //initVideoPlay();
                 });
+            $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
+                // TODO.......
+                //initVideoPlay();
+                //initAnimation();
+            });
         }
     });
     </script>
