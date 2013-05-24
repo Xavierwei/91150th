@@ -449,18 +449,14 @@ define(function(require, exports, module) {
         $timeBoard.html('00:00:0');
         // reset bg
         $bg.css( 'marginLeft' , 0 )
-            .attr('src' , bgConfig[0].src);
+            .attr('src' , './images/' + bgConfig[0].src);
         lastBgDistance = 0;
 
         // reset road
         motionRoad( 0 );
 
         // show robot
-        $cars.eq(1)
-            .css({
-                marginLeft :  - car2width / 2
-            })
-            .fadeIn();
+        _driveCarToSence( $cars.eq(1) , 1 );
     }
 
     var goon = function(){
@@ -683,7 +679,7 @@ define(function(require, exports, module) {
             } , time , 'easeInQuart' );
 
         // rotate the wheel
-        new Animate([ 0 ] , [ 360 * 10 ] , time , 'easeInQuart' , function( arr ){
+        new Animate([ 0 ] , [ 360 * 4 ] , time , 'easeInQuart' , function( arr ){
             $car2Wheels.rotate( arr[0] );
         } );
 
@@ -808,11 +804,7 @@ define(function(require, exports, module) {
                         $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
                             $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
                                 // show robot
-                                $cars.eq(1)
-                                    .css({
-                                        marginLeft :  - car2width / 2
-                                    })
-                                    .fadeIn();
+                                _driveCarToSence( $cars.eq(1) , 1 );
                             });
                             $('#login-mask').hide();
                         });
