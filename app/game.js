@@ -98,7 +98,7 @@ define(function( require , exports , model ){
             }
 
             if( _robotAnimate ){
-                _robotAnimate.turnTo([ status.gameStatus == GAME_OVER ?  :
+                _robotAnimate.turnTo([ status.gameStatus == GAME_OVER ? 0 :
                     speed * ( config.maxSpeed - config.minRobotSpeed )  + config.minRobotSpeed ] );
             } else {
                 _robotAnimate = new Animate( [0] , [ config.maxSpeed ] , config.duration , '' , function(arr){
