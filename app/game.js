@@ -40,6 +40,7 @@ define(function( require , exports , model ){
         // status of game, playing or pause or over
         , gameStatus : 0
     }
+    var GAME_READY = 0;
     var GAME_PLAYING = 1;
     var GAME_PAUSE = 2;
     var GAME_OVER = 3;
@@ -291,5 +292,9 @@ define(function( require , exports , model ){
         , play  : play
         , pause : pause
         , over  : over
+        , GAME_PLAYING : GAME_PLAYING
+        , GAME_PAUSE : GAME_PAUSE
+        , GAME_OVER : GAME_OVER
+        , GAME_READY : GAME_READY
     } );
 });

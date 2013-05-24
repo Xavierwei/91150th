@@ -110,6 +110,8 @@ define(function(require, exports, module) {
     var A = require('../src/Animate');
     var Animate = A.Animate;
 
+    // save the game status
+    var gStatus = null;
     var winWidth = $(window)
                     .resize(function(){
                         winWidth = $(this).width();
@@ -124,6 +126,7 @@ define(function(require, exports, module) {
         , maxSpeed: GAME_MAX_SPEED
         , minRobotSpeed  : 200
         , speedCallBack  : function( status ){
+            gStatus = status;
             // render car speed
             $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
             $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
@@ -136,7 +139,7 @@ define(function(require, exports, module) {
             // change car position
             // GAME_PLAYING  and GAME_OVER all need to modify the car position
             // and car wheel blur status
-            if( status.gameStatus == 1 || status.gameStatus == 3 ){
+            if( status.gameStatus == game.GAME_PLAYING || status.gameStatus == game.GAME_OVER ){
                 l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
                 $cars.eq(0)
                     .stop( true , false )
@@ -149,7 +152,7 @@ define(function(require, exports, module) {
             // change robot car position
 
             // need to reduce car2width for first starting
-            if( status.gameStatus == 0 ){
+            if( status.gameStatus == game.GAME_READY ){
                 rl = l + Math.min( 10 * Math.sqrt( Math.abs(p) ) * GAME_MAX_DISTANCE  , 2 * screenWidth ) - car2width ;
             } else {
                 var _tmpRl = l + 20 * p * GAME_MAX_DISTANCE;
@@ -178,7 +181,7 @@ define(function(require, exports, module) {
                     dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
                     dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
             // show time
-            if( status.gameStatus != 3 && status.gameStatus != 0 ){
+            if( status.gameStatus == game.GAME_PLAYING ){
                 var time = status.time + ( +new Date() - status.startTime );
                 var m = ~~ ( time / 1000 / 60 );
                 var s = ~~ ( time / 1000 % 60 );
@@ -262,8 +265,10 @@ define(function(require, exports, module) {
         $resultPanel.find('.r-list')
             .html( aHtml.join('') );
     }
+    var counterTimer = null;
     var counter = function( callback ){
-        var $nums = $counter.find('.num');
+        // hide all num first
+        var $nums = $counter.find('.num').hide();
         var len = $nums.length;
         ~(function showNum( ){
             var $t = $nums.eq( --len )
@@ -275,27 +280,16 @@ define(function(require, exports, module) {
                     $(this).parent().hide();
                 });
                 $t.hide();
-                game.start( true );
+                callback && callback();
                 return;
             }
             // reset nums
             M.motionBlur( $t[0] , 0 );
-            setTimeout( function(){
+            counterTimer = setTimeout( function(){
                 new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
                     M.motionBlur( $t[0] , ~~arr[ 0 ] );
                 } , function(){
                     $t.hide();
-                    // when count to four,  start the robot
-                    if( len == 2 ){
-                        $cars.eq(1).show().css('left' , - car2width);
-                        $robotDot.show().css('left' , '6%');
-                        game.start();
-                    }
-                    // and drive 'my car' to the sence
-                    if( len == 4 ){
-                        // drive ’my car ‘ to sence
-                        _driveCarToSence( $cars.eq(0) , 0 );
-                    }
                     showNum();
                 });
 //                $t.animate({'margin-left':20},function(){
@@ -345,12 +339,22 @@ define(function(require, exports, module) {
 
         // 2.counter the seconds
         // show counter btn
-        $counter.show();
-        // add shake effect to mouse
-        $counter.find('.c-mouse')
-            .addClass('shake');
+        resetCounter( function(){
+            game.start( true );
+        } );
+        // when count to four,  start the robot
+        setTimeout( function(){
+            $cars.eq(1).show().css('left' , - car2width);
+            $robotDot.show().css('left' , '6%');
+            game.start();
+        } , 3000 );
 
-        var $cbg = $counter.find('.c-bg');
+        setTimeout( function(){
+            // drive ’my car ‘ to sence
+            _driveCarToSence( $cars.eq(0) , 0 );
+        } , 2000 );
+
+//       var $cbg = $counter.find('.c-bg');
 
 //        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
 //            M.motionBlur( $cbg[0] , ~~ arr[ 0 ] , 0 , true );
@@ -360,7 +364,7 @@ define(function(require, exports, module) {
 //            counter();
 //
 //        });
-        counter();
+
 
         // pre motion road
         if( !$roadCan )
@@ -372,6 +376,23 @@ define(function(require, exports, module) {
                 })
                 .insertBefore($road.hide());
         motionRoad( 0 );
+    }
+    var resetCounter = function( cb ){
+        $counter.show()
+            .find('.c-bg')
+            .css({
+                  opacity   : 1
+                , marginLeft: 0
+                })
+            .end()
+            .find('.c-mouse')
+            .css({
+                  opacity   : 1
+                , marginLeft: 0
+            })
+            .addClass('shake');
+
+        counter( cb );
     }
     var reset = function(){
         // reset the game
@@ -410,6 +431,26 @@ define(function(require, exports, module) {
         // reset road
         motionRoad( 0 );
 
+    }
+
+    var goon = function(){
+        if( gStatus.gameStatus != game.GAME_PAUSE )
+            return;
+        //1. show ready panel
+        // 2.counter the seconds
+        // show counter btn
+        resetCounter( function() {
+            game.play();
+        });
+    }
+
+    var pause = function(){
+        // hide the counter panel
+        $counter.hide();
+        // stop the counterTimer
+        clearTimeout( counterTimer );
+        // pause the game
+        game.pause();
     }
 
     var lockClass = '__disabled__';
@@ -632,7 +673,7 @@ define(function(require, exports, module) {
     // click share btn to pause the game
     var $shareCon = $('#share-con')
         .hover( null , function(){
-            $shareCon.stop(true , false).fadeOut( function(){
+            $shareCon.fadeOut( function(){
                 $shareBgR.stop( true , false )
                     .animate({
                         right: 10
@@ -650,10 +691,24 @@ define(function(require, exports, module) {
                     right: -82
                 } , 500 , 'easeOutQuart' , function(){
                     $shareBtn.fadeOut();
-                    $shareCon.stop(true , false).fadeIn();
+                    $shareCon.css('opacity' , 1).fadeIn();
                 });
         });
 
+    var $gallery = $('#gallery-mask')
+        .find('.close')
+        .click(function(){
+            $gallery.fadeOut( function(){
+                goon();
+            });
+        })
+        .end();
+    // show photos gallery
+    $('#gallery').click(function(){
+        //Pause the game
+        pause();
+        $gallery.fadeIn();
+    });
 
 
     // user login
