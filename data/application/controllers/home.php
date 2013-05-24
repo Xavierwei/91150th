@@ -46,6 +46,15 @@ class Home_Controller extends Base_Controller {
 		return View::make("home.weibo")->with("code_url", $auth_url);
 	}
 
+    public function action_checkuser() {
+        $user = $this->_get_user();
+        // Logined ? redirect to home.
+        if (!$user) {
+            return Response::json(array("error" => "nologin", "code" => 500, "data" => array()));
+        }
+        return Response::json(array("data" => $user, "code" => 200, "error" => ""));
+    }
+
 	public function action_register() {
 		if (!Input::has("name") || !Input::has("email")) {
 			return Response::json(array("error" => "argument missed", "code" => 500, "data" => array()));
@@ -58,11 +67,17 @@ class Home_Controller extends Base_Controller {
 		);
 
 		$user = User::create($tmpuser);
+        $this->_put_user($user);
 		if (!$user) {
 			return Response::json(array("error" => "register failed", "code" => 500, "data" => array()));
 		}
 		return Response::json(array("data" => $user, "code" => 200, "error" => ""));
 	}
+
+    public function action_getrecord() {
+        $record = GameRecord::all();
+        return Response::json(array("data" => $record, "code" => 200, "error" => ""));
+    }
 
 	public function action_record() {
 		if (!Input::get("time") || !Input::get("distance")) {
@@ -71,6 +86,7 @@ class Home_Controller extends Base_Controller {
 		$tmprecord = array(
 			"time" => Input::get("time"),
 			"distance" => Input::get("distance"),
+            "status" => Input::get("status"),
 			"weibo_uid" => Input::get("weibo_uid"),
 			"name" => Input::get("user"),
 		);

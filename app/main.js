@@ -43,8 +43,8 @@ define(function(require, exports, module) {
     // bind skip event
     $videoPanel.find('.video-skip')
         .click(function(){
-            $videoPanel.animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
-                $(this).hide();
+            $videoPanel.find('.video-wrap').animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
+                $videoPanel.hide();
                 $videoPanel.find('*').remove();
                 $('#login-mask').show();
                 $('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
@@ -247,7 +247,16 @@ define(function(require, exports, module) {
             //_renderList( r.data );
         //});
 
-
+        var _time = result.time;
+        var _distance = result.distance;
+        var _status = result.gameStatus;
+        $.ajax({
+            url: "data/public/home/record",
+            dataType: "JSON",
+            type: "POST",
+            data: {time:_time,distance:_distance,status:_status},
+            success: function(res){}
+        });
     }
     var _renderList = function( dataArr ){
         var aHtml = ['<table><tbody>'];
@@ -763,23 +772,25 @@ define(function(require, exports, module) {
             name: "请输入用户名"
         },
         submitHandler: function (form) {
-            $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
-                $('.main-metas').animate( {left:'50%'} , 500 , 'easeOutQuart' , function(){
-                    // run robot
-                    runRobot();
-                });
-                $('#login-mask').hide();
-            });
             var name = $(form).find('#uname').val();
             var email = $(form).find('#email').val();
             $.ajax({
-                url: "data/third_content/node/pre_next_node",
+                url: "data/public/home/register",
                 dataType: "JSON",
                 type: "POST",
-                data: JSON.stringify({name:name,email:email}),
-                contentType: "application/json",
+                data: {name:name,email:email},
                 success: function(res){
-                    console.log(res);
+                    if(res.code == 200)
+                    {
+                        $('#username').val(res.data.original.name);
+                        $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
+                            $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
+                                // run robot
+                                runRobot();
+                            });
+                            $('#login-mask').hide();
+                        });
+                    }
                 }
             });
             return false;
