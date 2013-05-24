@@ -143,16 +143,34 @@ span.lpn-ghost {
   background: url(../images/login-bg.png) no-repeat;
 }
 .login-form{
-  width: 435px;
+  width: 439px;
   margin: 0 auto;
   margin-top: 25px;
   padding-top: 35px;
   font-size: 18px;
   color: #9D9D9D;
-  font-family: 黑体;
+  font-family: 'STHeiti',Arial,simsun;
 }
 .login-form label{
   float: left;
+    position: relative;
+}
+.login-form label.username {
+    background:url(../images/register_label.png) no-repeat 0 5px;
+    margin-right: 17px;
+    padding:0 0 0 54px;
+}
+.login-form label.email {
+    background:url(../images/register_label.png) no-repeat 0 -222px;
+    padding:0 0 0 38px;
+}
+.login-form label.error {
+    position: absolute;
+    top:35px;left:50px;
+    font-size:12px;font-weight:normal;
+}
+.login-form .username label.error {
+    left:65px;
 }
 .login-form input{
   border: none;
@@ -162,6 +180,8 @@ span.lpn-ghost {
   line-height: 31px;
   height: 31px;
   margin-left: 7px;
+    font-size:12px;
+    color:#ccc;
   background: url(../images/board-bgs1.png) no-repeat 0 -156px;
 }
 .login-form span{
@@ -169,10 +189,10 @@ span.lpn-ghost {
   font-size: 12px;
   margin-left: 24px;
 }
-.btn-back {background: url(../images/btn-back.png) no-repeat;width:96px;height:44px;opacity:.7;}
+.btn-back {float:left;background: url(../images/btn-back.png) no-repeat;width:96px;height:44px;margin:0 0 0 20px;opacity:.7;}
 .btn-back:hover {opacity:1;}
-.btn-ok {background: url(../images/btn-ok.png) no-repeat;width:96px;height:44px;opacity:.7;}
-.btn-ok:hover {opacity:1;}
+.login-form input.btn-ok {float:left;background: url(../images/btn-ok.png) no-repeat;width:96px;height:44px;opacity:.7;margin:0 0 0 110px;}
+.login-form input.btn-ok:hover {opacity:1;}
 
 /*---> main bg  */
 .main {opacity:0;}
@@ -357,6 +377,12 @@ span.lpn-ghost {
   font-size: 11px;
   color: #C2C2C2;
   left: 20px;
+}
+.main-bottom a {
+    color:#777;
+}
+.main-bottom a:hover {
+    color:#fff;
 }
 .main-cars .car{
   position: absolute;
@@ -1133,4 +1159,4 @@ span.lpn-ghost {
 
 #gallery-mask .close,.fancybox-close,.fancybox-nav,.fancybox-download,.fancybox-share {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
 
-.main-board .board-m-b a,.main-board .board-share a,.lpn-register a,.result .r-close,.btn-agian {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
+.main-board .board-m-b a,.main-board .board-share a,.lpn-register a,.result .r-close,.btn-agian,.main-bottom a {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
