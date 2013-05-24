@@ -663,7 +663,7 @@ define(function(require, exports, module) {
 
         currRoadConfig = roadConfig[currRoadIndex];
         var canvas = $roadCan[0];
-        var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 1 ) * currRoadConfig.width;
+        var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 2 ) * currRoadConfig.width;
         // reset road width and height
         canvas.width = width;
         M.motionBlur( currRoadConfig.img , radius , 0 , canvas );
