@@ -117,7 +117,7 @@ define(function( require , exports , model ){
                 }
                 _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
             } else {
-                _animate = new Animate( [0] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){
+                _animate = new Animate( [ 0 ] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){
                     ////////////////////////////// for debug
                     _dfpsTimes++;
                     if( new Date() - _dfpsStartTime > 1000 ){

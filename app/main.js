@@ -18,7 +18,7 @@ define(function(require, exports, module) {
     };
     // require jquery ani plugin
     // require('jquery.queryloader');
-    require('jquery.easing');
+    // require('jquery.easing');
     // require('modernizr');
 
     // extend jquery
@@ -44,21 +44,7 @@ define(function(require, exports, module) {
             $videoPanel.fadeOut();
             $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
         });
-    var initVideoPlay = function(){
-        // TODO... start to play video
 
-    }
-    var initAnimation = function(){
-        $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
-        $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
-        $videoPanel.delay(900).fadeIn(400);
-        $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
-        $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
-            $(this).animate({'opacity':1});
-        },function(){
-            $(this).animate({'opacity':.7});
-        });
-    }
 
     var $resultPanel = $('#result-mask');
     $resultPanel.find('.r-close')
@@ -147,7 +133,7 @@ define(function(require, exports, module) {
                     .css('left' , l )
                     [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
                 // change car wheels
-                $car1Wheels.rotate( status.distance * 80 );
+                $car1Wheels.rotate( status.distance * 60 );
             }
 
             // change robot car position
@@ -156,7 +142,8 @@ define(function(require, exports, module) {
             if( status.gameStatus == 0 ){
                 rl = l + Math.min( 10 * Math.sqrt( Math.abs(p) ) * GAME_MAX_DISTANCE  , 2 * screenWidth ) - car2width ;
             } else {
-                rl = l + 10 * p * GAME_MAX_DISTANCE;
+                var _tmpRl = l + 20 * p * GAME_MAX_DISTANCE;
+                rl = _tmpRl + ( rl - _tmpRl ) * 9 / 10;
             }
             $cars.eq(1)
                 .stop( true , false )
@@ -164,7 +151,7 @@ define(function(require, exports, module) {
                     left: rl
                 })
                 [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
-            $car2Wheels.rotate( status.robotDistance * 80 );
+            $car2Wheels.rotate( status.robotDistance * 60 );
 
             // change car dot position
             p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
