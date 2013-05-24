@@ -17,6 +17,7 @@ define(function(require, exports, module) {
         });
     };
     // require jquery ani plugin
+    require('jquery.validate');
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
@@ -42,10 +43,13 @@ define(function(require, exports, module) {
     // bind skip event
     $videoPanel.find('.video-skip')
         .click(function(){
-            $videoPanel.find('*').remove();
-            $videoPanel.fadeOut();
-            $('#login-mask').show();
-            $('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
+            $videoPanel.animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
+                $(this).hide();
+                $videoPanel.find('*').remove();
+                $('#login-mask').show();
+                $('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
+            });
+
             //$('.main-metas').animate({left:'50%'},500,'easeOutQuart');
         });
 
@@ -650,11 +654,7 @@ define(function(require, exports, module) {
                 });
         });
 
-    // show photos gallery
-    $('#gallery').click(function(){
-        //TODO Pause the game
-        $('#gallery-mask').fadeIn();
-    });
+
 
     // user login
     $('#login-mask .login-local')
@@ -665,18 +665,58 @@ define(function(require, exports, module) {
             })
         });
 
-    $('#login-mask .btn-ok')
+    $('#login-mask .btn-back')
         .click(function(){
-            //TODO api for register
+            $('#login-mask .lpn-panel').animate({'margin-left':-600,opacity:0},500,'easeOutQuart',function(){
+                $(this).hide();
+                $('#login-mask .lpn-register').css({display:'inline-block'}).animate({'margin-left':0,opacity:1},500,'easeOutQuart');
+            })
+        });
+
+    $('.login-form').validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            },
+            name: "required"
+        },
+        messages: {
+            email: "请输入正确的邮箱",
+            name: "请输入用户名"
+        },
+        submitHandler: function (form) {
             $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
                 $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
                 $('#login-mask').hide();
             });
-
-        });
-
+            var name = $(form).find('#uname').val();
+            var email = $(form).find('#email').val();
+            $.ajax({
+                url: "data/third_content/node/pre_next_node",
+                dataType: "JSON",
+                type: "POST",
+                data: JSON.stringify({name:name,email:email}),
+                contentType: "application/json",
+                success: function(res){
+                    console.log(res);
+                }
+            });
+            return false;
+        }
+    });
 
     // Gallery
+    // show photos gallery
+    $('#gallery').click(function(){
+        //TODO Pause the game
+        $('#gallery-mask').fadeIn();
+    });
+
+    $('#gallery-mask .close').click(function(){
+        $('#gallery-mask').fadeOut();
+    });
+
     // require jquery ani plugin
     require('jquery.fancybox');
     require('jquery.easing');
