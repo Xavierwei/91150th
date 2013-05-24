@@ -60,6 +60,8 @@ define(function( require , exports , model ){
             _caDis[0] += Math.abs( ev.pageX - __lp[0] );
             _caDis[1] += Math.abs( ev.pageY - __lp[1] );
             __lp = [ ev.pageX , ev.pageY ];
+
+            ev.preventDefault();
         }
 
 
@@ -198,6 +200,23 @@ define(function( require , exports , model ){
     var setConfig = function( cfg ){
         extend( config , cfg );
     }
+    var _isIpad = (function(){
+        return !!navigator.userAgent.toLowerCase().match(/ipad/i);
+    })();
+
+    // bind document touchmove event, prevent to move the page
+    if( _isIpad ){
+        document.addEventListener( 'touchmove' , function(ev){ev.preventDefault();} , false );
+    }
+
+    var _bindEvent = function(){
+        var event = _isIpad ? 'touchmove' : 'mousemove';
+        document.addEventListener( event , speedExchange.move , false );
+    }
+    var _removeEvent = function(){
+        var event = _isIpad ? 'touchmove' : 'mousemove';
+        document.removeEventListener( event , speedExchange.move , false );
+    }
 
     // export interface
     var start = function( ){
@@ -214,7 +233,7 @@ define(function( require , exports , model ){
         // record start time
         status.startTime = + new Date();
         // add event listener
-        document.addEventListener('mousemove' , speedExchange.move , false);
+        _bindEvent();
         // speed exchange fn
         speedExchange.start( config.speedCallBack );
         // change status
@@ -230,7 +249,7 @@ define(function( require , exports , model ){
             status.startTime = + new Date();
         }
         // add event listener
-        document.addEventListener( 'mousemove' , speedExchange.move , false );
+        _bindEvent();
         // speed exchange fn
         speedExchange.play( config.speedCallBack );
         // change status
@@ -248,7 +267,7 @@ define(function( require , exports , model ){
         status.time += + new Date() - status.startTime;
         status.gameStatus = GAME_PAUSE;
         speedExchange.stop();
-        document.removeEventListener('mousemove' , speedExchange.move , false);
+        _removeEvent();
     }
     // game over , remove mousemove event listener
     // set game status to GAME_OVER
@@ -259,7 +278,7 @@ define(function( require , exports , model ){
         }
         status.time += + new Date() - status.startTime;
         status.gameStatus = GAME_OVER;
-        document.removeEventListener('mousemove' , speedExchange.move , false);
+        _removeEvent();
     }
     // delete all animate
     // clear all setInterval

@@ -455,8 +455,12 @@ define(function(require, exports, module) {
         // reset road
         motionRoad( 0 );
 
-        // run robot
-        runRobot();
+        // show robot
+        $cars.eq(1)
+            .css({
+                marginLeft :  - car2width / 2
+            })
+            .fadeIn();
     }
 
     var goon = function(){
@@ -518,6 +522,9 @@ define(function(require, exports, module) {
                 $(this).hide();
                 ready();
             });
+
+            // run the robot car
+            runRobot();
         })
         .hover(function(){
             $(this).addClass('animated tada');
@@ -671,28 +678,21 @@ define(function(require, exports, module) {
         var time = 1000;
         // run robot car
         $cars.eq(1)
-            .css({
-                marginLeft :  - car2width / 2
-            })
-            .fadeIn(function(){
+            .animate({
+                marginLeft : winWidth
+            } , time , 'easeInQuart' );
 
-                $(this)
-                    .animate({
-                        marginLeft : winWidth
-                    } , time , 'easeInQuart' );
+        // rotate the wheel
+        new Animate([ 0 ] , [ 360 * 10 ] , time , 'easeInQuart' , function( arr ){
+            $car2Wheels.rotate( arr[0] );
+        } );
 
-                // rotate the wheel
-                new Animate([ 0 ] , [ 360 * 4 ] , time , 'easeInQuart' , function( arr ){
-                    $car2Wheels.rotate( arr[0] );
-                } );
-
-                // run the car dot
-                $robotDot.show()
-                    .css( 'left' , '6%' )
-                    .animate({
-                        'left' : ( 100 - 2 * 6 ) * robotStartDistancePercent + 6 + '%'
-                    } , time , 'easeInOutCubic' )
-            });
+        // run the car dot
+        $robotDot.show()
+            .css( 'left' , '6%' )
+            .animate({
+                'left' : ( 100 - 2 * 6 ) * robotStartDistancePercent + 6 + '%'
+            } , time , 'easeInOutCubic' );
     }
     // save road cache
     !(function(){
@@ -807,8 +807,12 @@ define(function(require, exports, module) {
                         $('#username').val(res.data.original.name);
                         $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
                             $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
-                                // run robot
-                                runRobot();
+                                // show robot
+                                $cars.eq(1)
+                                    .css({
+                                        marginLeft :  - car2width / 2
+                                    })
+                                    .fadeIn();
                             });
                             $('#login-mask').hide();
                         });

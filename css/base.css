@@ -175,13 +175,10 @@ span.lpn-ghost {
 .login-form input{
   border: none;
   width: 137px;
-  padding: 0 10px;
-  color: white;
-  line-height: 31px;
-  height: 31px;
+  padding: 8px 10px;
   margin-left: 7px;
-    font-size:12px;
-    color:#ccc;
+  font-size:12px;
+  color:#ccc;
   background: url(../images/board-bgs1.png) no-repeat 0 -156px;
 }
 .login-form span{
