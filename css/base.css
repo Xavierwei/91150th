@@ -363,7 +363,8 @@ span.lpn-ghost {
   z-index: 9999;
   display: none;
   bottom: 0;
-  right: 100%;
+  left: 50%;
+  margin-left: -460px;
 }
 
 .main-cars .car .front-wheel,

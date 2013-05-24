@@ -121,6 +121,7 @@ define(function(require, exports, module) {
         duration  : 2000
         , maxSpeed: GAME_MAX_SPEED
         , minRobotSpeed  : 200
+        //, robotStartDistance : GAME_MAX_DISTANCE * 1 / 6
         , speedCallBack  : function( status ){
             gStatus = status;
             // render car speed
@@ -136,10 +137,11 @@ define(function(require, exports, module) {
             // GAME_PLAYING  and GAME_OVER all need to modify the car position
             // and car wheel blur status
             if( status.gameStatus == game.GAME_PLAYING || status.gameStatus == game.GAME_OVER ){
-                l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
+                //l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
+                l = ( winWidth - car1width ) / 2;
                 $cars.eq(0)
                     .stop( true , false )
-                    .css('left' , l )
+                    //.css('left' , l )
                     [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
                 // change car wheels
                 $car1Wheels.rotate( status.distance * 60 );
@@ -149,15 +151,17 @@ define(function(require, exports, module) {
 
             // need to reduce car2width for first starting
             if( status.gameStatus == game.GAME_READY ){
-                rl = l + Math.min( 10 * Math.sqrt( Math.abs(p) ) * GAME_MAX_DISTANCE  , 2 * screenWidth ) - car2width ;
+                rl = - car2width / 2 + Math.min( 10 * Math.sqrt( Math.abs(p) ) * GAME_MAX_DISTANCE  , 2 * screenWidth );
             } else {
-                var _tmpRl = l + 20 * p * GAME_MAX_DISTANCE;
+                var _tmpRl = - car2width / 2 + 20 * p * GAME_MAX_DISTANCE;
                 rl = _tmpRl + ( rl - _tmpRl ) * 9 / 10;
             }
+
+            //rl = - car2width / 2 + 10 * p * GAME_MAX_DISTANCE
             $cars.eq(1)
                 .stop( true , false )
                 .css({
-                    left: rl
+                    marginLeft: rl
                 })
                 [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
             $car2Wheels.rotate( status.robotDistance * 60 );
@@ -196,7 +200,7 @@ define(function(require, exports, module) {
     var gameOver = function( result ){
         game.over();
 
-        $resultPanel.fadeIn();
+        $resultPanel.css('opacity' , 1).hide().fadeIn();
         $resultPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
 
         var $times = $resultPanel
@@ -296,39 +300,32 @@ define(function(require, exports, module) {
     }
 
     var _driveCarToSence = function( $car , index ){
-        var delay = 1000 * Math.random();
-        var dur = 1000 + 500 * Math.random();
+        var dur = 1000 ;
+        var w = $car.width();
         $car.show()
-            .css('left' , - $(this).width())
-            .delay( delay )
+            .css('margin-left' , - w - winWidth)
             .animate({
-                left : (winWidth - ( index == 0 ? car1width : car2width ) ) / 2
-            } , dur , 'easeOutQuart' , function(){
-
-            });
+                'margin-left' : - w / 2
+            } , dur , 'easeOutQuart');
 
         // run car dot
         var $dot = index == 0 ? $carDot : $robotDot;
         $dot.show()
             .css( 'left' , 0 )
-            .delay( delay )
             .animate({
                 left : '6%'
             } , dur , 'easeOutQuart');
         var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
-        setTimeout( function(){
-            new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
-                $wheels.rotate( arr[0] );
-            });
-        } , delay );
+        // run the wheel
+        new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
+            $wheels.rotate( arr[0] );
+        });
     }
     // ready for game , at this status , you should do follow list:
     // 1.reset cars position
     // 2.counter the seconds
     // 3.driver car to the right position
     var ready = function(  ){
-        // 1. drive robot to sence
-        //_driveCarToSence( $cars.eq(1) , 1 );
 
         $('.main-board').animate({left:'50%'},1200,'easeOutQuart');
         // drive robot along
@@ -339,8 +336,13 @@ define(function(require, exports, module) {
             game.start( true );
         } );
         // when count to four,  start the robot
+        // set robot car in the middle of the page
+        $cars.eq(1)
+            .fadeIn()
+            .css({
+                'margin-left' : - car2width / 2
+            });
         setTimeout( function(){
-            $cars.eq(1).show().css('left' , - car2width);
             $robotDot.show().css('left' , '6%');
             game.start();
         } , 3000 );
@@ -395,17 +397,16 @@ define(function(require, exports, module) {
         game.reset();
         // ..1. reset start btn
         $startBtn.attr('src' , $startBtn.attr('osrc'))
-            .css('opacity' , 1)
+            .css({
+                    opacity : 1
+                ,   marginLeft: 0
+            })
             .removeClass( lockClass )
             .show();
         // ..2. reset ready panel
-        $counter.hide()
-            .attr('src' , $startBtn.attr('osrc'));
+        $counter.hide();
         // ..3. reset cars position
-        $cars.hide()
-            .each(function( i ){
-                $(this).css( 'left' , i == 0 ? -car1width : -car2width );
-            });
+        $cars.hide();
         // ..4. reset car dots position
         $carDot.add( $robotDot )
             .hide();
@@ -421,7 +422,6 @@ define(function(require, exports, module) {
         // reset bg
         $bg.css( 'marginLeft' , 0 )
             .attr(bgConfig[0].src);
-        lastBgIndex = 0;
         lastBgDistance = 0;
 
         // reset road
@@ -519,28 +519,24 @@ define(function(require, exports, module) {
         src: 'bg3-1.jpg',
         width: 3071
     }];
-    var lastBgIndex = 0;
+
+    var bgIndex = 0;
     var lastBgDistance = 0;
     // cache last motion arguments
     // reduce the Consume of image motion
     var lastMotionValue = -1;
-    var motionValue = 0;
     var changeSence = false;
     var $senceBg = null;
-    var moveBgAndMotionRoad = function( status ){
-        var bgIndex = 0 , mod = bgConfig[0].width + bgConfig[1].width + bgConfig[2].width - 3 * winWidth;
-        if( status.distance % mod < bgConfig[0].width - winWidth ){
-            bgIndex = 0;
-        } else if (status.distance % mod < bgConfig[0].width + bgConfig[1].width - 2 * winWidth){
-            bgIndex = 1;
-        } else {
-            bgIndex = 2;
-        }
 
-        motionValue = ~~ ( status.speed / 20 ) * 3 ;
-        if( lastBgIndex != bgIndex && !changeSence){
+    var moveBgAndMotionRoad = function( status ){
+
+        var motionValue = ~~ ( status.speed / 20 ) * 3 ;
+        if( status.distance - lastBgDistance + winWidth > bgConfig[ bgIndex ].width
+         && !changeSence){
             changeSence = true;
+            var lastBgIndex = bgIndex;
             var animateTime = 1000;
+            bgIndex = ++bgIndex % bgConfig.length;
             // create sence
             if( !$senceBg ){
                 $senceBg = $('<div></div>')
@@ -574,24 +570,23 @@ define(function(require, exports, module) {
                     left: - ( bgConfig[lastBgIndex].width + bgSenceConfig[lastBgIndex].width )
                 } , 2000 , 'easeInCubic' , function(){
                     changeSence = false;
+
                     $(this).hide();
 
-
-                    $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
-                    $bg[0].style.marginLeft = '0px';
-
+                    lastBgDistance = status.distance;
                 });
+            // pre set bg
+            $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
+            $bg[0].style.marginLeft = '0px';
             setTimeout(function(){
-                lastBgDistance = status.distance;
-                lastBgIndex = bgIndex;
                 // .. motion road ,
-                // run motionRoad function, so that it will change the road right now.
+                // run motionRoad function, change the road to next type.
                 motionRoad( status.speed == 0 ? 0 :
-                            Math.min( motionValue + 3 , 30 ) );
-            } , 1500 );
+                            Math.min( motionValue + 3 , 30 ) , true );
+            } , 1000 );
         } else {
             if( !changeSence ){
-                $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) % mod + 'px';
+                $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) + 'px';
             }
             // .. motion road ,
             if( lastMotionValue != motionValue ){
@@ -626,13 +621,14 @@ define(function(require, exports, module) {
         , img: null
     }];
 
+    var currRoadIndex = 0;
     var currRoadConfig = roadConfig[0];
-    var motionRoad = function( radius ){
+    var motionRoad = function( radius , bGetNext ){
         // city road
         var motionCache = M.getMotionCache();
-        var index = lastBgIndex;
+        currRoadIndex = bGetNext ? ++currRoadIndex % roadConfig.length : currRoadIndex;
 
-        currRoadConfig = roadConfig[index];
+        currRoadConfig = roadConfig[currRoadIndex];
         var canvas = $roadCan[0];
         var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 1 ) * currRoadConfig.width;
         // reset road width and height
