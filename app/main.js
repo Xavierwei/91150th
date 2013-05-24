@@ -242,20 +242,40 @@ define(function(require, exports, module) {
         // TODO..  set loading status
         $resultPanel.find('.r-list')
             //.html('loading...');
-        //TODO.. ajax to get list
-        //$.get('' , '' , function(r){
-            //_renderList( r.data );
-        //});
 
+
+
+        // Save record
         var _time = result.time;
         var _distance = result.distance;
         var _status = result.gameStatus;
+        var _name = $('#username').val();
         $.ajax({
             url: "data/public/home/record",
             dataType: "JSON",
             type: "POST",
-            data: {time:_time,distance:_distance,status:_status},
-            success: function(res){}
+            data: {time:_time,distance:_distance,status:_status,name:_name},
+            success: function(res){
+                // Get list
+                $.ajax({
+                    url: "data/public/home/getrecord",
+                    dataType: "JSON",
+                    success: function(res){
+                        console.log(res);
+                        for(index in res.data){
+                            var item = res.data[index].original;
+                            var name = item.name;
+                            var time = item.time;
+                            var m = ~~ ( time / 1000 / 60 );
+                            var s = ~~ ( time / 1000 % 60 );
+                            var ss = ~~ ( time % 1000 / 10 );
+                            var str_time = m +":"+ s + ":" + ss;
+                            var distance = parseInt(item.distance)+'m';
+                            $('.r-list table').append('<tr><td>'+(parseInt(index)+1)+'</td><td>'+name+'</td><td>'+str_time+'</td><td>'+distance+'</td></tr>');
+                        }
+                    }
+                });
+            }
         });
     }
     var _renderList = function( dataArr ){
@@ -704,6 +724,7 @@ define(function(require, exports, module) {
     // click share btn to pause the game
     var $shareCon = $('#share-con')
         .hover( null , function(){
+            goon();
             $shareCon.fadeOut( function(){
                 $shareBgR.stop( true , false )
                     .animate({
@@ -717,6 +738,7 @@ define(function(require, exports, module) {
     var $shareBgR = $('#main-board-bg-r');
     var $shareBtn = $('#share-btn')
         .hover(function(){
+            pause();
             $shareBgR.stop( true , false )
                 .animate({
                     right: -82

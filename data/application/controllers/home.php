@@ -55,6 +55,10 @@ class Home_Controller extends Base_Controller {
         return Response::json(array("data" => $user, "code" => 200, "error" => ""));
     }
 
+    public function action_logout() {
+        SESSION::forget('user');
+    }
+
 	public function action_register() {
 		if (!Input::has("name") || !Input::has("email")) {
 			return Response::json(array("error" => "argument missed", "code" => 500, "data" => array()));
@@ -75,7 +79,7 @@ class Home_Controller extends Base_Controller {
 	}
 
     public function action_getrecord() {
-        $record = GameRecord::all();
+        $record = GameRecord::order_by('time', 'asc')->take(20)->get();
         return Response::json(array("data" => $record, "code" => 200, "error" => ""));
     }
 
@@ -88,7 +92,7 @@ class Home_Controller extends Base_Controller {
 			"distance" => Input::get("distance"),
             "status" => Input::get("status"),
 			"weibo_uid" => Input::get("weibo_uid"),
-			"name" => Input::get("user"),
+			"name" => Input::get("name"),
 		);
 		$record = GameRecord::create($tmprecord);
 		return Response::json(array("data" => $record, "code" => 200, "error" => ""));
