@@ -21,7 +21,7 @@ seajs.config({
         deps: ['jquery']
     }
     ,'jquery.queryloader' :{
-        src: '../../src/jquery-plugin/jquery.queryloader2',
+        src: '../../src/jquery-plugin/jquery.queryloader22',
         deps: ['jquery']
     }
     ,'jquery.ani' : {

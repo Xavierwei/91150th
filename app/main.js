@@ -642,4 +642,9 @@ define(function(require, exports, module) {
                     $shareCon.stop(true , false).fadeIn();
                 });
         });
+
+    // show photos gallery
+    $('#gallery').click(function(){
+
+    });
 });
