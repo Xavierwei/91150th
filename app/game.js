@@ -18,6 +18,7 @@ define(function( require , exports , model ){
         duration  : 2000
         // time for speed up to config.maxSpeed
         , speedUpDuration : 4000
+        , robotStartDistance: 0
         , speedCallBack  : null
         , maxSpeed : 400
         , minRobotSpeed: 200
@@ -97,9 +98,11 @@ define(function( require , exports , model ){
             }
 
             if( _robotAnimate ){
-                _robotAnimate.turnTo( [ speed * ( config.maxSpeed - config.minRobotSpeed )  + config.minRobotSpeed ] );
+                _robotAnimate.turnTo([ status.gameStatus == GAME_OVER ?  :
+                    speed * ( config.maxSpeed - config.minRobotSpeed )  + config.minRobotSpeed ] );
             } else {
                 _robotAnimate = new Animate( [0] , [ config.maxSpeed ] , config.duration , '' , function(arr){
+
                     status.robotSpeed = ~~arr[0];
                     // count the distance of car
                     status.robotDistance += status.robotSpeed * _disDuration;
@@ -197,32 +200,25 @@ define(function( require , exports , model ){
     }
 
     // export interface
-    var start = function( bPlayMyCar ){
-        // only the arguments is true , my car will running
-        if( bPlayMyCar ){
-            // reset status
-            extend( status  , {
-                 speed       : 0
-                 , time      : 0
-                 , distance  : 0
-                 , startTime : 0
-                 , gameStatus : 0
-            });
-            // record start time
-            status.startTime = + new Date();
-            // add event listener
-            document.addEventListener('mousemove' , speedExchange.move , false);
-            // change status
-            status.gameStatus = GAME_PLAYING;
-        } else {
-            // reset status
-            extend( status  , {
-                robotSpeed: 0
-                , robotDistance : 0
-            });
-            // speed exchange fn
-            speedExchange.start( config.speedCallBack );
-        }
+    var start = function( ){
+        // reset status
+        extend( status  , {
+             speed       : 0
+             , time      : 0
+             , distance  : 0
+             , startTime : 0
+             , gameStatus : 0
+             , robotSpeed: 0
+            , robotDistance : 0
+        });
+        // record start time
+        status.startTime = + new Date();
+        // add event listener
+        document.addEventListener('mousemove' , speedExchange.move , false);
+        // speed exchange fn
+        speedExchange.start( config.speedCallBack );
+        // change status
+        status.gameStatus = GAME_PLAYING;
     }
     // set game starttime value
     // bind mousemove event listener
@@ -263,7 +259,6 @@ define(function( require , exports , model ){
         }
         status.time += + new Date() - status.startTime;
         status.gameStatus = GAME_OVER;
-        // speedExchange.stop();
         document.removeEventListener('mousemove' , speedExchange.move , false);
     }
     // delete all animate

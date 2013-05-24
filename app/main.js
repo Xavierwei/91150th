@@ -120,12 +120,11 @@ define(function(require, exports, module) {
     var GAME_MAX_SPEED = 312;
     var GAME_MAX_DISTANCE = 4000;
     var p1 , p2 , p , l , dur , rl ;
-
+    var robotStartDistancePercent = 1 / 6;
     game.setConfig({
         duration  : 2000
         , maxSpeed: GAME_MAX_SPEED
-        , minRobotSpeed  : 200
-        //, robotStartDistance : GAME_MAX_DISTANCE * 1 / 6
+        , minRobotSpeed  : 0
         , speedCallBack  : function( status ){
             gStatus = status;
             // render car speed
@@ -134,13 +133,17 @@ define(function(require, exports, module) {
             $speeds[2].className = 'speed2' + ~~ (status.speed % 10 );
 
             l = 0;
-            dur = status.robotDistance - status.distance;
+            // because , before start the game , the robot car should run first
+            // For a reason , we set the robot car , has run the 1/6 of all the
+            // distane .
+            var robotDistance = status.robotDistance + robotStartDistancePercent * GAME_MAX_DISTANCE;
+            dur = robotDistance - status.distance;
             p = dur / GAME_MAX_DISTANCE;
 
             // change car position
             // GAME_PLAYING  and GAME_OVER all need to modify the car position
             // and car wheel blur status
-            if( status.gameStatus == game.GAME_PLAYING || status.gameStatus == game.GAME_OVER ){
+            //if( status.gameStatus == game.GAME_PLAYING || status.gameStatus == game.GAME_OVER ){
                 //l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
                 l = ( winWidth - car1width ) / 2;
                 $cars.eq(0)
@@ -149,33 +152,35 @@ define(function(require, exports, module) {
                     [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
                 // change car wheels
                 $car1Wheels.rotate( status.distance * 60 );
-            }
+            //}
 
             // change robot car position
 
             // need to reduce car2width for first starting
-            if( status.gameStatus == game.GAME_READY ){
+            /*if( status.gameStatus == game.GAME_READY ){
                 rl = - car2width / 2 + Math.min( 10 * Math.sqrt( Math.abs(p) ) * GAME_MAX_DISTANCE  , 2 * screenWidth );
             } else {
                 var _tmpRl = - car2width / 2 + 20 * p * GAME_MAX_DISTANCE;
                 rl = _tmpRl + ( rl - _tmpRl ) * 9 / 10;
             }
+            */
 
-            //rl = - car2width / 2 + 10 * p * GAME_MAX_DISTANCE
+            rl = - car2width / 2 + 5 * p * GAME_MAX_DISTANCE
             $cars.eq(1)
                 .stop( true , false )
                 .css({
                     marginLeft: rl
                 })
                 [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
-            $car2Wheels.rotate( status.robotDistance * 60 );
+            $car2Wheels.rotate( robotDistance * 60 );
 
             // change car dot position
-            p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
-            p2 = p1 + p * 88 ;
-            $carDot.css('left' , p1 + '%');
+            //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
+            //p2 = p1 + p * 88 ;
+            //$carDot.css('left' , p1 + '%');
             // change robot dot position
-            $robotDot.css('left' , Math.min( p2 , 94 ) + '%' );
+
+            $robotDot.css('left' , 6 + p * 88 + '%' );
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -193,7 +198,7 @@ define(function(require, exports, module) {
                 $timeBoard.html([ m > 9 ? m : '0' + m ,
                      s > 9 ? s : '0' + s ,
                      ss ].join(':'));
-                if( status.distance > status.robotDistance
+                if( status.distance > robotDistance
                     ||  dur > GAME_MAX_DISTANCE ){
                     gameOver( status );
                 }
@@ -341,6 +346,7 @@ define(function(require, exports, module) {
         } );
         // when count to four,  start the robot
         // set robot car in the middle of the page
+        /*
         $cars.eq(1)
             .fadeIn()
             .css({
@@ -350,22 +356,11 @@ define(function(require, exports, module) {
             $robotDot.show().css('left' , '6%');
             game.start();
         } , 3000 );
-
+        */
         setTimeout( function(){
             // drive ’my car ‘ to sence
             _driveCarToSence( $cars.eq(0) , 0 );
         } , 2000 );
-
-//       var $cbg = $counter.find('.c-bg');
-
-//        new Animate( [ 140 ] , [ 0 ] , 300 , '' , function( arr ){
-//            M.motionBlur( $cbg[0] , ~~ arr[ 0 ] , 0 , true );
-//        } , function(){
-//            // $cbg.attr('src' , $cbg.attr('osrc'));
-//            // counter nums
-//            counter();
-//
-//        });
 
 
         // pre motion road
@@ -400,7 +395,7 @@ define(function(require, exports, module) {
         // reset the game
         game.reset();
         // ..1. reset start btn
-        $startBtn.attr('src' , $startBtn.attr('osrc'))
+        $startBtn//.attr('src' , $startBtn.attr('osrc'))
             .css({
                     opacity : 1
                 ,   marginLeft: 0
@@ -425,12 +420,14 @@ define(function(require, exports, module) {
         $timeBoard.html('00:00:0');
         // reset bg
         $bg.css( 'marginLeft' , 0 )
-            .attr(bgConfig[0].src);
+            .attr('src' , bgConfig[0].src);
         lastBgDistance = 0;
 
         // reset road
         motionRoad( 0 );
 
+        // run robot
+        runRobot();
     }
 
     var goon = function(){
@@ -639,6 +636,35 @@ define(function(require, exports, module) {
         canvas.width = width;
         M.motionBlur( currRoadConfig.img , radius , 0 , canvas );
     }
+
+
+    var runRobot = function(){
+        var time = 1000;
+        // run robot car
+        $cars.eq(1)
+            .css({
+                marginLeft :  - car2width / 2
+            })
+            .fadeIn(function(){
+
+                $(this)
+                    .animate({
+                        marginLeft : winWidth
+                    } , time , 'easeInQuart' );
+
+                // rotate the wheel
+                new Animate([ 0 ] , [ 360 * 4 ] , time , 'easeInQuart' , function( arr ){
+                    $car2Wheels.rotate( arr[0] );
+                } );
+
+                // run the car dot
+                $robotDot.show()
+                    .css( 'left' , '6%' )
+                    .animate({
+                        'left' : ( 100 - 2 * 6 ) * robotStartDistancePercent + 6 + '%'
+                    } , time , 'easeInOutCubic' )
+            });
+    }
     // save road cache
     !(function(){
 
@@ -738,7 +764,10 @@ define(function(require, exports, module) {
         },
         submitHandler: function (form) {
             $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
-                $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
+                $('.main-metas').animate( {left:'50%'} , 500 , 'easeOutQuart' , function(){
+                    // run robot
+                    runRobot();
+                });
                 $('#login-mask').hide();
             });
             var name = $(form).find('#uname').val();
