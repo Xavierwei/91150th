@@ -20,6 +20,7 @@ define(function(require, exports, module) {
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
+    //require('swfobject');
 
     // extend jquery
     $.fn.rotate = function( deg ){
@@ -41,17 +42,22 @@ define(function(require, exports, module) {
     // bind skip event
     $videoPanel.find('.video-skip')
         .click(function(){
+            $videoPanel.find('*').remove();
             $videoPanel.fadeOut();
-            $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
+            $('#login-mask').show();
+            $('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
+            //$('.main-metas').animate({left:'50%'},500,'easeOutQuart');
         });
 
 
     var $resultPanel = $('#result-mask');
     $resultPanel.find('.r-close')
         .click(function(){
-            $resultPanel.animate({
-                top: '-100%'
-            } , 2000 , 'easeOutElastic' , function(){});
+            $resultPanel.find('.lpn-panel').animate({
+                height: 0
+            } , 600 , 'easeOutQuart' , function(){
+                $resultPanel.fadeOut();
+            });
         })
         .end()
         .find('.btn')
@@ -188,6 +194,7 @@ define(function(require, exports, module) {
         game.over();
 
         $resultPanel.fadeIn();
+        $resultPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
 
         var $times = $resultPanel
             .find('.r-time1 span,.r-time2 span,.r-time3 span');
@@ -625,7 +632,7 @@ define(function(require, exports, module) {
                 $shareBgR.stop( true , false )
                     .animate({
                         right: 10
-                    } , 500 , '' , function(){
+                    } , 500 , 'easeOutQuart' , function(){
                         $shareBtn.fadeIn();
                     } );
             });
@@ -637,7 +644,7 @@ define(function(require, exports, module) {
             $shareBgR.stop( true , false )
                 .animate({
                     right: -82
-                } , 500 , '' , function(){
+                } , 500 , 'easeOutQuart' , function(){
                     $shareBtn.fadeOut();
                     $shareCon.stop(true , false).fadeIn();
                 });
@@ -645,6 +652,80 @@ define(function(require, exports, module) {
 
     // show photos gallery
     $('#gallery').click(function(){
-
+        //TODO Pause the game
+        $('#gallery-mask').fadeIn();
     });
+
+    // user login
+    $('#login-mask .login-local')
+        .click(function(){
+            $('.lpn-register').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
+                $(this).hide();
+                $('#login-mask .lpn-panel').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},500,'easeOutQuart');
+            })
+        });
+
+    $('#login-mask .btn-ok')
+        .click(function(){
+            //TODO api for register
+            $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
+                $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
+                $('#login-mask').hide();
+            });
+
+        });
+
+
+    // Gallery
+    // require jquery ani plugin
+    require('jquery.fancybox');
+    require('jquery.easing');
+
+    $('.photo').each(function(i){
+        var left = (i%3)*360;
+        var top = parseInt(i/3)*219;
+        if(parseInt(i/3) == 1)
+        {
+            left -= 79;
+        }
+        $(this).css({left:left,top:top});
+    });
+
+    $('.photo a').fancybox({
+        openMethod : 'dropIn',
+        padding: 0,
+        tpl: {
+            wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"></div><div class="fancybox-inner"></div></div></div></div>'
+        },
+        afterShow: function(){
+            $('.fancybox-download').attr('href',$(this).attr('href'));
+        }
+    });
+
+    (function ($, F) {
+        F.transitions.dropIn = function() {
+            var endPos = F._getPosition(true);
+            endPos.opacity = 0;
+            endPos.top = (parseInt(endPos.top, 10) - 400) + 'px';
+
+            F.wrap.css(endPos).show().animate({
+                top: '+=400px',
+                opacity: 1
+            }, {
+                easing: 'easeOutQuart',
+                duration: 800,
+                complete: F._afterZoomIn
+            });
+        };
+
+        F.transitions.dropOut = function() {
+            F.wrap.removeClass('fancybox-opened').animate({
+                top: '-=200px'
+            }, {
+                duration: F.current.closeSpeed,
+                complete: F._afterZoomOut
+            });
+        };
+
+    }(jQuery, jQuery.fancybox));
 });

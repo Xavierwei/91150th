@@ -15,8 +15,9 @@
   </script>
   <![endif]-->
 
-  <link href="./css/base.css" rel="stylesheet" type="text/css" />
-     <link href="./css/animate.css" rel="stylesheet" type="text/css" />
+ <link href="./css/base.css" rel="stylesheet" type="text/css" />
+ <link href="./css/animate.css" rel="stylesheet" type="text/css" />
+ <link href="./css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
   <!--[if IE]>
   <link href="./css/ie.css" rel="stylesheet" type="text/css" />
   <![endif]-->
@@ -61,12 +62,16 @@
             <label>邮箱<input type="text" id="email" /><br/>
               <span style="margin-left: 10px;">诅输入苛大时代基本面</span>
             </label>
-            <div style="margin-top:84px;">
-              <div class="btn" style="margin-right: 24px;"><i class="btn-pre"></i><i class="btn-aft">返回</i></div>
-              <div class="btn"><i class="btn-pre"></i><i class="btn-aft">确认</i></div>
+            <div style="margin-top:72px;">
+              <div class="btn btn-ok" style="margin-right: 24px;"></div>
+                <div class="btn btn-back"></div>
             </div>
           </form>
         </div>
+      </div>
+      <div class="lpn-register">
+          <a href="#" class="login-weibo"></a>
+          <a href="javascript:void(0);" class="login-local"></a>
       </div>
     </section>
     <!--video panel-->
@@ -74,7 +79,7 @@
       <span class="lpn-ghost"></span>
       <div class="lpn-panel">
         <div class="video-wrap">
-          <video></video>
+          <div id="FlashContent"></div>
         </div>
         <div class="video-skip"></div>
       </div>
@@ -88,7 +93,14 @@
           <div class="r-time2"><span class="time00"></span><span class="time00"></span></div>
           <div class="r-time3"><span class="time00"></span><span class="time00"></span></div>
           <div class="r-distance"><span class="distance00"></span><span class="distance10"></span><span class="distance20"></span><span class="distance30"></span><span class="distance40"></span><span class="distance50"></span></div>
-          <div class="r-share"></div>
+          <div class="r-share">
+              <a href="" title="分享到新浪微博" class="sina"></a>
+              <a href="" title="分享到QQ空间" class="qzone"></a>
+              <a href="" title="分享到开心网" class="kaixing"></a>
+              <a href="" title="分享到QQ微博" class="qqwb"></a>
+              <a href="" title="分享到人人网" class="renren"></a>
+              <a href="" title="分享到搜狐微博" class="tt"></a>
+          </div>
           <div class="r-close"></div>
           <div class="r-list">
           </div>
@@ -97,7 +109,38 @@
             <hr>
             <hr>
           </div>
-          <div class="btn" style="margin-top: 360px;"><i class="btn-pre"></i><i class="btn-aft">再玩一次</i></div>
+          <div class="btn btn-agian" style="margin-top: 360px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!--result panel-->
+    <section id="gallery-mask" style="display:none;" class="gallery-mask lpn-mask">
+      <span class="lpn-ghost"></span>
+      <div class="lpn-panel">
+        <div id="gallery-wrap">
+          <div class="title"></div>
+          <div class="gallery">
+            <div class="photo">
+              <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+            </div>
+            <div class="photo">
+              <a rel="gallery" href="pic/b2.jpg"><img src="pic/s2.jpg" /></a>
+            </div>
+            <div class="photo">
+              <a rel="gallery" href="pic/b3.jpg"><img src="pic/s3.jpg" /></a>
+            </div>
+            <div class="photo">
+              <a rel="gallery" href="pic/b4.jpg"><img src="pic/s4.jpg" /></a>
+            </div>
+            <div class="photo">
+              <a rel="gallery" href="pic/b5.jpg"><img src="pic/s5.jpg" /></a>
+            </div>
+            <div class="photo">
+              <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
+            </div>
+          </div>
+          <div class="close"></div>
         </div>
       </div>
     </section>
@@ -128,16 +171,16 @@
             <img src="images/cardot.png" class="b-robot" id="robot-dot" />
           </div>
           <div class="board-m-b">
-            <a href="" id="gallery">保时捷911境界</a><a href="">保时捷官网</a><a href="">排行榜</a>
+            <a href="javascript:void(0);" id="gallery">保时捷911境界</a><a href="javascript:void(0);">保时捷官网</a><a href="javascript:void(0);">排行榜</a>
           </div>
           <span class="board-r" id="share-btn">分享</span>
           <div class="board-share" id="share-con">
-            <a href="" class="sina"></a>
-            <a href="" class="qzone"></a>
-            <a href="" class="kaixing"></a>
-            <a href="" class="qqwb"></a>
-            <a href="" class="renren"></a>
-            <a href="" class="tt"></a>
+            <a href="" title="分享到新浪微博" class="sina"></a>
+            <a href="" title="分享到QQ空间" class="qzone"></a>
+            <a href="" title="分享到开心网" class="kaixing"></a>
+            <a href="" title="分享到QQ微博" class="qqwb"></a>
+            <a href="" title="分享到人人网" class="renren"></a>
+            <a href="" title="分享到搜狐微博" class="tt"></a>
           </div>
         </div>
         <img src="images/p-bg-r.png" id="main-board-bg-r" class="main-board-bg-r" />
@@ -176,6 +219,7 @@
     <script type="text/javascript" src="./lib/jquery/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="./src/jquery-plugin/easing/jquery.easing.1.3.js"></script>
     <script type="text/javascript" src="./src/jquery-plugin/jquery.queryloader2.js"></script>
+    <script type="text/javascript" src="./src/swfobject/swfobject.js"></script>
     <script>
     // query loading
     var $probar = $('#process-bar');
@@ -216,6 +260,49 @@
         },function(){
             $(this).animate({'opacity':.7});
         });
+        initFlash(720,405);
+    }
+
+
+    var initFlash = function( stageW , stageH ){
+      // JAVASCRIPT VARS
+      var cacheBuster = "?t=" + Date.parse(new Date());
+
+      // PARAMS
+      var params = {};
+      params.allowfullscreen = "true";
+      params.allowScriptAccess = "always";
+      params.scale = "noscale";
+      params.wmode = "opaque";
+      //params.wmode = "transparent";
+
+      // ATTRIBUTES
+      var attributes = {};
+      attributes.id = 'FlashContent';
+
+
+      /* FLASH VARS */
+      var flashvars = {};
+
+      // PLAYER DIMENSIONS inside the SWF
+      // if this are not defined then the player will take the stage dimensions defined in the "JAVASCRIPT VARS" section above
+      flashvars.componentW = stageW;
+      flashvars.componentH = stageH;	// if controller under is set to true then you must change this variable(substract the controller height)
+
+      // if you don't define these then the one defined in the XML file will be taken in consideration
+      flashvars.previewFilePath = "video.jpg";
+      flashvars.videoFilePath = "videos/en_desk.flv";
+
+      // player settings(if not defined then the player will have the default settings defined in AS)
+      flashvars.settingsXMLFile = "settings.xml";
+
+
+      /** EMBED CODE **/
+      swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
+    }
+
+    var playfinished = function(){
+      $('.video-skip').click();
     }
     </script>
  </body>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- width and height attributes will be taken in consideration
+as dimensions of the player only if the init function's params are undefined -->
+<settings width = "" height = "">
+
+	<!-- previewPath and videoPath will be taken in consideration only if the
+	init function's params are undefined -->
+	<previewPath>video.jpg</previewPath>
+	<videoPath></videoPath>
+
+	<!-- playing settings -->
+	<initialVolume>50</initialVolume>
+	<bufferTime>5</bufferTime> <!-- in seconds -->
+	<autoStart>true</autoStart><!-- if the player autostarts the first time -->
+	<loopVideo>false</loopVideo> <!-- if the video should restart when it ends -->
+
+
+	<!-- CONTROLLER SETTINGS -->
+	<autoHideTime>false</autoHideTime> <!-- if not defined or is not a number then it will remain always visible on top of the video -->
+	<disableCenterPlayBt>false</disableCenterPlayBt>
+	<disableStopBt>false</disableStopBt>
+	<disableFullBt>false</disableFullBt>
+
+	<!-- background settings -->
+	<controllerBackAlpha>80</controllerBackAlpha>
+	<controllerBackColor>0xFFFFFF</controllerBackColor>
+
+	<!-- buttons settings -->
+	<buttonsBackgroundColor></buttonsBackgroundColor> <!-- if not defined then it will remain as in the FLA -->
+	<buttonsSignNormalColor>0xFFFFFF</buttonsSignNormalColor> <!-- this will be also the timer text color -->
+	<buttonsSignOverColor>0xFFFFFF</buttonsSignOverColor>
+
+	<!-- play bar settings -->
+	<playBackBarColor>0x666666</playBackBarColor>
+	<playDownloadBarColor>0x333333</playDownloadBarColor>
+	<playProgressBarColor>0xFFFFFF</playProgressBarColor>
+	<playScrubColors normalColor = "0xFFFFFF" overColor = "0xFFFFFF" />
+
+	<!-- timer settings -->
+	<timer backColor = "" passedTimeColor = "0xFFFFFF" totalTimeColor = "0xFFFFFF" separatorColor = "0xFFFFFF" />
+
+	<!-- volume control settings -->
+	<verticalVolume backColor = "0xAAAAAA">true</verticalVolume>
+	<volumeBackBarColor>0xAAAAAA</volumeBackBarColor>
+	<volumeLevelBarColor>0xFFFFFF</volumeLevelBarColor>
+	<volumeScrubColors normalColor = "0xFFFFFF" overColor = "0xFFFFFF" />
+
+</settings>
