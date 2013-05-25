@@ -530,6 +530,7 @@ define(function(require, exports, module) {
             .attr('src' , './images/' + bgConfig[0].src);
         lastBgDistance = 0;
 
+        currRoadIndex = 0;
         // reset road
         motionRoad( 0 );
 
