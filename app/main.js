@@ -139,7 +139,7 @@ define(function(require, exports, module) {
     var $resultPanel = $('#result-mask');
     var $sliderBtn = $resultPanel.find('.r-slider');
     // init slide btn
-    intSliderBtn( $sliderBtn , $resultPanel.find('r-list') , 79 , 289  );
+    intSliderBtn( $sliderBtn , $resultPanel.find('.r-list') , 79 , 289  );
 
     $resultPanel.find('.r-close')
         .click(function(){
