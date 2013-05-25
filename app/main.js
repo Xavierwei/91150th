@@ -501,8 +501,10 @@ define(function(require, exports, module) {
             game.pause();
 
         // show goon panel
+        /*
         $goon.fadeIn()
             .css({'margin-left':0 , opacity: 1});
+            */
     }
 
     var lockClass = '__disabled__';
@@ -522,6 +524,7 @@ define(function(require, exports, module) {
     var $carDot = $('#car-dot');
     var $robotDot = $('#robot-dot');
     var $counter = $('#counter');
+    /*
     var $goon = $('#goon-btn')
         .click(function(){
             $(this).animate({'margin-left':2000,opacity:0},500,'easeInQuart',function(){
@@ -534,6 +537,7 @@ define(function(require, exports, module) {
         },function(){
             $(this).removeClass('animated tada');
         });
+    */
     var $startBtn = $('#start-btn')
         .click(function(){
 //            var $t = $( this );
