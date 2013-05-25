@@ -687,7 +687,9 @@ define(function(require, exports, module) {
                     .insertBefore( $bg );
             }
             var totalWidth = bgConfig[lastBgIndex].width + bgSenceConfig[lastBgIndex].width + bgConfig[bgIndex].width;
-            $senceBg.html('')
+            $senceBg
+                .hide()
+                .html('')
                 .append(
                     $('<img />')
                     .attr('src' , './images/' + bgConfig[lastBgIndex].src )
@@ -709,14 +711,14 @@ define(function(require, exports, module) {
                     left: - ( bgConfig[lastBgIndex].width + bgSenceConfig[lastBgIndex].width )
                 } , 2000 , 'easeInCubic' , function(){
                     changeSence = false;
-
+                    // pre set bg
+                    $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
+                    $bg[0].style.marginLeft = '0px';
                     $(this).hide();
 
                     lastBgDistance = status.distance;
                 });
-            // pre set bg
-            $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
-            $bg[0].style.marginLeft = '0px';
+
             setTimeout(function(){
                 // .. motion road ,
                 // run motionRoad function, change the road to next type.
