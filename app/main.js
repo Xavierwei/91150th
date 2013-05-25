@@ -36,6 +36,31 @@ define(function(require, exports, module) {
             });
         return this;
     }
+    $.fn.translate = function( dis ){
+        dis = 'translate(' + dis + 'px)';
+        $( this )
+            .css({
+                '-webkit-transform' : dis,
+                   '-moz-transform' : dis,
+                    '-ms-transform' : dis,
+                     '-o-transform' : dis,
+                        'transform' : dis
+            });
+        return this;
+    }
+
+    var _isIpad = (function(){
+        return !!navigator.userAgent.toLowerCase().match(/ipad/i);
+    })();
+
+    var _fixIpad = function(){
+        // fix ipad , it would scroll body left
+        if( _isIpad ){
+            $(document.body).animate({
+                scrollLeft: 0
+            }, 500 );
+        }
+    }
 
 
     // loading bar
@@ -104,7 +129,9 @@ define(function(require, exports, module) {
     // TODO.. init share button
 
     // disabled contextmenu
-    // $(document).contextmenu(function(){return false;});
+    $(document).contextmenu(function(){return false;});
+    // disabled scroll the body
+    $(document).scroll(function(){return false;});
 
     // game logic application
     var game = require('../app/game');
@@ -134,7 +161,7 @@ define(function(require, exports, module) {
             $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
             $speeds[2].className = 'speed2' + ~~ (status.speed % 10 );
 
-            l = 0;
+            // l = 0;
             // because , before start the game , the robot car should run first
             // For a reason , we set the robot car , has run the 1/6 of all the
             // distane .
@@ -147,9 +174,9 @@ define(function(require, exports, module) {
             // and car wheel blur status
             //if( status.gameStatus == game.GAME_PLAYING || status.gameStatus == game.GAME_OVER ){
                 //l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
-                l = ( winWidth - car1width ) / 2;
+                //l = ( winWidth - car1width ) / 2;
                 $cars.eq(0)
-                    .stop( true , false )
+                    //.stop( true , false )
                     //.css('left' , l )
                     [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
                 // change car wheels
@@ -167,9 +194,9 @@ define(function(require, exports, module) {
             }
             */
 
-            rl = - car2width / 2 + 5 * p * GAME_MAX_DISTANCE
+            rl = - car2width / 2 + 5 * p * GAME_MAX_DISTANCE;
             $cars.eq(1)
-                .stop( true , false )
+                //.stop( true , false )
                 .css({
                     marginLeft: rl
                 })
@@ -182,7 +209,7 @@ define(function(require, exports, module) {
             //$carDot.css('left' , p1 + '%');
             // change robot dot position
 
-            $robotDot.css('left' , 6 + p * 88 + '%' );
+            $robotDot[0].style.marginLeft = p * 235 - 11 + 'px';
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -343,7 +370,8 @@ define(function(require, exports, module) {
         })();
     }
 
-    var _driveCarToSence = function( $car , index ){
+    var _driveCarToSence = function( $car ){
+        var index =  $cars.index( $car[0] );
         var dur = 1000 ;
         var w = $car.width();
         $car.show()
@@ -354,11 +382,10 @@ define(function(require, exports, module) {
 
         // run car dot
         var $dot = index == 0 ? $carDot : $robotDot;
-        $dot.show()
-            .css( 'left' , 0 )
-            .animate({
-                left : '6%'
-            } , dur , 'easeOutQuart');
+        var marginLeft = index == 0 ? '20px' : '0px';
+        $dot.fadeIn()
+                [0].style.marginLeft = marginLeft;
+
         var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
         // run the wheel
         new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
@@ -488,6 +515,12 @@ define(function(require, exports, module) {
         // pause the game
         if( gStatus && gStatus.gameStatus == game.GAME_PLAYING )
             game.pause();
+
+        // show goon panel
+        /*
+        $goon.fadeIn()
+            .css({'margin-left':0 , opacity: 1});
+            */
     }
 
     var lockClass = '__disabled__';
@@ -507,6 +540,20 @@ define(function(require, exports, module) {
     var $carDot = $('#car-dot');
     var $robotDot = $('#robot-dot');
     var $counter = $('#counter');
+    /*
+    var $goon = $('#goon-btn')
+        .click(function(){
+            $(this).animate({'margin-left':2000,opacity:0},500,'easeInQuart',function(){
+                $(this).hide();
+                goon();
+            });
+        })
+        .hover(function(){
+            $(this).addClass('animated tada');
+        },function(){
+            $(this).removeClass('animated tada');
+        });
+    */
     var $startBtn = $('#start-btn')
         .click(function(){
 //            var $t = $( this );
@@ -682,7 +729,7 @@ define(function(require, exports, module) {
 
 
     var runRobot = function(){
-        var time = 1000;
+        var time = 2500;
         // run robot car
         $cars.eq(1)
             .animate({
@@ -695,11 +742,10 @@ define(function(require, exports, module) {
         } );
 
         // run the car dot
-        $robotDot.show()
-            .css( 'left' , '6%' )
+        $robotDot
             .animate({
-                'left' : ( 100 - 2 * 6 ) * robotStartDistancePercent + 6 + '%'
-            } , time , 'easeInOutCubic' );
+                'marginLeft' : 235 * robotStartDistancePercent - 11
+            } , time );
     }
     // save road cache
     !(function(){
@@ -731,16 +777,14 @@ define(function(require, exports, module) {
     // click share btn to pause the game
     var $shareCon = $('#share-con')
         .hover( null , function(){
-            goon();
             $shareCon.stop(true , false).fadeOut( function(){
                 $shareBgR.stop( true , false )
                     .animate({
-                        right: 10
+                        marginRight: 10
                     } , 500 , 'easeOutQuart' , function(){
                         $shareBtn.fadeIn();
                     } );
             });
-
         });
     var $shareBgR = $('#main-board-bg-r');
     var $shareBtn = $('#share-btn')
@@ -748,19 +792,19 @@ define(function(require, exports, module) {
             pause();
             $shareBgR.stop( true , false )
                 .animate({
-                    right: -82
+                    marginRight: -82
                 } , 500 , 'easeOutQuart' , function(){
-                    $shareBtn.fadeOut();
                     $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
+                    setTimeout(function(){
+                        $shareBtn.fadeOut();
+                    } , 100);
                 });
         });
 
     var $gallery = $('#gallery-mask')
         .find('.close')
         .click(function(){
-            $gallery.fadeOut( function(){
-                goon();
-            });
+            $gallery.fadeOut( );
         })
         .end();
     // show photos gallery
@@ -818,6 +862,7 @@ define(function(require, exports, module) {
                             $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
                                 // show robot
                                 _driveCarToSence( $cars.eq(1) , 1 );
+                                _fixIpad();
                             });
                             $('#login-mask').hide();
                         });
@@ -830,15 +875,12 @@ define(function(require, exports, module) {
 
     // Gallery
     // require jquery ani plugin
-
     require('jquery.fancybox');
-    require('jquery.easing');
 
     $('.photo').each(function(i){
         var left = (i%3)*360;
         var top = parseInt(i/3)*219;
-        if(parseInt(i/3) == 1)
-        {
+        if(parseInt(i/3) == 1){
             left -= 79;
         }
         $(this).css({left:left,top:top});
@@ -881,6 +923,7 @@ define(function(require, exports, module) {
         };
 
     }(jQuery, jQuery.fancybox));
+
 
     // ranking list
     $('#ranking').click(function(){
