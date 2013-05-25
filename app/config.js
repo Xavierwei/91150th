@@ -37,6 +37,10 @@ seajs.config({
         src: '../../src/jquery-plugin/slider/jquery.fancybox.pack',
         deps: ['jquery']
     }
+    ,'jquery.mousewheel' :{
+        src: '../../src/jquery-plugin/jquery.mousewheel.js',
+        deps: ['jquery']
+    }
     // for ie6 fix png
     ,'uglyFuckIe6' : {
         src: '../../src/DD_belatedPNG_0.0.8a-min',

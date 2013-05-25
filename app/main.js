@@ -19,6 +19,8 @@ define(function(require, exports, module) {
     // require jquery ani plugin
     require('jquery.validate');
     require('jquery.hoverIntent');
+    require('jquery.mousewheel');
+    // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
     //require('swfobject');
@@ -99,6 +101,7 @@ define(function(require, exports, module) {
         });
     }
     var $resultPanel = $('#result-mask');
+    var $sliderBtn = $resultPanel.find('.r-slider');
     $resultPanel.find('.r-close')
         .click(function(){
             $resultPanel.find('.lpn-panel').animate({
@@ -124,9 +127,24 @@ define(function(require, exports, module) {
         .find('.r-slider')
         // when start to drag
         .on('mousedown' , slideMousedown)
-        .on('touchstart' , slideMousedown);
-
-    // TODO.. init share button
+        .on('touchstart' , slideMousedown)
+        .end()
+        .find('.r-list')
+        .mousewheel(function(event, delta, deltaX, deltaY){
+            var min = 79, max = 289
+             , top = parseInt($sliderBtn.css('top'))
+             , $con = $(this);
+            if( deltaY > 0 ) {// up
+                top -= 3;
+            } else { //down
+                top += 3;
+            }
+            var height = $con.height();
+            var conHeight = $con.find('table').height();
+            $sliderBtn.css('top' , Math.max( Math.min( top , max ) , min ));
+            // change the scroll value
+            $con.scrollTop( ( conHeight - height ) * ( top - min ) / ( max - min )  );
+        });
 
     // disabled contextmenu
     $(document).contextmenu(function(){return false;});
@@ -777,21 +795,40 @@ define(function(require, exports, module) {
 
 
     // click share btn to pause the game
-    var $shareCon = $('#share-con')
-        .hover( null , function(){
-            $shareCon.stop(true , false).fadeOut( function(){
-                $shareBgR.stop( true , false )
-                    .animate({
-                        marginRight: 10
-                    } , 500 , 'easeOutQuart' , function(){
-                        $shareBtn.fadeIn();
-                    } );
+    var showShareBtns = function(){
+        $shareBgR.stop( true , false )
+            .animate({
+                marginRight: -82
+            } , 500 , 'easeOutQuart' , function(){
+                $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
+                setTimeout(function(){
+                    $shareBtn.fadeOut();
+                } , 100);
             });
+    }
+    var hideShareBtns = function(){
+        $shareCon.stop(true , false).fadeOut( function(){
+            $shareBgR.stop( true , false )
+                .animate({
+                    marginRight: 10
+                } , 500 , 'easeOutQuart' , function(){
+                    $shareBtn.fadeIn(function(){
+                        goon();
+                    });
+                } );
+        });
+    }
+    var $shareCon = $('#share-con')
+        .hover( function(){
+            showShareBtns();
+        } , function(){
+            hideShareBtns();
         });
     var $shareBgR = $('#main-board-bg-r');
     var $shareBtn = $('#share-btn')
         .hoverIntent(function(){
             pause();
+<<<<<<< HEAD
             $shareBgR.stop( true , false )
                 .animate({
                     marginRight: -82
@@ -802,11 +839,23 @@ define(function(require, exports, module) {
                     } , 100);
                 });
         },null);
+=======
+            showShareBtns();
+        } , function(){
+            hideShareBtns();
+        });
+    var $mainBoard = $('.main-board')
+        .hover( null , function(){
+            //hideShareBtns();
+        });
+>>>>>>> 3fe47b806dc34b8e460be165eccbb966ef3b1585
 
     var $gallery = $('#gallery-mask')
         .find('.close')
         .click(function(){
-            $gallery.fadeOut( );
+            $gallery.fadeOut( function(){
+                goon();
+            } );
         })
         .end();
     // show photos gallery
