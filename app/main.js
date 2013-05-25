@@ -828,7 +828,6 @@ define(function(require, exports, module) {
     var $shareBtn = $('#share-btn')
         .hoverIntent(function(){
             pause();
-<<<<<<< HEAD
             $shareBgR.stop( true , false )
                 .animate({
                     marginRight: -82
@@ -839,7 +838,6 @@ define(function(require, exports, module) {
                     } , 100);
                 });
         },null);
-=======
             showShareBtns();
         } , function(){
             hideShareBtns();
@@ -848,7 +846,6 @@ define(function(require, exports, module) {
         .hover( null , function(){
             //hideShareBtns();
         });
->>>>>>> 3fe47b806dc34b8e460be165eccbb966ef3b1585
 
     var $gallery = $('#gallery-mask')
         .find('.close')
