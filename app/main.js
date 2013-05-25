@@ -100,9 +100,9 @@ define(function(require, exports, module) {
                 var conHeight = $con.find('table').height();
 
                 if( deltaY > 0 ) {// up
-                    scrollTop -= height / 10;
+                    scrollTop -= height*5 / 10;
                 } else { //down
-                    scrollTop += height / 10;
+                    scrollTop += height*5 / 10;
                 }
                 var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
                 $slider
