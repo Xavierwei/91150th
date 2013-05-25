@@ -840,39 +840,20 @@ define(function(require, exports, module) {
                 .animate({
                     right: 10
                 } , 500 , 'easeOutQuart' , function(){
-                    $shareBtn.stop(true , false).fadeIn(function(){
-                        goon();
-                    });
+                    $shareBtn.stop(true , false).fadeIn();
                 } );
         });
     }
-    var $shareCon = $('#share-con')
-        .hover( function(){
-            showShareBtns();
-        } , function(){
-            hideShareBtns();
-        });
     var $shareBgR = $('#main-board-bg-r');
-    var $shareBtn = $('#share-btn')
-        .hoverIntent(function(){
+    var $shareBtn = $('#share-btn');
+    var $shareCon = $('#share-con');
+    $('#share-wrap')
+        .hover(function(){
             pause();
-            $shareBgR.stop( true , false )
-                .animate({
-                    marginRight: -82
-                } , 500 , 'easeOutQuart' , function(){
-                    $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
-                    setTimeout(function(){
-                        $shareBtn.fadeOut();
-                    } , 100);
-                });
-            showShareBtns();
+            showShareBtns()
         } , function(){
-            if( $(this).is(':hidden') ) return;
+            goon();
             hideShareBtns();
-        });
-    var $mainBoard = $('.main-board')
-        .hover( null , function(){
-            //hideShareBtns();
         });
 
     var $gallery = $('#gallery-mask')
