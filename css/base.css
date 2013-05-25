@@ -1133,7 +1133,8 @@ span.lpn-ghost {
 .fancybox-share {background:url(../images/fancybox_share.png) no-repeat;width:56px;height:38px;position:absolute;top:5px;right:10px;z-index:9999;opacity:0.3}
 .fancybox-share:hover {opacity:1;}
 
-.icon-pause { position: absolute;top:100px;left:50%;background:url(../images/icon-pause.png) no-repeat;width:37px;height:50px;margin-left:18px;}
+.icon-pause {display:none;position: absolute;top:60px;left:50%;background:url(../images/icon-pause.png) no-repeat;width:37px;height:50px;margin-left:-18px;z-index:9999999;opacity:.6;}
+.bg-pause {display:none;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:19998; position: fixed;}
 
 #fancybox-loading div {
     -webkit-animation: loadingAnimation 0.4s 50 linear;
