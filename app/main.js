@@ -374,7 +374,7 @@ define(function(require, exports, module) {
         // 2.counter the seconds
         // show counter btn
         resetCounter( function(){
-            game.start( true );
+            game.start( );
         } );
         // when count to four,  start the robot
         // set robot car in the middle of the page
@@ -463,13 +463,13 @@ define(function(require, exports, module) {
     }
 
     var goon = function(){
-        if( gStatus.gameStatus != game.GAME_PAUSE )
+        if( gStatus && gStatus.gameStatus != game.GAME_PAUSE )
             return;
         //1. show ready panel
         // 2.counter the seconds
         // show counter btn
         resetCounter( function() {
-            game.play();
+            game[ gStatus ? 'play' : 'start' ]( );
         });
     }
 
@@ -479,7 +479,8 @@ define(function(require, exports, module) {
         // stop the counterTimer
         clearTimeout( counterTimer );
         // pause the game
-        game.pause();
+        if( gStatus && gStatus.gameStatus == game.GAME_PLAYING )
+            game.pause();
     }
 
     var lockClass = '__disabled__';
@@ -724,7 +725,7 @@ define(function(require, exports, module) {
     var $shareCon = $('#share-con')
         .hover( null , function(){
             goon();
-            $shareCon.fadeOut( function(){
+            $shareCon.stop(true , false).fadeOut( function(){
                 $shareBgR.stop( true , false )
                     .animate({
                         right: 10
@@ -743,7 +744,7 @@ define(function(require, exports, module) {
                     right: -82
                 } , 500 , 'easeOutQuart' , function(){
                     $shareBtn.fadeOut();
-                    $shareCon.css('opacity' , 1).fadeIn();
+                    $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
                 });
         });
 
@@ -830,6 +831,7 @@ define(function(require, exports, module) {
     });
 
     // require jquery ani plugin
+
     require('jquery.fancybox');
     require('jquery.easing');
 

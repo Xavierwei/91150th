@@ -5,7 +5,7 @@ seajs.config({
   shim: {
     // for jquery
     'jquery': {
-        src: '../jquery/jquery-1.8.3.min',
+        src: '../jquery/jquery-1.10',
         exports: 'jQuery'
     }
     ,'jquery.easing' : {

@@ -77,9 +77,10 @@ a {
   text-align : center;
   white-space: nowrap;
   background: rgba(0,0,0,0.3);
-  _position : absolute;
+  /*_position : absolute;
   _top  : expression( ( ignoreMe  = document.documentElement.scrollTop  ) + 'px' );
   _left : expression( ( ignoreMe2 = document.documentElement.scrollLeft ) + 'px' );
+  */
 }
 span.lpn-ghost {
   display: inline-block;
