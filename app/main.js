@@ -54,6 +54,24 @@ define(function(require, exports, module) {
         });
 
 
+    var slideMousedown = function( ev ){
+        var min = 79, max = 289 , slider = this , off = $resultPanel.find('.result').offset();
+        var $con = $resultPanel.find('.r-list');
+        var height = $con.height();
+        var conHeight = $con.find('table').height();
+        // bind mouse move event
+        $(document).on('mousemove.slide-drag', function(ev){
+
+            var value = Math.max( Math.min( ev.pageY - off.top , max ) , min );
+            slider.style.top = value + 'px';
+            // change the scroll value
+            $con.scrollTop( ( conHeight - height ) * ( value - min ) / ( max - min )  );
+        });
+        $(document).on('mouseup.slide-drag', function(ev){
+            $(this)
+                .off('.slide-drag');
+        });
+    }
     var $resultPanel = $('#result-mask');
     $resultPanel.find('.r-close')
         .click(function(){
@@ -78,26 +96,8 @@ define(function(require, exports, module) {
         .end()
         .find('.r-slider')
         // when start to drag
-        .on('mousedown' , function( ev ){
-            var min = 79, max = 289 , slider = this , off = $resultPanel.find('.result').offset();
-            var $con = $resultPanel.find('.r-list');
-            var height = $con.height();
-            var conHeight = $con.find('table').height();
-            // bind mouse move event
-            $(document).on('mousemove.slide-drag', function(ev){
-
-                var value = Math.max( Math.min( ev.pageY - off.top , max ) , min );
-                console.log( 'mousemove ' + value);
-                slider.style.top = value + 'px';
-                // change the scroll value
-                $con.scrollTop( ( conHeight - height ) * ( value - min ) / ( max - min )  );
-            });
-            $(document).on('mouseup.slide-drag', function(ev){
-                $(this)
-                    .off('.slide-drag');
-                console.log( 'mouseup ');
-            });
-        });
+        .on('mousedown' , slideMousedown)
+        .on('touchstart' , slideMousedown);
 
     // TODO.. init share button
 
@@ -200,14 +200,14 @@ define(function(require, exports, module) {
                      ss ].join(':'));
                 if( status.distance > robotDistance
                     ||  dur > GAME_MAX_DISTANCE ){
-                    gameOver( status );
+                    gameOver( status , status.distance > robotDistance );
                 }
             }
         }
     });
 
-    var gameOver = function( result ){
-        game.over();
+    var gameOver = function( result , isWin){
+        game.over( isWin );
 
         $resultPanel.css('opacity' , 1).hide().fadeIn();
         $resultPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
@@ -248,7 +248,10 @@ define(function(require, exports, module) {
         // Save record
         var _time = result.time;
         var _distance = result.distance;
-        var _status = result.gameStatus;
+
+        // 0 : failure
+        // 1 : success
+        var _status = result.result;
         var _name = $('#username').val();
         $.ajax({
             url: "data/public/home/record",
@@ -261,18 +264,18 @@ define(function(require, exports, module) {
                     url: "data/public/home/getrecord",
                     dataType: "JSON",
                     success: function(res){
-                        console.log(res);
-                        for(index in res.data){
-                            var item = res.data[index].original;
-                            var name = item.name;
-                            var time = item.time;
-                            var m = ~~ ( time / 1000 / 60 );
-                            var s = ~~ ( time / 1000 % 60 );
-                            var ss = ~~ ( time % 1000 / 10 );
-                            var str_time = m +":"+ s + ":" + ss;
-                            var distance = parseInt(item.distance)+'m';
-                            $('.r-list table').append('<tr><td>'+(parseInt(index)+1)+'</td><td>'+name+'</td><td>'+str_time+'</td><td>'+distance+'</td></tr>');
-                        }
+                        _renderList( res.data );
+                        // for(index in res.data){
+                        //     var item = res.data[index].original;
+                        //     var name = item.name;
+                        //     var time = item.time;
+                        //     var m = ~~ ( time / 1000 / 60 );
+                        //     var s = ~~ ( time / 1000 % 60 );
+                        //     var ss = ~~ ( time % 1000 / 10 );
+                        //     var str_time = m +":"+ s + ":" + ss;
+                        //     var distance = parseInt(item.distance)+'m';
+                        //     $('.r-list table').append('<tr><td>'+(parseInt(index)+1)+'</td><td>'+name+'</td><td>'+str_time+'</td><td>'+distance+'</td></tr>');
+                        // }
                     }
                 });
             }
@@ -283,18 +286,18 @@ define(function(require, exports, module) {
         var tpl = '<tr><td>#{i}</td><td>#{n}</td><td>#{t}</td><td>#{d}</td></tr>';
 
         $.each( dataArr , function( i , data ){
-            var time = data.time ;
+            var item = data.original;
             var m = ~~ ( time / 1000 / 60 );
             var s = ~~ ( time / 1000 % 60 );
-            var ss = ~~ ( time % 1000 / 100 );
+            var ss = ~~ ( time % 1000 / 10 );
             var str = [ m > 9 ? m : '0' + m ,
                  s > 9 ? s : '0' + s ,
-                 ss ].join(':')
+                 ss ].join(':');
             aHtml.push( format( tpl , {
-                i   : i
-                , n : data.name
+                i   : i + 1
+                , n : item.name
                 , t : str
-                , d : data.distance + 'm'
+                , d : item.distance + 'm'
             } ) );
         } );
 

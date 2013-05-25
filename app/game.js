@@ -40,6 +40,11 @@ define(function( require , exports , model ){
         , robotDistance : 0
         // status of game, playing or pause or over
         , gameStatus : 0
+        // game result
+        // -1 : game is running
+        // 0  : failure
+        // 1  : success
+        , result : -1
     }
     var GAME_READY = 0;
     var GAME_PLAYING = 1;
@@ -228,7 +233,8 @@ define(function( require , exports , model ){
              , startTime : 0
              , gameStatus : 0
              , robotSpeed: 0
-            , robotDistance : 0
+             , robotDistance : 0
+             , result    : -1
         });
         // record start time
         status.startTime = + new Date();
@@ -272,12 +278,13 @@ define(function( require , exports , model ){
     // game over , remove mousemove event listener
     // set game status to GAME_OVER
     // count the game time
-    var over = function(){
+    var over = function( isWin ){
         if( status.gameStatus != GAME_PLAYING ){
             return;
         }
         status.time += + new Date() - status.startTime;
         status.gameStatus = GAME_OVER;
+        status.result = isWin + 0;
         _removeEvent();
     }
     // delete all animate
@@ -293,7 +300,7 @@ define(function( require , exports , model ){
             , startTime : 0
             , robotDistance : 0
             , gameStatus : 0
-            , playing   : false
+            , result    : -1
         });
         // pause all the animate , interval and timeout
         speedExchange.stop();
