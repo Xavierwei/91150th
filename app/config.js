@@ -61,6 +61,11 @@ seajs.config({
         src: '../../src/modernizr-2.5.3.min',
 		exports: 'modernizr'
     }
+      // for checking browser
+      ,'jquery.hoverIntent': {
+          src: '../../src/jquery-plugin/jquery.hoverIntent.minified',
+          exports: 'jquery.hoverIntent'
+      }
     // for flash player
     ,'swfobject': {
       src: '../../src/swfobject/swfobject',

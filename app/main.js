@@ -18,6 +18,7 @@ define(function(require, exports, module) {
     };
     // require jquery ani plugin
     require('jquery.validate');
+    require('jquery.hoverIntent');
     require('jquery.mousewheel');
     // require('jquery.queryloader');
     // require('jquery.easing');
@@ -851,8 +852,17 @@ define(function(require, exports, module) {
         });
     var $shareBgR = $('#main-board-bg-r');
     var $shareBtn = $('#share-btn')
-        .hover(function(){
+        .hoverIntent(function(){
             pause();
+            $shareBgR.stop( true , false )
+                .animate({
+                    marginRight: -82
+                } , 500 , 'easeOutQuart' , function(){
+                    $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
+                    setTimeout(function(){
+                        $shareBtn.fadeOut();
+                    } , 100);
+                });
             showShareBtns();
         } , function(){
             if( $(this).is(':hidden') ) return;
