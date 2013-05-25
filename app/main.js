@@ -624,7 +624,8 @@ define(function(require, exports, module) {
             });
 
             // run the robot car
-            runRobot();
+            setTimeout(runRobot,2000);
+
         })
         .hover(function(){
             $(this).addClass('animated tada');
