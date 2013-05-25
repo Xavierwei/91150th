@@ -41,6 +41,12 @@ body {
     overflow: hidden;
 }
 
+html , body{
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 a:link, a:visited , a:hover , a:active {
   text-decoration: none;
   color: inherit;
@@ -236,30 +242,28 @@ span.lpn-ghost {
 .main-board-con{
   background: url('../images/p-bg-l.png') no-repeat;
   height: 102px;
+  position: relative;
+  margin-bottom: -102px;
+  z-index: 1;
 }
 .main-board-bg-r{
-  position: absolute;
-  z-index: -1;
-  right: 10px;
-  top: 0;
+  margin-right: 10px;
+  float: right;
 }
 .main-board .board-l{
-  position: absolute;
   width: 130px;
   height: 70px;
-  top: 17px;
-  left: 44px;
-  font-size: 80px;
-  line-height: 80px;
-  color: white;
+  padding-top: 17px;
+  padding-left: 44px;
+  float: left;
 }
 .main-board .board-time{
   color: white;
   font-size: 24px;
-  position: absolute;
-  left: 187px;
   font-style: italic;
-  top: 26px;
+  float: left;
+  margin-top: 26px;
+  margin-left: 15px;
 }
 .main-board .board-m-t{
   position: absolute;
@@ -274,11 +278,10 @@ span.lpn-ghost {
 .main-board .board-m-t .b-bar3{
   height: 3px;
   width: 88%;
-  top: 50%;
-  position: absolute;
-  margin-top: -2px;
-  left: 6%;
   background: url(../images/carbar.png) no-repeat;
+  margin-bottom: -11px;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 .main-board .board-m-t .b-bar1{
   background-position: 0 -3px;
@@ -297,16 +300,14 @@ span.lpn-ghost {
   display: none;
   width: 9px;
   height: 11px;
-  position: absolute;
-  left: 0px;
-  top: 50%;
-  margin-top: -5px;
+  margin-right: -13px;
+  margin-left: 20px;
 }
 
 .main-board .board-m-b{
-  position: absolute;
-  left: 269px;
-  top: 53px;
+  margin-top: -34px;
+  margin-left: 270px;
+  float: left;
   width: 267px;
   height: 25px;
   text-align: center;
@@ -322,11 +323,11 @@ span.lpn-ghost {
 }
 
 .main-board .board-r{
-  position: absolute;
+  float: right;
+  margin-top: -66px;
+  margin-right: 50px;
   height: 57px;
-  top: 22px;
   width: 84px;
-  right: 54px;
   line-height: 90px;
   text-indent: 1.5em;
   cursor: pointer;
@@ -438,7 +439,11 @@ span.lpn-ghost {
   margin-top: -112px;
   text-align: center;
 }
-.main-metas .start{
+.main-metas .start {
+  cursor: pointer;
+}
+.main-metas .goon {
+  display: none;
   cursor: pointer;
 }
 .main-metas .counter{
