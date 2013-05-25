@@ -40,7 +40,13 @@ body {
     font: 14px/20px arial,STHeiti,simsun,sans-serif;
     overflow: hidden;
 }
-
+img,a,div,span{
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 a:link, a:visited , a:hover , a:active {
   text-decoration: none;
   color: inherit;
@@ -380,6 +386,19 @@ span.lpn-ghost {
     color:#777;
 }
 .main-bottom a:hover {
+    color:#fff;
+}
+#login-status {
+    position: absolute;
+    bottom: 13px;
+    font-size: 11px;
+    color: #C2C2C2;
+    right: 20px;
+}
+#login-status a {
+    color:#777;
+}
+#login-status a:hover {
     color:#fff;
 }
 .main-cars .car{
@@ -1158,4 +1177,4 @@ span.lpn-ghost {
 
 #gallery-mask .close,.fancybox-close,.fancybox-nav,.fancybox-download,.fancybox-share {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
 
-.main-board .board-m-b a,.main-board .board-share a,.lpn-register a,.result .r-close,.btn-agian,.main-bottom a {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
+.main-board .board-m-b a,.main-board .board-share a,.lpn-register a,.result .r-close,.btn-agian,.main-bottom a,#login-status a {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
