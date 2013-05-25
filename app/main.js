@@ -335,6 +335,8 @@ define(function(require, exports, module) {
 
         $resultPanel.find('.r-list')
             .html( aHtml.join('') );
+        $rankingPanel.find('.r-list')
+            .html( aHtml.join('') );
     }
     var counterTimer = null;
     var counter = function( callback ){
@@ -729,7 +731,7 @@ define(function(require, exports, module) {
 
 
     var runRobot = function(){
-        var time = 2500;
+        var time = 1000;
         // run robot car
         $cars.eq(1)
             .animate({
@@ -926,9 +928,10 @@ define(function(require, exports, module) {
 
 
     // ranking list
+    var $rankingPanel = $('#ranking-mask');
     $('#ranking').click(function(){
-        $resultPanel.css('opacity' , 1).hide().fadeIn();
-        $resultPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
+        $rankingPanel.css('opacity' , 1).hide().fadeIn();
+        $rankingPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
         pause();
         // Get list
         $.ajax({
@@ -939,6 +942,16 @@ define(function(require, exports, module) {
             }
         });
     });
+
+    $rankingPanel.find('.r-close')
+        .click(function(){
+            $rankingPanel.find('.lpn-panel').animate({
+                height: 0
+            } , 600 , 'easeOutQuart' , function(){
+                $rankingPanel.hide();
+            });
+            goon();
+        })
 
     $('body').delegate('#logout','click',function(){
         $.ajax({
