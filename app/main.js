@@ -92,6 +92,7 @@ define(function(require, exports, module) {
             } , 600 , 'easeOutQuart' , function(){
                 $resultPanel.fadeOut();
             });
+            goon();
         })
         .end()
         .find('.btn')
@@ -299,6 +300,7 @@ define(function(require, exports, module) {
 
         $.each( dataArr , function( i , data ){
             var item = data.original;
+            var time = data.original.time;
             var m = ~~ ( time / 1000 / 60 );
             var s = ~~ ( time / 1000 % 60 );
             var ss = ~~ ( time % 1000 / 10 );
@@ -309,7 +311,7 @@ define(function(require, exports, module) {
                 i   : i + 1
                 , n : item.name
                 , t : str
-                , d : item.distance + 'm'
+                , d : parseInt(item.distance) + 'm'
             } ) );
         } );
 
@@ -480,6 +482,8 @@ define(function(require, exports, module) {
         //1. show ready panel
         // 2.counter the seconds
         // show counter btn
+        $('.icon-pause').fadeOut();
+        $('.bg-pause').fadeOut();
         resetCounter( function() {
             game[ gStatus ? 'play' : 'start' ]( );
         });
@@ -490,6 +494,8 @@ define(function(require, exports, module) {
         $counter.hide();
         // stop the counterTimer
         clearTimeout( counterTimer );
+        $('.icon-pause').fadeIn();
+        $('.bg-pause').fadeIn();
         // pause the game
         if( gStatus && gStatus.gameStatus == game.GAME_PLAYING )
             game.pause();
@@ -906,9 +912,18 @@ define(function(require, exports, module) {
     }(jQuery, jQuery.fancybox));
 
 
-
-    // exports
-    $.extend( exports , {
-        driveCarToSence: _driveCarToSence
-    } );
+    // ranking list
+    $('#ranking').click(function(){
+        $resultPanel.css('opacity' , 1).hide().fadeIn();
+        $resultPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
+        pause();
+        // Get list
+        $.ajax({
+            url: "data/public/home/getrecord",
+            dataType: "JSON",
+            success: function(res){
+                _renderList( res.data );
+            }
+        });
+    });
 });
