@@ -552,6 +552,7 @@ define(function(require, exports, module) {
     }
 
     var pause = function(){
+        if( gStatus && gStatus.gameStatus != game.GAME_PLAYING ) return;
         // hide the counter panel
         $counter.hide();
         // stop the counterTimer
