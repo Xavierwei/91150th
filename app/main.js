@@ -18,7 +18,7 @@ define(function(require, exports, module) {
     };
     // require jquery ani plugin
     require('jquery.validate');
-    // require('jquery.queryloader');
+    require('jquery.hoverIntent');
     // require('jquery.easing');
     // require('modernizr');
     //require('swfobject');
@@ -790,7 +790,7 @@ define(function(require, exports, module) {
         });
     var $shareBgR = $('#main-board-bg-r');
     var $shareBtn = $('#share-btn')
-        .hover(function(){
+        .hoverIntent(function(){
             pause();
             $shareBgR.stop( true , false )
                 .animate({
@@ -801,7 +801,7 @@ define(function(require, exports, module) {
                         $shareBtn.fadeOut();
                     } , 100);
                 });
-        });
+        },null);
 
     var $gallery = $('#gallery-mask')
         .find('.close')
