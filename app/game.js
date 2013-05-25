@@ -84,7 +84,7 @@ define(function( require , exports , model ){
         var _disDuration = 6 / 1000;
         var _winWdth = window.innerWidth;
         var _animate = null;
-        var _robotAnimate = null;
+        //var _robotAnimate = null;
 
         var _startSpeedExchange = function( cb ){
             _stopSpeedExchange( true );
@@ -95,6 +95,7 @@ define(function( require , exports , model ){
         var _dfpsStartTime;
         var _dfpsTimes = 0;
         var _d$fp = $('#fps');
+        /*
         var __robotExchange = function( cb ){
 
             var speed = _roSpeeds / _caCollectTimes;
@@ -117,6 +118,44 @@ define(function( require , exports , model ){
                 });
             }
         }
+        */
+        var __carExchange = function( cb ){
+            var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
+            var robotSpeed = _roSpeeds / _caCollectTimes;
+            if( _animate ){
+                // if game over , stop the car , reset the durations
+                if( status.gameStatus == GAME_OVER ){
+                    mouseSpeed = 0;
+                    robotSpeed = 0;
+                    _animate.duration = config.duration * 1.5;
+                } else {
+                    mouseSpeed = mouseSpeed * config.maxSpeed;
+                    robotSpeed = robotSpeed * ( config.maxSpeed - config.minRobotSpeed )  + config.minRobotSpeed;
+                }
+                _animate.turnTo( [ mouseSpeed ,  robotSpeed ] );
+            } else {
+                _animate = new Animate( [ 0 , 0 ] , [ mouseSpeed * config.maxSpeed , config.maxSpeed ] , config.duration , '' , function(arr){
+                    ////////////////////////////// for debug
+                    _dfpsTimes++;
+                    if( new Date() - _dfpsStartTime > 1000 ){
+                        _d$fp.html('fps:' + _dfpsTimes );
+                        _dfpsStartTime = new Date();
+                        _dfpsTimes = 0;
+                    }
+                    ////////////////////////////// for debug
+                    status.speed = ~~arr[0];
+                    // count the distance of car
+                    status.distance += status.speed * _disDuration;
+
+
+                    status.robotSpeed = ~~arr[1];
+                    // count the distance of car
+                    status.robotDistance += status.robotSpeed * _disDuration;
+                    cb && cb( status );
+                });
+            }
+        }
+        /*
         var __myCarExchange = function( cb ){
             var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
 
@@ -146,6 +185,7 @@ define(function( require , exports , model ){
                 });
             }
         }
+        */
         var _speedExchange = function( myCarCb ){
             _dfpsStartTime = + new Date();
             _dfpsTimes = 0;
@@ -167,8 +207,9 @@ define(function( require , exports , model ){
                 _roSpeeds += tmp;
                 _caTimes++;
                 if( _caTimes % _caCollectTimes == 0 ){
-                    __myCarExchange( myCarCb );
-                    __robotExchange( );
+                    //__myCarExchange( myCarCb );
+                    //__robotExchange( );
+                    __carExchange( myCarCb );
                     _caSpeeds = 0;
                     _roSpeeds = 0;
                 }
@@ -187,11 +228,11 @@ define(function( require , exports , model ){
                 if( clearAnimate )
                     _animate = null;
             }
-            if( _robotAnimate ){
+            /*if( _robotAnimate ){
                 _robotAnimate.pause();
                 if( clearAnimate )
                     _robotAnimate = null;
-            }
+            }*/
         }
 
         return {

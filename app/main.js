@@ -49,6 +49,19 @@ define(function(require, exports, module) {
         return this;
     }
 
+    var _isIpad = (function(){
+        return !!navigator.userAgent.toLowerCase().match(/ipad/i);
+    })();
+
+    var _fixIpad = function(){
+        // fix ipad , it would scroll body left
+        if( _isIpad ){
+            $(document.body).animate({
+                scrollLeft: 0
+            }, 500 );
+        }
+    }
+
     // loading bar
     var $videoPanel = $('#video-mask');
 
@@ -115,7 +128,9 @@ define(function(require, exports, module) {
     // TODO.. init share button
 
     // disabled contextmenu
-    // $(document).contextmenu(function(){return false;});
+    $(document).contextmenu(function(){return false;});
+    // disabled scroll the body
+    $(document).scroll(function(){return false;});
 
     // game logic application
     var game = require('../app/game');
@@ -844,6 +859,7 @@ define(function(require, exports, module) {
                             $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
                                 // show robot
                                 _driveCarToSence( $cars.eq(1) , 1 );
+                                _fixIpad();
                             });
                             $('#login-mask').hide();
                         });
