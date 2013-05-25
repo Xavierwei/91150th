@@ -781,7 +781,9 @@ define(function(require, exports, module) {
                     .animate({
                         marginRight: 10
                     } , 500 , 'easeOutQuart' , function(){
-                        $shareBtn.fadeIn();
+                        $shareBtn.fadeIn(function(){
+                            goon();
+                        });
                     } );
             });
         });
