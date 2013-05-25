@@ -837,7 +837,6 @@ define(function(require, exports, module) {
                         $shareBtn.fadeOut();
                     } , 100);
                 });
-        },null);
             showShareBtns();
         } , function(){
             hideShareBtns();
