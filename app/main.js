@@ -81,9 +81,45 @@ define(function(require, exports, module) {
         });
 
 
-    var slideMousedown = function( ev ){
-        var min = 79, max = 289 , slider = this , off = $resultPanel.find('.result').offset();
-        var $con = $resultPanel.find('.r-list');
+    var intSliderBtn = function( $slider , $list , min , max ){
+        $slider// when start to drag
+            .on('mousedown' , function( ev ){
+                _slideMousedown.call( this , $slider , $list , min , max , ev );
+            })
+            .on('touchstart' , function( ev ){
+                _slideMousedown.call( this , $slider , $list , min , max , ev );
+            });
+
+        $list
+            .mousewheel(function(event, delta, deltaX, deltaY){
+                var $con = $(this);
+                var scrollTop = $con.scrollTop();
+                var height = $con.height();
+                var recordNum = $con.find('tr').length;
+                var conHeight = $con.find('table').height();
+
+                if( deltaY > 0 ) {// up
+                    scrollTop -= height / 10;
+                } else { //down
+                    scrollTop += height / 10;
+                }
+                var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
+                $slider
+                    .stop( true , false )
+                    .animate({
+                        'top': Math.max( Math.min( top , max ) , min )
+                    } , 500 );
+                // change the scroll value
+                $con.stop( true , false )
+                    .animate({
+                        scrollTop: scrollTop
+                    } , 500 );
+            });
+    }
+    var _slideMousedown = function( $slider , $list , min , max , ev ){
+        var slider = this
+         , off = $slider.offsetParent().offset();
+        var $con = $list;
         var height = $con.height();
         var conHeight = $con.find('table').height();
         // bind mouse move event
@@ -101,6 +137,9 @@ define(function(require, exports, module) {
     }
     var $resultPanel = $('#result-mask');
     var $sliderBtn = $resultPanel.find('.r-slider');
+    // init slide btn
+    intSliderBtn( $sliderBtn , $resultPanel.find('r-list') , 79 , 289  );
+
     $resultPanel.find('.r-close')
         .click(function(){
             $resultPanel.find('.lpn-panel').animate({
@@ -121,29 +160,8 @@ define(function(require, exports, module) {
 
             });
             reset();
-        })
-        .end()
-        .find('.r-slider')
-        // when start to drag
-        .on('mousedown' , slideMousedown)
-        .on('touchstart' , slideMousedown)
-        .end()
-        .find('.r-list')
-        .mousewheel(function(event, delta, deltaX, deltaY){
-            var min = 79, max = 289
-             , top = parseInt($sliderBtn.css('top'))
-             , $con = $(this);
-            if( deltaY > 0 ) {// up
-                top -= 3;
-            } else { //down
-                top += 3;
-            }
-            var height = $con.height();
-            var conHeight = $con.find('table').height();
-            $sliderBtn.css('top' , Math.max( Math.min( top , max ) , min ));
-            // change the scroll value
-            $con.scrollTop( ( conHeight - height ) * ( top - min ) / ( max - min )  );
         });
+
 
     // disabled contextmenu
     $(document).contextmenu(function(){return false;});
@@ -333,7 +351,7 @@ define(function(require, exports, module) {
 
         $.each( dataArr , function( i , data ){
             var item = data.original;
-            var time = data.original.time;
+            var time = item.time;
             var m = ~~ ( time / 1000 / 60 );
             var s = ~~ ( time / 1000 % 60 );
             var ss = ~~ ( time % 1000 / 10 );
@@ -356,7 +374,9 @@ define(function(require, exports, module) {
             .html( aHtml.join('') );
     }
     var counterTimer = null;
+    var counterAnimate = null;
     var counter = function( callback ){
+        stopCounter();
         // hide all num first
         var $nums = $counter.find('.num').hide();
         var len = $nums.length;
@@ -376,7 +396,7 @@ define(function(require, exports, module) {
             // reset nums
             M.motionBlur( $t[0] , 0 );
             counterTimer = setTimeout( function(){
-                new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
+                counterAnimate = new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
                     M.motionBlur( $t[0] , ~~arr[ 0 ] );
                 } , function(){
                     $t.hide();
@@ -387,6 +407,11 @@ define(function(require, exports, module) {
 //                });
             } , 800 );
         })();
+    }
+
+    var stopCounter = function(){
+        clearTimeout( counterTimer );
+        if( counterAnimate )counterAnimate.pause();
     }
 
     var _driveCarToSence = function( $car ){
@@ -519,6 +544,7 @@ define(function(require, exports, module) {
         // show counter btn
         $('.icon-pause').fadeOut();
         $('.bg-pause').fadeOut();
+
         resetCounter( function() {
             game[ gStatus ? 'play' : 'start' ]( );
         });
@@ -528,7 +554,7 @@ define(function(require, exports, module) {
         // hide the counter panel
         $counter.hide();
         // stop the counterTimer
-        clearTimeout( counterTimer );
+        stopCounter();
         $('.icon-pause').fadeIn();
         $('.bg-pause').fadeIn();
         // pause the game
@@ -797,11 +823,11 @@ define(function(require, exports, module) {
     var showShareBtns = function(){
         $shareBgR.stop( true , false )
             .animate({
-                marginRight: -82
+                right: -87
             } , 500 , 'easeOutQuart' , function(){
                 $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
                 setTimeout(function(){
-                    $shareBtn.fadeOut();
+                    $shareBtn.stop(true , false).fadeOut();
                 } , 100);
             });
     }
@@ -809,9 +835,9 @@ define(function(require, exports, module) {
         $shareCon.stop(true , false).fadeOut( function(){
             $shareBgR.stop( true , false )
                 .animate({
-                    marginRight: 10
+                    right: 10
                 } , 500 , 'easeOutQuart' , function(){
-                    $shareBtn.fadeIn(function(){
+                    $shareBtn.stop(true , false).fadeIn(function(){
                         goon();
                     });
                 } );
@@ -829,6 +855,7 @@ define(function(require, exports, module) {
             pause();
             showShareBtns();
         } , function(){
+            if( $(this).is(':hidden') ) return;
             hideShareBtns();
         });
     var $mainBoard = $('.main-board')
@@ -952,7 +979,7 @@ define(function(require, exports, module) {
 
         F.transitions.dropOut = function() {
             F.wrap.removeClass('fancybox-opened').animate({
-                top: '-=200px'
+                top: '-=200'
             }, {
                 duration: F.current.closeSpeed,
                 complete: F._afterZoomOut
@@ -964,6 +991,8 @@ define(function(require, exports, module) {
 
     // ranking list
     var $rankingPanel = $('#ranking-mask');
+    // init slide btn
+    intSliderBtn( $rankingPanel.find('.r-slider') , $rankingPanel.find('.r-list') , 115 , 319  );
     $('#ranking').click(function(){
         $rankingPanel.css('opacity' , 1).hide().fadeIn();
         $rankingPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');

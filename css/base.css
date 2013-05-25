@@ -254,8 +254,9 @@ span.lpn-ghost {
   z-index: 1;
 }
 .main-board-bg-r{
-  margin-right: 10px;
-  float: right;
+  position: absolute;
+  right: 10px;
+  top: 0px;
 }
 .main-board .board-l{
   width: 130px;
@@ -627,6 +628,9 @@ span.lpn-ghost {
   top: 79px;
   right: 191px;
   cursor: ns-resize;
+}
+.ranking .r-slider {
+  top: 119px;
 }
 .result .r-slider hr:first-child,.ranking .r-slider hr:first-child{
   margin-top: 8px;
