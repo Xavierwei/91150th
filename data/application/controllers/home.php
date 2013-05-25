@@ -106,7 +106,7 @@ class Home_Controller extends Base_Controller {
 		}
 		$this->_put_user($user);
 
-		return View::make("home.callback")->with("token", $auth_token);
+        return Redirect::to("../../../index.html");
 	}
 
 	private function _put_user($user) {

@@ -1,9 +1,9 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
-define( "WB_AKEY" , '1522524724' );
-define( "WB_SKEY" , '3b53836d69058abca2435bf751867f80' );
-define( "WB_CALLBACK_URL" , 'http://lightgame.local:81/home/callback' );
+define( "WB_AKEY" , '2935559718' );
+define( "WB_SKEY" , 'a78f1ff36d8e70192866e0fcfe82705f' );
+define( "WB_CALLBACK_URL" , 'http://50years911.porsche-events.cn/dev/data/public/index.php/home/callback' );
 
 Class Weibo {
 	static function getAuthURL() {

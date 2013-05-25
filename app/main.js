@@ -62,6 +62,7 @@ define(function(require, exports, module) {
         }
     }
 
+
     // loading bar
     var $videoPanel = $('#video-mask');
 
@@ -282,14 +283,14 @@ define(function(require, exports, module) {
         var _status = result.result;
         var _name = $('#username').val();
         $.ajax({
-            url: "data/public/home/record",
+            url: "data/public/index.php/home/record",
             dataType: "JSON",
             type: "POST",
             data: {time:_time,distance:_distance,status:_status,name:_name},
             success: function(res){
                 // Get list
                 $.ajax({
-                    url: "data/public/home/getrecord",
+                    url: "data/public/index.php/home/getrecord",
                     dataType: "JSON",
                     success: function(res){
                         _renderList( res.data );
@@ -333,6 +334,8 @@ define(function(require, exports, module) {
         aHtml.push('</tbody></table>');
 
         $resultPanel.find('.r-list')
+            .html( aHtml.join('') );
+        $rankingPanel.find('.r-list')
             .html( aHtml.join('') );
     }
     var counterTimer = null;
@@ -728,7 +731,7 @@ define(function(require, exports, module) {
 
 
     var runRobot = function(){
-        var time = 2500;
+        var time = 1000;
         // run robot car
         $cars.eq(1)
             .animate({
@@ -849,14 +852,16 @@ define(function(require, exports, module) {
             var name = $(form).find('#uname').val();
             var email = $(form).find('#email').val();
             $.ajax({
-                url: "data/public/home/register",
+                url: "data/public/index.php/home/register",
                 dataType: "JSON",
                 type: "POST",
                 data: {name:name,email:email},
                 success: function(res){
                     if(res.code == 200)
                     {
-                        $('#username').val(res.data.original.name);
+                        var username = res.data.original.name;
+                        $('#username').val(username);
+                        $('#login-status').html(username + ' <a href="javascript:void(0)" id="logout">退出</a>');
                         $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
                             $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
                                 // show robot
@@ -873,16 +878,6 @@ define(function(require, exports, module) {
     });
 
     // Gallery
-    // show photos gallery
-    $('#gallery').click(function(){
-        //TODO Pause the game
-        $('#gallery-mask').fadeIn();
-    });
-
-    $('#gallery-mask .close').click(function(){
-        $('#gallery-mask').fadeOut();
-    });
-
     // require jquery ani plugin
     require('jquery.fancybox');
 
@@ -910,10 +905,10 @@ define(function(require, exports, module) {
         F.transitions.dropIn = function() {
             var endPos = F._getPosition(true);
             endPos.opacity = 0;
-            endPos.top = (parseInt(endPos.top, 10) - 400) + 'px';
+            endPos.top = (parseInt(endPos.top, 10) - 400);
 
             F.wrap.css(endPos).show().animate({
-                top: '+=400px',
+                top: endPos.top + 400,
                 opacity: 1
             }, {
                 easing: 'easeOutQuart',
@@ -935,17 +930,43 @@ define(function(require, exports, module) {
 
 
     // ranking list
+    var $rankingPanel = $('#ranking-mask');
     $('#ranking').click(function(){
-        $resultPanel.css('opacity' , 1).hide().fadeIn();
-        $resultPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
+        $rankingPanel.css('opacity' , 1).hide().fadeIn();
+        $rankingPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
         pause();
         // Get list
         $.ajax({
-            url: "data/public/home/getrecord",
+            url: "data/public/index.php/home/getrecord",
             dataType: "JSON",
             success: function(res){
                 _renderList( res.data );
             }
         });
     });
+
+    $rankingPanel.find('.r-close')
+        .click(function(){
+            $rankingPanel.find('.lpn-panel').animate({
+                height: 0
+            } , 600 , 'easeOutQuart' , function(){
+                $rankingPanel.hide();
+            });
+            goon();
+        })
+
+    $('body').delegate('#logout','click',function(){
+        $.ajax({
+            url: "data/public/index.php/home/logout",
+            success: function(res){
+                location.reload();
+            }
+        });
+    });
+
+    // exports
+    $.extend( exports , {
+        driveCarToSence: _driveCarToSence
+    } );
 });
+

@@ -40,6 +40,13 @@ body {
     font: 14px/20px arial,STHeiti,simsun,sans-serif;
     overflow: hidden;
 }
+img,a,div,span{
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 html , body{
   height: 100%;
@@ -383,6 +390,19 @@ span.lpn-ghost {
 .main-bottom a:hover {
     color:#fff;
 }
+#login-status {
+    position: absolute;
+    bottom: 13px;
+    font-size: 11px;
+    color: #C2C2C2;
+    right: 20px;
+}
+#login-status a {
+    color:#777;
+}
+#login-status a:hover {
+    color:#fff;
+}
 .main-cars .car{
   position: absolute;
   z-index: 9999;
@@ -513,6 +533,12 @@ span.lpn-ghost {
   cursor: pointer;
   display:none;
 }
+.ranking {
+    background:url(../images/ranking-bg.png) no-repeat;
+    width:776px;
+    height:458px;
+    position: relative;
+}
 #result-mask .lpn-panel {overflow:hidden;height:0;}
 .result{
   width: 1161px;
@@ -555,7 +581,7 @@ span.lpn-ghost {
   top: 280px;
   left: 243px;
 }
-.result .r-close{
+.result .r-close,.ranking .r-close{
   background:url(../images/result_close.png) no-repeat;
   position: absolute;
   height: 43px;
@@ -568,7 +594,7 @@ span.lpn-ghost {
 .result .r-close:hover {
     opacity:1;
 }
-.result .r-list{
+.result .r-list,.ranking .r-list{
   position: absolute;
   top: 83px;
   left: 633px;
@@ -577,16 +603,23 @@ span.lpn-ghost {
   overflow: hidden;
   line-height: 23px;
 }
-.result .r-list table{
+.ranking .r-list {
+    top:116px;
+    left:246px;
+}
+.result .r-list table,.ranking .r-list table{
   width: 100%;
   color: white;
 }
 .result .r-list tr:nth-child(1),
 .result .r-list tr:nth-child(2),
-.result .r-list tr:nth-child(3){
+.result .r-list tr:nth-child(3),
+.ranking .r-list tr:nth-child(1),
+.ranking .r-list tr:nth-child(2),
+.ranking .r-list tr:nth-child(3){
   color: red;
 }
-.result .r-slider{
+.result .r-slider,.ranking .r-slider{
   position: absolute;
   width: 13px;
   height: 26px;
@@ -595,10 +628,10 @@ span.lpn-ghost {
   right: 191px;
   cursor: ns-resize;
 }
-.result .r-slider hr:first-child{
+.result .r-slider hr:first-child,.ranking .r-slider hr:first-child{
   margin-top: 8px;
 }
-.result .r-slider hr{
+.result .r-slider hr,.ranking .r-slider hr{
   border-top: 1px solid #ababab;
   border-bottom: 1px solid #000;
   margin: 2px 2px;
@@ -1163,4 +1196,4 @@ span.lpn-ghost {
 
 #gallery-mask .close,.fancybox-close,.fancybox-nav,.fancybox-download,.fancybox-share {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
 
-.main-board .board-m-b a,.main-board .board-share a,.lpn-register a,.result .r-close,.btn-agian,.main-bottom a {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
+.main-board .board-m-b a,.main-board .board-share a,.lpn-register a,.result .r-close,.btn-agian,.main-bottom a,#login-status a {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}

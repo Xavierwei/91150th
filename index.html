@@ -2,6 +2,8 @@
 <html>
  <head>
   <meta charset="utf-8"/>
+  <title>911 50周年</title>
+  <meta name="viewport" content="width=1400, minimum-scale=1.0, maximum-scale=1.0" />
   <title> 2013保时捷极至体验 </title>
   <meta name="viewport" content="width=1024, minimum-scale=1.0, maximum-scale=1.0" />
   <script type="text/javascript"
@@ -69,7 +71,7 @@
         </div>
       </div>
       <div class="lpn-register">
-          <a href="#" class="login-weibo"></a>
+          <a href="https://api.weibo.com/oauth2/authorize?client_id=2935559718&redirect_uri=http%3A%2F%2F50years911.porsche-events.cn%2Fdev%2Fdata%2Fpublic%2Findex.php%2Fhome%2Fcallback&response_type=code" class="login-weibo"></a>
           <a href="javascript:void(0);" class="login-local"></a>
       </div>
     </section>
@@ -83,6 +85,23 @@
         <div class="video-skip"></div>
       </div>
     </section>
+    <!-- ranking panel -->
+    <section id="ranking-mask" style="display:none;" class="ranking-mask lpn-mask">
+        <span class="lpn-ghost"></span>
+        <div class="lpn-panel">
+            <div class="ranking">
+                <div class="r-close"></div>
+                <div class="r-list">
+                </div>
+                <div class="r-slider">
+                    <hr>
+                    <hr>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!--result panel-->
     <section id="result-mask" style="display:none;" class="result-mask lpn-mask">
       <span class="lpn-ghost"></span>
@@ -189,6 +208,7 @@
       <div class="main-bottom">
         <a href="">©2013保时捷中国 法律公告</a>
       </div>
+      <div id="login-status"></div>
       <div class="main-cars">
         <div class="car">
           <img src="images/car.png" />
@@ -242,9 +262,27 @@
                 });
             $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
                 // TODO.......
-                initVideoPlay();
+                //initVideoPlay();
                 initAnimation();
             });
+        }
+    });
+    // get username
+    $.ajax({
+        url: "data/public/index.php/home/checkuser",
+        dataType: "JSON",
+        success: function(res){
+            if(res.code==200)
+            {
+                var username = res.data.original.name;
+                $('#username').val(username);
+                $('#login-status').html(username + ' <a href="javascript:void(0)" id="logout">退出</a>');
+            }
+            else
+            {
+                $('#username').val('');
+            }
+
         }
     });
 
@@ -256,14 +294,27 @@
     var initAnimation = function(){
         $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
         $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
-        $videoPanel.delay(900).fadeIn(400);
-        $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
-        $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
-            $(this).animate({'opacity':1});
-        },function(){
-            $(this).animate({'opacity':.7});
-        });
-        initFlash(720,405);
+        if($('#username').val() != '')
+        {
+            $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
+                // show robot
+                var $cars = $('.main-cars .car');
+                seajs.use('../../app/main' , function( main ){
+                    main.driveCarToSence($cars.eq(1) , 1);
+                });
+            });
+        }
+        else
+        {
+            $videoPanel.delay(900).fadeIn(400);
+            $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
+            $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
+                $(this).animate({'opacity':1});
+            },function(){
+                $(this).animate({'opacity':.7});
+            });
+            initFlash(720,405);
+        }
     }
 
 
