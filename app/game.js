@@ -205,11 +205,12 @@ define(function( require , exports , model ){
                 __gameControll.over200StartTime = 0;
                 __gameControll.over200Duration = 0;
             }
+            // speed up robot
             if( __addRobotSpeed ){
                 robotSpeed *= 5;
             }
 
-            if( status.time + ( + new Date() - status.startTime ) < 5000){
+            if( _getPlayTime() < 5000 ){
                 robotSpeed *= 2;
             }
             return robotSpeed;
