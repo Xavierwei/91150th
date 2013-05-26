@@ -150,7 +150,6 @@ define(function( require , exports , model ){
 
                 if( __gameControll.overStartTime
                     && + new Date() - __gameControll.overStartTime + __gameControll.overDuration > __gameControll.overMaxDuration ){
-                    console.log( + new Date() - __gameControll.overStartTime + __gameControll.overDuration);
                     // game over
                     status.result = 0;
                 }
@@ -165,7 +164,6 @@ define(function( require , exports , model ){
                 && duration < _winWdth / 30
                 && __gameControll.over200Times){
                 __bRobotControll = true;
-                console.log(' controll the robot , and speed it ' , duration );
                 __gameControll.over200Times--;
                 setTimeout( function(){
                     __bRobotControll = false;
@@ -325,9 +323,9 @@ define(function( require , exports , model ){
 
                 var spx =  Math.abs( _caDis[0] - _caLastDis[0] );
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
-                var screenWidth = Math.sqrt(_winWdth)*15;
+                //var screenWidth = Math.sqrt(_winWdth)*15;
                 //console.log(screenWidth);
-                var speed = Math.round( spx + spy ) / screenWidth * 1.4;
+                var speed = Math.round( spx + spy ) / _winWdth * 1.4;
                 //console.log(speed);
                 // count robot
                 // var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;

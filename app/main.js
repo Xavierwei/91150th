@@ -91,18 +91,17 @@ define(function(require, exports, module) {
                 _slideMousedown.call( this , $slider , $list , min , max , ev );
             });
 
+
         $list
             .mousewheel(function(event, delta, deltaX, deltaY){
                 var $con = $(this);
                 var scrollTop = $con.scrollTop();
-                var height = $con.height();
-                var recordNum = $con.find('tr').length;
-                var conHeight = $con.find('table').height();
-
+                var height = $list.height();
+                var conHeight = $list[0].scrollHeight;
                 if( deltaY > 0 ) {// up
-                    scrollTop -= height*5 / 10;
+                    scrollTop -= height * 5 / 10;
                 } else { //down
-                    scrollTop += height*5 / 10;
+                    scrollTop += height * 5 / 10;
                 }
                 var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
                 $slider
@@ -116,6 +115,31 @@ define(function(require, exports, module) {
                         scrollTop: scrollTop
                     } , 500 );
             });
+
+        if( _isIpad ){ // bind touch move event
+            var py ;
+            $list
+                .on('touchstart' , function( ev ){
+                    py = ev.originalEvent.pageY;
+                })
+                .on('touchmove' , function( ev ){
+                    var dis = ev.originalEvent.pageY - py;
+                    var scrollTop = $(this).scrollTop();
+                    var height = $list.height();
+                    var conHeight = $list[0].scrollHeight;
+
+                    scrollTop = Math.max( Math.min( scrollTop - dis , conHeight - height ) , 0 );
+                    $(this).scrollTop( scrollTop );
+
+                    var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
+                    // move the slider
+                    $slider
+                        .stop( true , false )
+                        .animate({
+                            'top': Math.max( Math.min( top , max ) , min )
+                        } , 500 );
+                });
+        }
     }
     var _slideMousedown = function( $slider , $list , min , max , ev ){
         var slider = this
@@ -123,18 +147,26 @@ define(function(require, exports, module) {
         var $con = $list;
         var height = $con.height();
         var conHeight = $con.find('table').height();
-        // bind mouse move event
-        $(document).on('mousemove.slide-drag', function(ev){
-
-            var value = Math.max( Math.min( ev.pageY - off.top , max ) , min );
+        var moveEvent = function( pageY ){
+            var value = Math.max( Math.min( pageY - off.top , max ) , min );
             slider.style.top = value + 'px';
             // change the scroll value
             $con.scrollTop( ( conHeight - height ) * ( value - min ) / ( max - min )  );
-        });
-        $(document).on('mouseup.slide-drag', function(ev){
-            $(this)
-                .off('.slide-drag');
-        });
+        }
+        var endEvent = function(ev){
+                $(this)
+                    .off('.slide-drag');
+            }
+        // bind mouse move event
+        $(document)
+            .on('mousemove.slide-drag', function( ev ){
+                moveEvent( ev.pageY );
+            })
+            .on('touchmove.slide-drag', function( ev ){
+                moveEvent( ev.originalEvent.pageY );
+            })
+            .on('touchend.slide-drag', endEvent )
+            .on('mouseup.slide-drag', endEvent );
     }
     var $resultPanel = $('#result-mask');
     var $sliderBtn = $resultPanel.find('.r-slider');
@@ -580,6 +612,7 @@ define(function(require, exports, module) {
         lastBgDistance = 0;
 
         currRoadIndex = 0;
+        bgIndex = 0;
         // reset road
         motionRoad( 0 );
         gStatus = null;
