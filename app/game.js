@@ -158,6 +158,27 @@ define(function( require , exports , model ){
         }
         var __bRobotControll = false;
         var __addRobotSpeed = false;
+        var __robotSpeedTime = 1000;
+        var __gameRobotControll = function( robotSpeed ){
+            var duration = status.robotDistance - status.distance;
+            if( !__bRobotControll
+                && duration < _winWdth / 30
+                && __gameControll.over200Times){
+                __bRobotControll = true;
+                console.log(' controll the robot , and speed it ' , duration );
+                __gameControll.over200Times--;
+                setTimeout( function(){
+                    __bRobotControll = false;
+                } , __robotSpeedTime );
+            }
+            // speed up the robot
+            if( __bRobotControll ){
+                robotSpeed = 400;
+            }
+
+            return robotSpeed;
+        }
+        /*
         var __gameRobotControll = function( robotSpeed ){
 
             var duration = status.robotDistance - status.distance;
@@ -215,6 +236,7 @@ define(function( require , exports , model ){
             }
             return robotSpeed;
         }
+        */
 
         var __carExchange = function( cb ){
             var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
