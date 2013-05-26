@@ -263,8 +263,6 @@
                     $(this).hide();
                 });
             $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
-                // TODO.......
-                //initVideoPlay();
                 initAnimation();
             });
         }
@@ -289,22 +287,12 @@
     });
 
     var $videoPanel = $('#video-mask');
-    var initVideoPlay = function(){
-        // TODO... start to play video
-
-    }
     var initAnimation = function(){
         $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
         $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
         if($('#username').val() != '')
         {
-            $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
-                // show robot
-                var $cars = $('.main-cars .car');
-                seajs.use('../../app/main' , function( main ){
-                    main.driveCarToSence($cars.eq(1) , 1);
-                });
-            });
+            $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
         }
         else
         {

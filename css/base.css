@@ -1117,21 +1117,6 @@ span.lpn-ghost {
 }
 /********add css animate plugin**********/
 
-.css-animate {
-  transition:   All 1s ease;
-  -webkit-transition:   All 1s ease;
-  -moz-transition:  All 1s ease;
-  -o-transition:  All 1s ease;
-  -ms-transition:  All 1s ease;
-
-   -webkit-transform: translate3d(0, 0, 0);
-   -moz-transform: translate3d(0, 0, 0);
-   -ms-transform: translate3d(0, 0, 0);
-   -o-transition: translate3d(0, 0, 0);
-   transform: translate3d(0, 0, 0);
-}
-
-
 /* for button */
 .btn{
   display: inline-block;

@@ -18,7 +18,6 @@ define(function(require, exports, module) {
     };
     // require jquery ani plugin
     require('jquery.validate');
-    require('jquery.hoverIntent');
     require('jquery.mousewheel');
     // require('jquery.queryloader');
     // require('jquery.easing');
@@ -52,7 +51,7 @@ define(function(require, exports, module) {
     }
 
     var _isIpad = (function(){
-        return !!navigator.userAgent.toLowerCase().match(/ipad/i);
+        return !!navigator.userAgent.toLowerCase().match(/ipad/i) ;
     })();
 
     var _fixIpad = function(){
@@ -189,7 +188,7 @@ define(function(require, exports, module) {
     game.setConfig({
         duration  : 2000
         , maxSpeed: GAME_MAX_SPEED
-        , minRobotSpeed  : 0
+        , minRobotSpeed  : 150
         , speedCallBack  : function( status ){
             gStatus = status;
             // render car speed
@@ -201,7 +200,8 @@ define(function(require, exports, module) {
             // because , before start the game , the robot car should run first
             // For a reason , we set the robot car , has run the 1/6 of all the
             // distane .
-            var robotDistance = status.robotDistance + robotStartDistancePercent * GAME_MAX_DISTANCE;
+            //var robotDistance = status.robotDistance + robotStartDistancePercent * GAME_MAX_DISTANCE;
+            var robotDistance = status.robotDistance;
             dur = robotDistance - status.distance;
             p = dur / GAME_MAX_DISTANCE;
 
@@ -216,7 +216,7 @@ define(function(require, exports, module) {
                     //.css('left' , l )
                     [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
                 // change car wheels
-                $car1Wheels.rotate( status.distance * 60 );
+                $car1Wheels.rotate( status.distance * 80 );
             //}
 
             // change robot car position
@@ -230,14 +230,14 @@ define(function(require, exports, module) {
             }
             */
 
-            rl = - car2width / 2 + 5 * p * GAME_MAX_DISTANCE;
+            rl = - car2width / 2 + 10 * p * GAME_MAX_DISTANCE;
             $cars.eq(1)
                 //.stop( true , false )
                 .css({
                     marginLeft: rl
                 })
                 [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
-            $car2Wheels.rotate( robotDistance * 60 );
+            $car2Wheels.rotate( robotDistance * 80 );
 
             // change car dot position
             //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
@@ -245,7 +245,7 @@ define(function(require, exports, module) {
             //$carDot.css('left' , p1 + '%');
             // change robot dot position
 
-            $robotDot[0].style.marginLeft = p * 235 - 11 + 'px';
+            $robotDot[0].style.marginLeft = p * 224 + 'px';
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -264,8 +264,10 @@ define(function(require, exports, module) {
                      s > 9 ? s : '0' + s ,
                      ss ].join(':'));
                 if( status.distance > robotDistance
-                    ||  dur > GAME_MAX_DISTANCE ){
-                    gameOver( status , status.distance > robotDistance );
+                    ||  dur > GAME_MAX_DISTANCE
+                    // or the game is not running ,this used to computer controll the game
+                    || status.result !=-1 ){
+                    gameOver( status , status.result !=-1 ? status.result : status.distance > robotDistance );
                 }
             }
         }
@@ -281,7 +283,7 @@ define(function(require, exports, module) {
             .find('.r-time1 span,.r-time2 span,.r-time3 span');
 
         // count time
-        new Animate([0] , [result.time] , 1000 , '' , function( arr ){
+        new Animate([0] , [result.time] , 2000 , '' , function( arr ){
             var time = arr[0] ;
             var m = ~~ ( time / 1000 / 60 );
             var s = ~~ ( time / 1000 % 60 );
@@ -296,7 +298,7 @@ define(function(require, exports, module) {
 
         var $diss = $resultPanel.find('.r-distance span');
         // count distance
-        new Animate([0] , [result.distance] , 1000 , '' , function( arr ){
+        new Animate([0] , [result.distance] , 2000 , '' , function( arr ){
             var dis = ~~arr[0] + '' ;
             dis = new Array( 6 - dis.length ).join('0') + dis;
             $diss.each(function( i ,dom ){
@@ -395,18 +397,55 @@ define(function(require, exports, module) {
                 return;
             }
             // reset nums
-            M.motionBlur( $t[0] , 0 );
-            counterTimer = setTimeout( function(){
-                counterAnimate = new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
-                    M.motionBlur( $t[0] , ~~arr[ 0 ] );
-                } , function(){
-                    $t.hide();
-                    showNum();
-                });
-//                $t.animate({'margin-left':20},function(){
-//                    $(this).hide();
-//                });
-            } , 800 );
+            /*
+            if( _isIpad ){
+                var top = parseInt( $t.css('top') );
+                var left = parseInt( $t.css('left') );
+                var height = $t.height();
+                var width = $t.width()
+                // if is first one
+                //if( len == $nums.length - 1 ){
+                    $t.css({
+                        'opacity': 1
+                        , 'top'  : top
+                    })
+                    .fadeIn();
+                //}
+
+                counterTimer = setTimeout( function(){
+                    // if has preg
+                    $t.animate({
+                            top: top + height,
+                            opacity : 0
+                        } , 200 , '' , function(){
+                            $(this).hide()
+                                // clear css
+                                .css({
+                                    'top': ''
+                                    ,'left':''
+                                    ,'width':''
+                                    ,'height':''
+                                });
+
+                            showNum();
+                        });
+
+                } , 800 );
+            } else {
+                */
+                M.motionBlur( $t[0] , 0 );
+                counterTimer = setTimeout( function(){
+                    counterAnimate = new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
+                        M.motionBlur( $t[0] , ~~arr[ 0 ] );
+                    } , function(){
+                        $t.hide();
+                        showNum();
+                    });
+    //                $t.animate({'margin-left':20},function(){
+    //                    $(this).hide();
+    //                });
+                } , 800 );
+            //}
         })();
     }
 
@@ -418,9 +457,11 @@ define(function(require, exports, module) {
     var _driveCarToSence = function( $car ){
         var index =  $cars.index( $car[0] );
         var dur = 1000 ;
+        var delay = Math.random() * 1000;
         var w = $car.width();
         $car.show()
             .css('margin-left' , - w - winWidth)
+            .delay( delay )
             .animate({
                 'margin-left' : - w / 2
             } , dur , 'easeOutQuart');
@@ -428,14 +469,17 @@ define(function(require, exports, module) {
         // run car dot
         var $dot = index == 0 ? $carDot : $robotDot;
         var marginLeft = index == 0 ? '20px' : '0px';
-        $dot.fadeIn()
-                [0].style.marginLeft = marginLeft;
+        $dot.delay(delay)
+            .fadeIn()
+            .css('marginLeft' , marginLeft );
 
         var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
         // run the wheel
-        new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
-            $wheels.rotate( arr[0] );
-        });
+        setTimeout( function(){
+            new Animate([ - 2*360 - 360 * Math.random() ] , [ 0 ] , dur , 'easeOutQuart' , function( arr ){
+                $wheels.rotate( arr[0] );
+            });
+        } , delay );
     }
     // ready for game , at this status , you should do follow list:
     // 1.reset cars position
@@ -464,21 +508,22 @@ define(function(require, exports, module) {
             game.start();
         } , 3000 );
         */
-        setTimeout( function(){
-            // drive ’my car ‘ to sence
-            _driveCarToSence( $cars.eq(0) , 0 );
-        } , 2000 );
+        // drive ’my car ‘ to sence
+        _driveCarToSence( $cars.eq(0) );
+        _driveCarToSence( $cars.eq(1) );
 
 
         // pre motion road
-        if( !$roadCan )
-            $roadCan = $('<canvas>')
-                .attr({
-                    id: 'can-road'
-                    , width: screenWidth
-                    , height: 256
-                })
-                .insertBefore($road.hide());
+        if( !_isIpad ){
+            if( !$roadCan )
+                $roadCan = $('<canvas>')
+                    .attr({
+                        id: 'can-road'
+                        , width: screenWidth
+                        , height: 256
+                    })
+                    .insertBefore($road.hide());
+        }
         motionRoad( 0 );
     }
     var resetCounter = function( cb ){
@@ -534,8 +579,6 @@ define(function(require, exports, module) {
         // reset road
         motionRoad( 0 );
 
-        // show robot
-        _driveCarToSence( $cars.eq(1) , 1 );
     }
 
     var goon = function(){
@@ -626,7 +669,7 @@ define(function(require, exports, module) {
             });
 
             // run the robot car
-            setTimeout(runRobot,2000);
+            // setTimeout(runRobot,2000);
 
         })
         .hover(function(){
@@ -670,8 +713,8 @@ define(function(require, exports, module) {
 
     var moveBgAndMotionRoad = function( status ){
 
-        var motionValue = ~~ ( status.speed / 20 ) * 3 ;
-        if( status.distance - lastBgDistance + winWidth > bgConfig[ bgIndex ].width
+        var motionValue = ~~ ( status.speed / 20 ) * 5 ;
+        if( ( status.distance - lastBgDistance ) * 1.2 + winWidth > bgConfig[ bgIndex ].width
          && !changeSence){
             changeSence = true;
             var lastBgIndex = bgIndex;
@@ -683,6 +726,8 @@ define(function(require, exports, module) {
                     .css({
                         position: 'absolute'
                         , zIndex: 1000
+                        , fontSize: '0px'
+                        , lineHeight: '0px'
                         , bottom: $bg.css('bottom')
                     })
                     .insertBefore( $bg );
@@ -712,28 +757,28 @@ define(function(require, exports, module) {
                     left: - ( bgConfig[lastBgIndex].width + bgSenceConfig[lastBgIndex].width )
                 } , 2000 , 'easeInCubic' , function(){
                     changeSence = false;
-                    // pre set bg
-                    $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
-                    $bg[0].style.marginLeft = '0px';
                     $(this).hide();
 
                     lastBgDistance = status.distance;
                 });
 
             setTimeout(function(){
+                // pre set bg
+                $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
+                $bg[0].style.marginLeft = '0px';
                 // .. motion road ,
                 // run motionRoad function, change the road to next type.
                 motionRoad( status.speed == 0 ? 0 :
-                            Math.min( motionValue + 3 , 30 ) , true );
+                            Math.min( motionValue + 5 , 20 ) , true );
             } , 1000 );
         } else {
             if( !changeSence ){
-                $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) + 'px';
+                $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) * 1.2 + 'px';
             }
             // .. motion road ,
             if( lastMotionValue != motionValue ){
                 motionRoad( status.speed == 0 ? 0 :
-                        Math.min( motionValue + 3 , 30 ) );
+                        Math.min( motionValue + 5 , 20 ) );
 
                 lastMotionValue = motionValue;
                 motionValue = 0;
@@ -741,7 +786,11 @@ define(function(require, exports, module) {
         }
 
         // move the road
-        $roadCan[0].style.marginLeft = - status.distance * 100 % currRoadConfig.width + 'px';
+        if( _isIpad ){
+            $road[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
+        } else {
+            $roadCan[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
+        }
     }
     /*
      * motion the road, dur to the game status and radius
@@ -771,8 +820,17 @@ define(function(require, exports, module) {
         currRoadIndex = bGetNext ? ++currRoadIndex % roadConfig.length : currRoadIndex;
 
         currRoadConfig = roadConfig[currRoadIndex];
-        var canvas = $roadCan[0];
+
         var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 2 ) * currRoadConfig.width;
+        if( _isIpad ){
+            $road.width( width );
+            if( bGetNext ){
+                $road.css('background-image' , 'url(./images/' + currRoadConfig.src + ')');
+            }
+            return;
+        }
+        var canvas = $roadCan[0];
+
         // reset road width and height
         canvas.width = width;
         M.motionBlur( currRoadConfig.img , radius , 0 , canvas );
@@ -801,9 +859,9 @@ define(function(require, exports, module) {
     // save road cache
     !(function(){
 
-        var motionStart = 3 , motionMax = 30 , motionStep = 3;
+        var motionStart = 5 , motionMax = 20 , motionStep = 5;
         var cacheMotionBlur = function( img ){
-            for (var i = motionStart; i <= 30; i+=motionStep ) {
+            for (var i = motionStart; i <= motionMax; i+=motionStep ) {
                 (function( radius ){
                     setTimeout( function(){
                         M.motionBlur( img , radius , 0 , false , true );
@@ -815,7 +873,8 @@ define(function(require, exports, module) {
             var img = document.createElement('img');
             img.id = roadConfig[i].id;
             img.onload = function(){
-                cacheMotionBlur( img );
+                if( !_isIpad )
+                    cacheMotionBlur( img );
                 roadConfig[i].width = this.width;
             }
             img.setAttribute( 'src' , './images/' + roadConfig[i].src );
@@ -920,8 +979,6 @@ define(function(require, exports, module) {
                         $('#login-status').html(username + ' <a href="javascript:void(0)" id="logout">退出</a>');
                         $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
                             $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
-                                // show robot
-                                _driveCarToSence( $cars.eq(1) , 1 );
                                 _fixIpad();
                             });
                             $('#login-mask').hide();
@@ -1022,9 +1079,4 @@ define(function(require, exports, module) {
         });
     });
 
-    // exports
-    $.extend( exports , {
-        driveCarToSence: _driveCarToSence
-    } );
 });
-

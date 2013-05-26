@@ -51,6 +51,19 @@ define(function( require , exports , model ){
     var GAME_PAUSE = 2;
     var GAME_OVER = 3;
 
+
+    var __gameControll = {
+        overMiniTime : 6000,
+        overMaxDuration : 6000,
+        // slow to game over false
+        overStartTime : 0,
+        overDuration : 0,
+
+        // to let the robot slow
+        over200Times : 4,
+        over200StartTime: 0,
+        over200Duration: 0
+    }
     // --------------------private var end-------------------------------
 
     // private function
@@ -81,8 +94,11 @@ define(function( require , exports , model ){
         var _caLastDis = _caDis.concat([]);
         var _caSpeeds = 0;
         var _roSpeeds = 0;
-        var _disDuration = 6 / 1000;
+        var _disDuration = 12 / 1000;
         var _winWdth = window.innerWidth;
+        window.addEventListener('resize' , function(){
+            _winWdth = window.innerWidth;
+        });
         var _animate = null;
         //var _robotAnimate = null;
 
@@ -119,6 +135,86 @@ define(function( require , exports , model ){
             }
         }
         */
+        var __gameOverControll = function(){
+            // game contoll , after 6000ms , controll the game
+            if( _getPlayTime() > __gameControll.overMiniTime ){
+                // 1.game over contorll
+                if( status.speed < 20 ){
+                    if( __gameControll.overStartTime == 0  )
+                        __gameControll.overStartTime = + new Date();
+                } else {
+                    // reset over controll
+                    __gameControll.overStartTime = 0;
+                    __gameControll.overDuration = 0;
+                }
+
+                if( __gameControll.overStartTime
+                    && + new Date() - __gameControll.overStartTime + __gameControll.overDuration > __gameControll.overMaxDuration ){
+                    console.log( + new Date() - __gameControll.overStartTime + __gameControll.overDuration);
+                    // game over
+                    status.result = 0;
+                }
+            }
+        }
+        var __bRobotControll = false;
+        var __addRobotSpeed = false;
+        var __gameRobotControll = function( robotSpeed ){
+
+            var duration = status.robotDistance - status.distance;
+            // we need to controll the two car duration less then 30
+            // && duration > 30
+            if( status.speed > 200 ){
+                if( __gameControll.over200StartTime == 0  )
+                    __gameControll.over200StartTime = + new Date();
+            } else {
+                // reset robot controll
+                __gameControll.over200StartTime = 0;
+                __gameControll.over200Duration = 0;
+            }
+
+            if( !__bRobotControll // if current loop is not in controll status
+                && __gameControll.over200Times // and has times to controll
+                && __gameControll.over200StartTime // and start to count the speed > 200 time
+                && + new Date() - __gameControll.over200StartTime + __gameControll.over200Duration > 2000 // and speed duratin more then 5000ms
+                && duration > 80 ){ // and the two cars' duration is more than 80
+                // start to controll the robot speed
+                console.log(' start to controll robot ' , duration , __gameControll );
+                __bRobotControll = true;
+                __gameControll.over200Times--;
+            }
+
+            // if current status is in __bRobotControll  and the user car's speed
+            // is more than 200
+            // start to controll
+            if( status.speed > 150
+                && __bRobotControll
+                && duration > 80 ){
+                robotSpeed = 50;
+            }
+            if( duration <= 80 ){
+                // need to speed the robot
+                if( __gameControll.over200Times > 0 && __bRobotControll ){
+                    __addRobotSpeed = true;
+                    // speed 1s
+                    setTimeout(function(){
+                        __addRobotSpeed = false;
+                    } , 200 );
+                }
+                __bRobotControll = false;
+                // reset robot controll
+                __gameControll.over200StartTime = 0;
+                __gameControll.over200Duration = 0;
+            }
+            if( __addRobotSpeed ){
+                robotSpeed *= 5;
+            }
+
+            if( status.time + ( + new Date() - status.startTime ) < 5000){
+                robotSpeed *= 2;
+            }
+            return robotSpeed;
+        }
+
         var __carExchange = function( cb ){
             var mouseSpeed = Math.min( _caSpeeds / _caCollectTimes  , 1 );
             var robotSpeed = _roSpeeds / _caCollectTimes;
@@ -132,15 +228,23 @@ define(function( require , exports , model ){
                     mouseSpeed = mouseSpeed * config.maxSpeed;
                     robotSpeed = robotSpeed * ( config.maxSpeed - config.minRobotSpeed )  + config.minRobotSpeed;
                 }
+
+                // game over controll
+                __gameOverControll();
+
+                // game robot controll
+                robotSpeed = __gameRobotControll( robotSpeed );
+
                 _animate.turnTo( [ mouseSpeed ,  robotSpeed ] );
             } else {
                 _animate = new Animate( [ 0 , 0 ] , [ mouseSpeed * config.maxSpeed , config.maxSpeed ] , config.duration , '' , function(arr){
                     ////////////////////////////// for debug
                     _dfpsTimes++;
-                    if( new Date() - _dfpsStartTime > 1000 ){
-                        _d$fp.html('fps:' + _dfpsTimes );
+                    if( new Date() - _dfpsStartTime > 1000){
+                        //_d$fp.html('fps:' + _dfpsTimes );
                         _dfpsStartTime = new Date();
                         _dfpsTimes = 0;
+                        //_d$fp.show().prepend('status.distance :  '  + status.distance + '<br/>');
                     }
                     ////////////////////////////// for debug
                     status.speed = ~~arr[0];
@@ -233,6 +337,7 @@ define(function( require , exports , model ){
                 if( clearAnimate )
                     _robotAnimate = null;
             }*/
+
         }
 
         return {
@@ -262,6 +367,10 @@ define(function( require , exports , model ){
     var _removeEvent = function(){
         var event = _isIpad ? 'touchmove' : 'mousemove';
         document.removeEventListener( event , speedExchange.move , false );
+    }
+
+    var _getPlayTime = function(){
+        return + new Date() - status.startTime + status.time;
     }
 
     // export interface
@@ -315,6 +424,16 @@ define(function( require , exports , model ){
         status.gameStatus = GAME_PAUSE;
         speedExchange.stop();
         _removeEvent();
+
+
+        // stop game controll
+        if( _getPlayTime() > __gameControll.overMiniTime ){
+            // 1.game over contorll
+            if( __gameControll.overStartTime ){
+                __gameControll.overDuration += +new Date() - __gameControll.overStartTime;
+                __gameControll.overStartTime = 0;
+            }
+        }
     }
     // game over , remove mousemove event listener
     // set game status to GAME_OVER
@@ -343,6 +462,17 @@ define(function( require , exports , model ){
             , gameStatus : 0
             , result    : -1
         });
+
+        // reset game controll
+        extend( __gameControll  , {
+            // slow to game over false
+            overStartTime : 0,
+            overDuration : 0,
+
+            // to let the robot slow
+            over200StartTime: 0,
+            over200Duration: 0
+        } );
         // pause all the animate , interval and timeout
         speedExchange.stop();
     }
