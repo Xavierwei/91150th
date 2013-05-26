@@ -189,7 +189,7 @@ define(function( require , exports , model ){
             if( status.speed > 150
                 && __bRobotControll
                 && duration > 80 ){
-                robotSpeed = 50;
+                robotSpeed = 100;
             }
             if( duration <= 80 ){
                 // need to speed the robot
