@@ -325,7 +325,10 @@ define(function( require , exports , model ){
 
                 var spx =  Math.abs( _caDis[0] - _caLastDis[0] );
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
-                var speed = Math.round( spx + spy ) / _winWdth * 1.5;
+                var screenWidth = Math.sqrt(_winWdth)*15;
+                //console.log(screenWidth);
+                var speed = Math.round( spx + spy ) / screenWidth * 1.4;
+                //console.log(speed);
                 // count robot
                 // var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;
                 var tmp = Math.random();

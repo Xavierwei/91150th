@@ -408,10 +408,11 @@ span.lpn-ghost {
   position: absolute;
   z-index: 9999;
   display: none;
-  bottom: 0;
+  bottom: 30px;
   left: 50%;
   margin-left: -460px;
 }
+
 
 .main-cars .car .front-wheel,
 .main-cars .car .end-wheel{
@@ -427,10 +428,29 @@ span.lpn-ghost {
   left: 635px;
 }
 
+.main-cars .my-car .front-wheel,
+.main-cars .my-car .end-wheel{
+    background: url(../images/wheel-my.png) no-repeat;
+    position: absolute;
+    height: 83px;
+    width: 83px;
+    top: 102px;
+    left: 173px;
+}
+.main-cars .my-car .front-wheel{
+    top: 102px;
+    left: 547px;
+}
+
 /* for pause car */
 .main-cars .wheelblur .front-wheel,
 .main-cars .wheelblur .end-wheel{
   background-position: -117px 0;
+}
+
+.main-cars .my-car.wheelblur .front-wheel,
+.main-cars .my-car.wheelblur .end-wheel{
+    background-position: -103px 0;
 }
 /*  main -metas */
 @-webkit-keyframes shake{
@@ -1160,7 +1180,7 @@ span.lpn-ghost {
 .fancybox-share {background:url(../images/fancybox_share.png) no-repeat;width:56px;height:38px;position:absolute;top:5px;right:10px;z-index:9999;opacity:0.3}
 .fancybox-share:hover {opacity:1;}
 
-.icon-pause {display:none;position: absolute;top:60px;left:50%;background:url(../images/icon-pause.png) no-repeat;width:37px;height:50px;margin-left:-18px;z-index:9999999;opacity:.6;}
+.icon-pause {display:none;position: absolute;top:5%;left:50%;background:url(../images/icon-pause.png) no-repeat;width:37px;height:50px;margin-left:-18px;z-index:9999999;opacity:.6;}
 .bg-pause {display:none;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:19998; position: fixed;}
 
 #fancybox-loading div {

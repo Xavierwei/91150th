@@ -19,6 +19,7 @@ define(function(require, exports, module) {
     // require jquery ani plugin
     require('jquery.validate');
     require('jquery.mousewheel');
+    require('jquery.hoverIntent');
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
@@ -147,7 +148,7 @@ define(function(require, exports, module) {
             } , 600 , 'easeOutQuart' , function(){
                 $resultPanel.fadeOut();
             });
-            goon();
+            reset();
         })
         .end()
         .find('.btn')
@@ -230,7 +231,7 @@ define(function(require, exports, module) {
             }
             */
 
-            rl = - car2width / 2 + 10 * p * GAME_MAX_DISTANCE;
+            rl = - car2width / 2 + 10 * p * GAME_MAX_DISTANCE + 400;
             $cars.eq(1)
                 //.stop( true , false )
                 .css({
@@ -459,11 +460,14 @@ define(function(require, exports, module) {
         var dur = 1000 ;
         var delay = Math.random() * 1000;
         var w = $car.width();
+        var marginLeft = - w / 2;
+        if(index == 1)
+            marginLeft =  - w / 2 + 400;
         $car.show()
             .css('margin-left' , - w - winWidth)
             .delay( delay )
             .animate({
-                'margin-left' : - w / 2
+                'margin-left' : marginLeft
             } , dur , 'easeOutQuart');
 
         // run car dot
@@ -547,13 +551,13 @@ define(function(require, exports, module) {
         // reset the game
         game.reset();
         // ..1. reset start btn
-        $startBtn//.attr('src' , $startBtn.attr('osrc'))
-            .css({
-                    opacity : 1
-                ,   marginLeft: 0
-            })
-            .removeClass( lockClass )
-            .show();
+//        $startBtn//.attr('src' , $startBtn.attr('osrc'))
+//            .css({
+//                    opacity : 1
+//                ,   marginLeft: 0
+//            })
+//            .removeClass( lockClass )
+//            .show();
         // ..2. reset ready panel
         $counter.hide();
         // ..3. reset cars position
@@ -578,6 +582,8 @@ define(function(require, exports, module) {
         currRoadIndex = 0;
         // reset road
         motionRoad( 0 );
+        gStatus = null;
+        ready();
 
     }
 
@@ -910,7 +916,7 @@ define(function(require, exports, module) {
     var $shareBtn = $('#share-btn');
     var $shareCon = $('#share-con');
     $('#share-wrap')
-        .hover(function(){
+        .hoverIntent(function(){
             pause();
             showShareBtns()
         } , function(){
@@ -926,6 +932,15 @@ define(function(require, exports, module) {
             } );
         })
         .end();
+    $gallery.click(function(e){
+        var target = e.target;
+        if($(target).hasClass('gallery-mask'))
+        {
+            $gallery.fadeOut( function(){
+                goon();
+            });
+        }
+    });
     // show photos gallery
     $('#gallery').click(function(){
         //Pause the game
@@ -1069,6 +1084,19 @@ define(function(require, exports, module) {
             });
             goon();
         })
+
+    $rankingPanel.click(function(e){
+        var target = $(e.target);
+        if(target.hasClass('ranking-mask'))
+        {
+            $rankingPanel.find('.lpn-panel').animate({
+                height: 0
+            } , 600 , 'easeOutQuart' , function(){
+                $rankingPanel.hide();
+            });
+            goon();
+        }
+    });
 
     $('body').delegate('#logout','click',function(){
         $.ajax({
