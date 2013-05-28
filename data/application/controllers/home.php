@@ -99,14 +99,18 @@ class Home_Controller extends Base_Controller {
 	}
 
 	public function action_callback() {
-		$auth_token = Weibo::authCallback();
-		$user = $this->_request_user();
-		if (!$user) {
-			return View::make("home.error")->with("error", "get weibo user failed");
-		}
-		$this->_put_user($user);
+        try{
+            $auth_token = Weibo::authCallback();
+            $user = $this->_request_user();
+            if (!$user) {
+                return View::make("home.error")->with("error", "get weibo user failed");
+            }
+            $this->_put_user($user);
 
-        return Redirect::to("../../../index.html");
+            return Redirect::to("../../../index.html");
+        }
+        catch(Exception $e)
+        {}
 	}
 
 	private function _put_user($user) {
