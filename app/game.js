@@ -10,6 +10,18 @@ define(function( require , exports , model ){
         }
         return o1;
     }
+
+    var bind = window.addEventListener ?  function( dom , event , fn ){
+        return dom.addEventListener( event , fn , false );
+    } : function( dom , event , fn ){
+        return dom.attachEvent('on' + event , fn );
+    };
+
+    var unbind = window.addEventListener ?  function( dom , event , fn ){
+        return dom.removeEventListener( event , fn , false );
+    } : function( dom , event , fn ){
+        return dom.detachEvent('on' + event , fn );
+    };
     var A = require('../src/Animate');
     var Animate = A.Animate;
     // --------------------private var-----------------------------------
@@ -71,15 +83,19 @@ define(function( require , exports , model ){
 
         var __lp = null;
         var _mousemoveEvent = function( ev ){
+            var px = ev.pageX || ev.clientX;
+            var py = ev.pageY || ev.clientY;
             if( !__lp ){
-                __lp = [ ev.pageX , ev.pageY ];
+                __lp = [ px , py ];
                 return;
             }
-            _caDis[0] += Math.abs( ev.pageX - __lp[0] );
-            _caDis[1] += Math.abs( ev.pageY - __lp[1] );
-            __lp = [ ev.pageX , ev.pageY ];
+            _caDis[0] += Math.abs( px - __lp[0] );
+            _caDis[1] += Math.abs( py - __lp[1] );
+            __lp = [ px , py ];
 
-            ev.preventDefault();
+            if( ev.preventDefault )
+                ev.preventDefault();
+             window.event.returnValue =  false;
         }
 
 
@@ -95,9 +111,10 @@ define(function( require , exports , model ){
         var _caSpeeds = 0;
         var _roSpeeds = 0;
         var _disDuration = 12 / 1000;
-        var _winWdth = window.innerWidth;
-        window.addEventListener('resize' , function(){
-            _winWdth = window.innerWidth;
+        var _winWidth = window.innerWidth || document.documentElement.clientWidth;
+
+        bind( window , 'resize' , function(){
+            _winWidth = window.innerWidth || document.documentElement.clientWidth;
         });
         var _animate = null;
         //var _robotAnimate = null;
@@ -161,7 +178,7 @@ define(function( require , exports , model ){
         var __gameRobotControll = function( robotSpeed ){
             var duration = status.robotDistance - status.distance;
             if( !__bRobotControll
-                && duration < _winWdth / 30
+                && duration < _winWidth / 30
                 && __gameControll.over200Times){
                 __bRobotControll = true;
                 __gameControll.over200Times--;
@@ -323,9 +340,8 @@ define(function( require , exports , model ){
 
                 var spx =  Math.abs( _caDis[0] - _caLastDis[0] );
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
-                //var screenWidth = Math.sqrt(_winWdth)*15;
-                //console.log(screenWidth);
-                var speed = Math.round( spx + spy ) / _winWdth * 1.4;
+
+                var speed = Math.round( spx + spy ) / _winWidth * 1.4;
                 //console.log(speed);
                 // count robot
                 // var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;
@@ -381,16 +397,16 @@ define(function( require , exports , model ){
 
     // bind document touchmove event, prevent to move the page
     if( _isIpad ){
-        document.addEventListener( 'touchmove' , function(ev){ev.preventDefault();} , false );
+        bind( document , 'touchmove' , function(ev){ev.preventDefault();} , false );
     }
 
     var _bindEvent = function(){
         var event = _isIpad ? 'touchmove' : 'mousemove';
-        document.addEventListener( event , speedExchange.move , false );
+        bind( document , event , speedExchange.move );
     }
     var _removeEvent = function(){
         var event = _isIpad ? 'touchmove' : 'mousemove';
-        document.removeEventListener( event , speedExchange.move , false );
+        unbind( document , event , speedExchange.move );
     }
 
     var _getPlayTime = function(){

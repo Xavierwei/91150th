@@ -16,6 +16,48 @@ define(function(require, exports, module) {
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
     };
+    // for ie8
+    (function(){
+        if(!window.vml){
+          window.vml = {};
+          document.createStyleSheet().addRule(".vml", "behavior:url(#default#VML);display:inline-block;");
+          if (!document.namespaces.vml && !+"\v1"){
+            document.namespaces.add("vml", "urn:schemas-microsoft-com:vml");
+          }
+        }
+        var vml = window.vml = function(name){
+          return vml.fn.create(name || "rect");
+        }
+        vml.fn = vml.prototype = {
+          create : function(name){
+            this.node = document.createElement('<vml:' + name + ' class="vml">');
+            return this;
+          },
+          appendTo: function(parent){
+            if(typeof this.node !== "undefined" && parent.nodeType == 1){
+              parent.appendChild(this.node);
+            }
+            return this;
+          },
+          attr : function(bag){
+            for(var i in bag){
+              if(bag.hasOwnProperty(i)){
+                this.node.setAttribute(i,bag[i])
+              }
+            }
+            return this;
+          },
+          css: function(bag){
+            var str = ";"
+            for(var i in bag){
+              if(bag.hasOwnProperty(i))
+                str +=  i == "opacity" ? ("filter:alpha(opacity="+ bag[i] * 100+");"):(i+":"+bag[i]+";")
+            }
+            this.node.style.cssText = str;
+            return this;
+          }
+        }
+      })();
     // require jquery ani plugin
     require('jquery.validate');
     require('jquery.mousewheel');
@@ -27,8 +69,39 @@ define(function(require, exports, module) {
 
     // extend jquery
     $.fn.rotate = function( deg ){
-        deg = 'rotate(' + deg + 'deg)';
-        $( this )
+        if( $.browser.msie && $.browser.version < 9 ){
+            // use vml
+            var $t = $( this );
+            var vmlObj = $t.data('vml');
+
+            if( !vmlObj ){
+                var width = $t.width();
+                var height = $t.height();
+                var top = parseInt( $t.css('top') );
+                var left = parseInt( $t.css('left') );
+                var bgImage = $t.css('background-image');
+
+                vmlObj = vml('rect').appendTo($( this ).parent()[0])
+                    .css({
+                        position: 'absolute'
+                        ,top : top + 'px'
+                        ,left: left + 'px'
+                        ,width: width + 'px'
+                        ,height: height + 'px'
+                    })
+                    .attr({fillcolor:"yellow"});
+                var fillObj = vml('fill').attr({
+                    src: bgImage
+                }).appendTo( vmlObj.node );
+
+                $t.hide()
+                    .data( 'vml' , vmlObj);
+            }
+
+            vmlObj.node.rotation = deg;
+        } else {
+            deg = 'rotate(' + deg + 'deg)';
+            $( this )
             .css({
                 '-webkit-transform' : deg,
                    '-moz-transform' : deg,
@@ -36,6 +109,7 @@ define(function(require, exports, module) {
                      '-o-transform' : deg,
                         'transform' : deg
             });
+        }
         return this;
     }
     $.fn.translate = function( dis ){
@@ -98,7 +172,7 @@ define(function(require, exports, module) {
                 var scrollTop = $con.scrollTop();
                 var height = $list.height();
                 var conHeight = $list[0].scrollHeight;
-                if( deltaY > 0 ) {// up
+                if( delta > 0 ) {// up
                     scrollTop -= height * 5 / 10;
                 } else { //down
                     scrollTop += height * 5 / 10;
@@ -206,7 +280,7 @@ define(function(require, exports, module) {
     var M = require('../app/motion-blur');
     var A = require('../src/Animate');
     var Animate = A.Animate;
-
+    var isSupportCanvas = M.isSupportCanvas;
     // save the game status
     var gStatus = null;
     var winWidth = $(window)
@@ -550,7 +624,7 @@ define(function(require, exports, module) {
 
 
         // pre motion road
-        if( !_isIpad ){
+        if( !_isIpad && isSupportCanvas){
             if( !$roadCan )
                 $roadCan = $('<canvas>')
                     .attr({
@@ -825,7 +899,7 @@ define(function(require, exports, module) {
         }
 
         // move the road
-        if( _isIpad ){
+        if( _isIpad || !isSupportCanvas ){
             $road[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
         } else {
             $roadCan[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
@@ -861,7 +935,7 @@ define(function(require, exports, module) {
         currRoadConfig = roadConfig[currRoadIndex];
 
         var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 2 ) * currRoadConfig.width;
-        if( _isIpad ){
+        if( _isIpad || !isSupportCanvas){
             $road.width( width );
             if( bGetNext ){
                 $road.css('background-image' , 'url(./images/' + currRoadConfig.src + ')');
@@ -912,7 +986,7 @@ define(function(require, exports, module) {
             var img = document.createElement('img');
             img.id = roadConfig[i].id;
             img.onload = function(){
-                if( !_isIpad )
+                if( !_isIpad && isSupportCanvas)
                     cacheMotionBlur( img );
                 roadConfig[i].width = this.width;
             }

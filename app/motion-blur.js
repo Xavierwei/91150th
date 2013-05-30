@@ -115,7 +115,7 @@ define(function( require , exports , model ){
     // Detect canvas support
     var isSupportCanvas = (function(){
         can = document.createElement('canvas');
-        ctx = can.getContext('2d');
+        ctx = can.getContext ? can.getContext('2d') : false;
         return !!ctx;
     })();
 
@@ -174,6 +174,7 @@ define(function( require , exports , model ){
         }
     }
 
+    exports.isSupportCanvas = isSupportCanvas;
     exports.getMotionCache = function(){
         return cache;
     }
