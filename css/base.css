@@ -1180,7 +1180,7 @@ span.lpn-ghost {
 .fancybox-share {background:url(../images/fancybox_share.png) no-repeat;width:56px;height:38px;position:absolute;top:5px;right:10px;z-index:9999;opacity:0.3}
 .fancybox-share:hover {opacity:1;}
 
-.icon-pause {display:none;position: absolute;top:5%;left:50%;background:url(../images/icon-pause.png) no-repeat;width:37px;height:50px;margin-left:-18px;z-index:9999999;opacity:.6;}
+.icon-pause {display:none;position: absolute;top:5%;left:50%;background:none;width:37px;height:50px;margin-left:-18px;z-index:9999999;opacity:.6;}
 .bg-pause {display:none;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:19998; position: fixed;}
 
 #fancybox-loading div {
@@ -1201,8 +1201,39 @@ span.lpn-ghost {
     to { -o-transform: rotate(360deg); }
 }
 
-
+.fancybox-share:hover .fancybox-share-list {display:block;}
+.fancybox-share-list {display:none;position: absolute;background:rgba(0,0,0,0.6);padding:5px 0;top:36px;left:1px;}
+.fancybox-share-list a{
+    display:block;
+    width: 36px;
+    background: url(../images/share.png) no-repeat;
+    height: 30px;
+    margin: 0 6px;
+    opacity: .7;
+}
+.fancybox-share-list a:hover {
+    opacity: 1;
+}
+.fancybox-share-list a.sina{
+    background-position: 2px 5px;
+}
+.fancybox-share-list a.qzone{
+    background-position: -50px 5px;
+}
+.fancybox-share-list a.kaixing{
+    background-position: -102px 5px;
+}
+.fancybox-share-list a.qqwb{
+    background-position: 6px -24px;
+}
+.fancybox-share-list a.renren{
+    background-position: -46px -26px;
+}
+.fancybox-share-list a.tt{
+    background-position: -94px -26px;
+}
 
 #gallery-mask .close,.fancybox-close,.fancybox-nav,.fancybox-download,.fancybox-share {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}
+
 
 .main-board .board-m-b a,.main-board .board-share a,.lpn-register a,.result .r-close,.btn-agian,.main-bottom a,#login-status a {-webkit-transition:   all 0.3s ease;-moz-transition:  all 0.3s ease;-o-transition:  all 0.3s ease;-ms-transition:  all 0.3s ease;transition:  all 0.3s ease;}

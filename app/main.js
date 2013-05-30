@@ -422,11 +422,21 @@ define(function(require, exports, module) {
         // Save record
         var _time = result.time;
         var _distance = result.distance;
-
+        var m = ~~ ( _time / 1000 / 60 );
+        var s = ~~ ( _time / 1000 % 60 );
+        var ss = ~~ ( _time % 1000 / 10 );
         // 0 : failure
         // 1 : success
         var _status = result.result;
         var _name = $('#username').val();
+        var shareCopy = '我在911五十周年的竞速游戏中追逐了'+parseInt(_distance)+'公里，用了时'+m+':'+s+':'+ss;
+        $('#share_sina').attr('href','http://v.t.sina.com.cn/share/share.php?title='+shareCopy+'&url=http://50years911.porsche-events.cn%2f&pic=http://50years911.porsche-events.cn/91150th.jpg&appkey=2455498088');
+        $('#share_qzone').attr('href','http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+shareCopy);
+        $('#share_kaixin').attr('href','http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&rurl=http://50years911.porsche-events.cn%2f&rcontent='+shareCopy);
+        $('#share_qq').attr('href','http://v.t.qq.com/share/share.php?title='+shareCopy+'&pic=http://50years911.porsche-events.cn/91150th.jpg')
+        $('#share_renren').attr('href','http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&title='+shareCopy);
+        $('#share_sohu').attr('href','http://t.sohu.com/third/post.jsp?url=http://50years911.porsche-events.cn%2f&title='+shareCopy);
+
         $.ajax({
             url: "data/public/index.php/home/record",
             dataType: "JSON",
@@ -1129,10 +1139,17 @@ define(function(require, exports, module) {
         openMethod : 'dropIn',
         padding: 0,
         tpl: {
-            wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"></div><div class="fancybox-inner"></div></div></div></div>'
+            wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
         },
         afterShow: function(){
-            $('.fancybox-download').attr('href',$(this).attr('href'));
+            var picurl = $(this).attr('href');
+            $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
+            $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
+                '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
+                '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;amp;rcontent=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
+                '<a target="_blank" href="http://v.t.qq.com/share/share.php?title=911%2050th&amp;&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
+                '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
+                '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
         }
     });
 
