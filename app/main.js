@@ -16,48 +16,6 @@ define(function(require, exports, module) {
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
     };
-    // for ie8
-    (function(){
-        if(!window.vml){
-          window.vml = {};
-          document.createStyleSheet().addRule(".vml", "behavior:url(#default#VML);display:inline-block;");
-          if (!document.namespaces.vml && !+"\v1"){
-            document.namespaces.add("vml", "urn:schemas-microsoft-com:vml");
-          }
-        }
-        var vml = window.vml = function(name){
-          return vml.fn.create(name || "rect");
-        }
-        vml.fn = vml.prototype = {
-          create : function(name){
-            this.node = document.createElement('<vml:' + name + ' class="vml">');
-            return this;
-          },
-          appendTo: function(parent){
-            if(typeof this.node !== "undefined" && parent.nodeType == 1){
-              parent.appendChild(this.node);
-            }
-            return this;
-          },
-          attr : function(bag){
-            for(var i in bag){
-              if(bag.hasOwnProperty(i)){
-                this.node.setAttribute(i,bag[i])
-              }
-            }
-            return this;
-          },
-          css: function(bag){
-            var str = ";"
-            for(var i in bag){
-              if(bag.hasOwnProperty(i))
-                str +=  i == "opacity" ? ("filter:alpha(opacity="+ bag[i] * 100+");"):(i+":"+bag[i]+";")
-            }
-            this.node.style.cssText = str;
-            return this;
-          }
-        }
-      })();
     // require jquery ani plugin
     require('jquery.validate');
     require('jquery.mousewheel');
@@ -68,37 +26,41 @@ define(function(require, exports, module) {
     //require('swfobject');
 
     // extend jquery
+
     $.fn.rotate = function( deg ){
         if( $.browser.msie && $.browser.version < 9 ){
-            // use vml
             var $t = $( this );
-            var vmlObj = $t.data('vml');
+            // use vml
+            seajs.use('../../app/vml' , function( exports ){
+                var vmlObj = $t.data('vml');
+                if( !vmlObj ){
+                    var vml = exports.vml;
+                    var width = $t.width();
+                    var height = $t.height();
+                    var top = parseInt( $t.css('top') );
+                    var left = parseInt( $t.css('left') );
+                    var bgImage = $t.css('background-image');
 
-            if( !vmlObj ){
-                var width = $t.width();
-                var height = $t.height();
-                var top = parseInt( $t.css('top') );
-                var left = parseInt( $t.css('left') );
-                var bgImage = $t.css('background-image');
+                    vmlObj = vml('rect').appendTo($t.parent()[0])
+                        .css({
+                            position: 'absolute'
+                            ,top : top + 'px'
+                            ,left: left + 'px'
+                            ,width: width + 'px'
+                            ,height: height + 'px'
+                        })
+                        .attr({fillcolor:"yellow"});
+                    var fillObj = vml('fill').attr({
+                        src: bgImage
+                    }).appendTo( vmlObj.node );
 
-                vmlObj = vml('rect').appendTo($( this ).parent()[0])
-                    .css({
-                        position: 'absolute'
-                        ,top : top + 'px'
-                        ,left: left + 'px'
-                        ,width: width + 'px'
-                        ,height: height + 'px'
-                    })
-                    .attr({fillcolor:"yellow"});
-                var fillObj = vml('fill').attr({
-                    src: bgImage
-                }).appendTo( vmlObj.node );
+                    $t.hide()
+                        .data( 'vml' , vmlObj);
+                }
 
-                $t.hide()
-                    .data( 'vml' , vmlObj);
-            }
+                vmlObj.node.rotation = deg;
+            });
 
-            vmlObj.node.rotation = deg;
         } else {
             deg = 'rotate(' + deg + 'deg)';
             $( this )
@@ -290,7 +252,7 @@ define(function(require, exports, module) {
     var screenWidth = screen.width;
     var GAME_MAX_SPEED = 312;
     var GAME_MAX_DISTANCE = 4000;
-    var p1 , p2 , p , l , dur , rl ;
+    var p1 , p2 , p , l , dur , rl , lastl;
     var robotStartDistancePercent = 1 / 6;
     game.setConfig({
         duration  : 2000
@@ -318,12 +280,12 @@ define(function(require, exports, module) {
             //if( status.gameStatus == game.GAME_PLAYING || status.gameStatus == game.GAME_OVER ){
                 //l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
                 //l = ( winWidth - car1width ) / 2;
-                $cars.eq(0)
+                //$cars.eq(0)
                     //.stop( true , false )
                     //.css('left' , l )
-                    [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
+                //    [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
                 // change car wheels
-                $car1Wheels.rotate( status.distance * 80 );
+                //$car1Wheels.rotate( status.distance * 80 );
             //}
 
             // change robot car position
@@ -337,7 +299,13 @@ define(function(require, exports, module) {
             }
             */
 
-            rl = - car2width / 2 + 10 * p * GAME_MAX_DISTANCE + 400;
+            //rl = 10 * p * GAME_MAX_DISTANCE + winWidth / 2;
+            rl =  - (  status.speed - 100 ) / ( GAME_MAX_SPEED - 100) * car2width / 3 - 85
+                     + winWidth / 2 ;
+            if( lastl ){
+                rl = rl + ( lastl - rl ) * 9 / 10;
+            }
+            lastl = rl;
             $cars.eq(1)
                 //.stop( true , false )
                 .css({
@@ -352,15 +320,16 @@ define(function(require, exports, module) {
             //$carDot.css('left' , p1 + '%');
             // change robot dot position
 
-            $robotDot[0].style.marginLeft = p * 224 + 'px';
+            $robotDot[0].style.marginLeft = Math.min( 21 + p * 224 , 245 ) + 'px';
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
 
             // change bar background
-            $bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
-                    dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
-                    dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
+            //$bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
+            //        dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
+            //        dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
+            $bar[0].className = 'b-bar' + ( rl > winWidth / 2 ? 3 : 0 );
             // show time
             if( status.gameStatus == game.GAME_PLAYING ){
                 var time = status.time + ( +new Date() - status.startTime );
@@ -370,11 +339,10 @@ define(function(require, exports, module) {
                 $timeBoard.html([ m > 9 ? m : '0' + m ,
                      s > 9 ? s : '0' + s ,
                      ss ].join(':'));
-                if( status.distance > robotDistance
-                    ||  dur > GAME_MAX_DISTANCE
+                if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    gameOver( status , status.result !=-1 ? status.result : status.distance > robotDistance );
+                    gameOver( status , status.result !=-1 ? status.result : dur <= GAME_MAX_DISTANCE );
                 }
             }
         }
@@ -573,22 +541,22 @@ define(function(require, exports, module) {
 
     var _driveCarToSence = function( $car ){
         var index =  $cars.index( $car[0] );
-        var dur = 1000 ;
-        var delay = Math.random() * 1000;
+        var dur = 1500 ;
+        var delay = 0;//Math.random() * 1000;
         var w = $car.width();
         var marginLeft = - w / 2;
         if(index == 1)
-            marginLeft =  - w / 2 + 400;
+            marginLeft =  winWidth / 2;
         $car.show()
             .css('margin-left' , - w - winWidth)
             .delay( delay )
             .animate({
                 'margin-left' : marginLeft
-            } , dur , 'easeOutQuart');
+            } , dur , 'easeInQuart');
 
         // run car dot
         var $dot = index == 0 ? $carDot : $robotDot;
-        var marginLeft = index == 0 ? '20px' : '0px';
+        var marginLeft = index == 0 ? '20px' : '20px';
         $dot.delay(delay)
             .fadeIn()
             .css('marginLeft' , marginLeft );
@@ -629,7 +597,7 @@ define(function(require, exports, module) {
         } , 3000 );
         */
         // drive ’my car ‘ to sence
-        _driveCarToSence( $cars.eq(0) );
+        //_driveCarToSence( $cars.eq(0) );
         _driveCarToSence( $cars.eq(1) );
 
 

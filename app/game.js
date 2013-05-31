@@ -65,7 +65,7 @@ define(function( require , exports , model ){
 
 
     var __gameControll = {
-        overMiniTime : 6000,
+        overMiniTime : 3000,
         overMaxDuration : 6000,
         // slow to game over false
         overStartTime : 0,
@@ -342,7 +342,7 @@ define(function( require , exports , model ){
                 var spy =  Math.abs( _caDis[1] - _caLastDis[1] );
 
                 //var speed = Math.round( spx + spy ) / _winWidth * 1.4;
-                var screenWidth = Math.sqrt(_winWdth)*15;
+                var screenWidth = Math.sqrt(_winWidth)*15;
                 //console.log(screenWidth);
                 var speed = Math.round( spx + spy ) / screenWidth * 1.4;
                 //console.log(speed);
