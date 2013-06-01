@@ -26,41 +26,28 @@ define(function(require, exports, module) {
     //require('swfobject');
 
     // extend jquery
-
+    if( !$.browser ){
+        $.browser = (function(){
+            var exp = /(msie) ([\w.]+)/.exec(navigator.userAgent.toLowerCase());
+            var r = {};
+            if( exp ){
+                r[ exp[1] ] = 1;
+                r['version'] = exp[2];
+            }
+            return r;
+        })();
+    }
     $.fn.rotate = function( deg ){
         if( $.browser.msie && $.browser.version < 9 ){
             var $t = $( this );
             // use vml
-            seajs.use('../../app/vml' , function( exports ){
-                var vmlObj = $t.data('vml');
-                if( !vmlObj ){
-                    var vml = exports.vml;
-                    var width = $t.width();
-                    var height = $t.height();
-                    var top = parseInt( $t.css('top') );
-                    var left = parseInt( $t.css('left') );
-                    var bgImage = $t.css('background-image');
-
-                    vmlObj = vml('rect').appendTo($t.parent()[0])
-                        .css({
-                            position: 'absolute'
-                            ,top : top + 'px'
-                            ,left: left + 'px'
-                            ,width: width + 'px'
-                            ,height: height + 'px'
-                        })
-                        .attr({fillcolor:"yellow"});
-                    var fillObj = vml('fill').attr({
-                        src: bgImage
-                    }).appendTo( vmlObj.node );
-
-                    $t.hide()
-                        .data( 'vml' , vmlObj);
-                }
-
-                vmlObj.node.rotation = deg;
-            });
-
+            var vmlObj = $t.data('vml');
+            if( !vmlObj ){
+                vmlObj = $('<vml:image style="position:absolute;width:94px;height:94px;" class=vml src="./images/wheel-ie8.png" />')[0];
+                $t.append(vmlObj);
+                $t.data('vml' , vmlObj);
+            }
+            vmlObj.style.cssText = 'position:absolute;width:94px;height:94px;rotation:' + deg;
         } else {
             deg = 'rotate(' + deg + 'deg)';
             $( this )
@@ -107,18 +94,21 @@ define(function(require, exports, module) {
     // bind skip event
     $videoPanel.find('.video-skip')
         .click(function(){
-            $videoPanel.find('.video-wrap').animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
+            $videoPanel.find('.video-wrap').animate({'margin-top':-300,opacity:0},1000,'easeInQuart',function(){
                 $videoPanel.hide();
                 $videoPanel.find('*').remove();
-                $('#login-mask').show();
-                $('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
+                $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
+                    _fixIpad();
+                });
+                //$('#login-mask').show();
+                //$('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
             });
 
             //$('.main-metas').animate({left:'50%'},500,'easeOutQuart');
         });
 
 
-    var intSliderBtn = function( $slider , $list , min , max ){
+    var initSliderBtn = function( $slider , $list , min , max ){
         $slider// when start to drag
             .on('mousedown' , function( ev ){
                 _slideMousedown.call( this , $slider , $list , min , max , ev );
@@ -207,7 +197,7 @@ define(function(require, exports, module) {
     var $resultPanel = $('#result-mask');
     var $sliderBtn = $resultPanel.find('.r-slider');
     // init slide btn
-    intSliderBtn( $sliderBtn , $resultPanel.find('.r-list') , 79 , 289  );
+    initSliderBtn( $sliderBtn , $resultPanel.find('.r-list') , 79 , 289  );
 
     $resultPanel.find('.r-close')
         .click(function(){
@@ -320,7 +310,7 @@ define(function(require, exports, module) {
             //$carDot.css('left' , p1 + '%');
             // change robot dot position
 
-            $robotDot[0].style.marginLeft = Math.min( 21 + p * 224 , 245 ) + 'px';
+            $robotDot[0].style.marginLeft = Math.max( 0 , p * 300 ) + 'px';
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -382,7 +372,7 @@ define(function(require, exports, module) {
         });
 
         // TODO..  set loading status
-        $resultPanel.find('.r-list')
+        //$resultPanel.find('.r-list');
             //.html('loading...');
 
 
@@ -404,37 +394,29 @@ define(function(require, exports, module) {
         $('#share_qq').attr('href','http://v.t.qq.com/share/share.php?title='+shareCopy+'&pic=http://50years911.porsche-events.cn/91150th.jpg')
         $('#share_renren').attr('href','http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&title='+shareCopy);
         $('#share_sohu').attr('href','http://t.sohu.com/third/post.jsp?url=http://50years911.porsche-events.cn%2f&title='+shareCopy);
-
-        $.ajax({
+         $.ajax({
             url: "data/public/index.php/home/record",
             dataType: "JSON",
             type: "POST",
-            data: {time:_time,distance:_distance,status:_status,name:_name},
+            data: {month:_time,distance:_distance,status:_status,name:_name},
             success: function(res){
-                // Get list
-                $.ajax({
-                    url: "data/public/index.php/home/getrecord",
-                    dataType: "JSON",
-                    success: function(res){
-                        _renderList( res.data );
-                        // for(index in res.data){
-                        //     var item = res.data[index].original;
-                        //     var name = item.name;
-                        //     var time = item.time;
-                        //     var m = ~~ ( time / 1000 / 60 );
-                        //     var s = ~~ ( time / 1000 % 60 );
-                        //     var ss = ~~ ( time % 1000 / 10 );
-                        //     var str_time = m +":"+ s + ":" + ss;
-                        //     var distance = parseInt(item.distance)+'m';
-                        //     $('.r-list table').append('<tr><td>'+(parseInt(index)+1)+'</td><td>'+name+'</td><td>'+str_time+'</td><td>'+distance+'</td></tr>');
-                        // }
-                    }
-                });
+
+            }
+        });
+    }
+    var _getRankList = function( month ){
+        // Get list
+        $.ajax({
+            url: "data/public/index.php/home/getrecord",
+            data: {month: month},
+            dataType: "JSON",
+            success: function(res){
+                _renderList( res.data );
             }
         });
     }
     var _renderList = function( dataArr ){
-        var aHtml = ['<table><tbody>'];
+        var aHtml = ['<div class="r-list-l"><table><tbody>'];
         var tpl = '<tr><td>#{i}</td><td>#{n}</td><td>#{t}</td><td>#{d}</td></tr>';
 
         $.each( dataArr , function( i , data ){
@@ -446,18 +428,22 @@ define(function(require, exports, module) {
             var str = [ m > 9 ? m : '0' + m ,
                  s > 9 ? s : '0' + s ,
                  ss ].join(':');
+
             aHtml.push( format( tpl , {
                 i   : i + 1
                 , n : item.name
                 , t : str
                 , d : parseInt(item.distance) + 'm'
             } ) );
+            if( i ==4 ){
+                aHtml.push('</div><div class="r-list-r"><table><tbody>');
+            }
         } );
 
-        aHtml.push('</tbody></table>');
+        aHtml.push('</tbody></table></div>');
 
-        $resultPanel.find('.r-list')
-            .html( aHtml.join('') );
+        //$resultPanel.find('.r-list')
+        //    .html( aHtml.join('') );
         $rankingPanel.find('.r-list')
             .html( aHtml.join('') );
     }
@@ -541,12 +527,12 @@ define(function(require, exports, module) {
 
     var _driveCarToSence = function( $car ){
         var index =  $cars.index( $car[0] );
-        var dur = 1500 ;
+        var dur = 2500 ;
         var delay = 0;//Math.random() * 1000;
         var w = $car.width();
         var marginLeft = - w / 2;
         if(index == 1)
-            marginLeft =  winWidth / 2;
+            marginLeft =  winWidth ;
         $car.show()
             .css('margin-left' , - w - winWidth)
             .delay( delay )
@@ -556,7 +542,7 @@ define(function(require, exports, module) {
 
         // run car dot
         var $dot = index == 0 ? $carDot : $robotDot;
-        var marginLeft = index == 0 ? '20px' : '20px';
+        var marginLeft = index == 0 ? '20px' : '0';
         $dot.delay(delay)
             .fadeIn()
             .css('marginLeft' , marginLeft );
@@ -598,6 +584,8 @@ define(function(require, exports, module) {
         */
         // drive ’my car ‘ to sence
         //_driveCarToSence( $cars.eq(0) );
+        // show car dot
+        $carDot.show().css('marginLeft' , 21);
         _driveCarToSence( $cars.eq(1) );
 
 
@@ -1035,6 +1023,7 @@ define(function(require, exports, module) {
 
 
     // user login
+    /*
     $('#login-mask .login-local')
         .click(function(){
             $('.lpn-register').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
@@ -1078,9 +1067,7 @@ define(function(require, exports, module) {
                         $('#username').val(username);
                         $('#login-status').html(username + ' <a href="javascript:void(0)" id="logout">退出</a>');
                         $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
-                            $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
-                                _fixIpad();
-                            });
+
                             $('#login-mask').hide();
                         });
                     }
@@ -1089,7 +1076,7 @@ define(function(require, exports, module) {
             return false;
         }
     });
-
+ */
     // Gallery
     // require jquery ani plugin
     require('jquery.fancybox');
@@ -1151,8 +1138,6 @@ define(function(require, exports, module) {
 
     // ranking list
     var $rankingPanel = $('#ranking-mask');
-    // init slide btn
-    intSliderBtn( $rankingPanel.find('.r-slider') , $rankingPanel.find('.r-list') , 115 , 319  );
     $('#ranking').click(function(){
         $rankingPanel.css('opacity' , 1).hide().fadeIn();
         $rankingPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
@@ -1176,19 +1161,32 @@ define(function(require, exports, module) {
             });
             goon();
         })
-
-    $rankingPanel.click(function(e){
-        var target = $(e.target);
-        if(target.hasClass('ranking-mask'))
-        {
-            $rankingPanel.find('.lpn-panel').animate({
-                height: 0
-            } , 600 , 'easeOutQuart' , function(){
-                $rankingPanel.hide();
-            });
-            goon();
-        }
-    });
+        .end()
+        .find('.r-head .btn') // click month to change the rank list
+        .click(function(){
+            // change style
+            $(this)
+                .siblings()
+                .removeClass('selected')
+                .end()
+                .addClass('selected');
+            // get month
+            var month = parseInt( $(this).text() );
+            // render list
+            _getRankList( month );
+        })
+        .end()
+        .click(function(e){ // click itself to close the panel
+            var target = $(e.target);
+            if(target.hasClass('ranking-mask')){
+                $rankingPanel.find('.lpn-panel').animate({
+                    height: 0
+                } , 600 , 'easeOutQuart' , function(){
+                    $rankingPanel.hide();
+                });
+                goon();
+            }
+        });
 
     $('body').delegate('#logout','click',function(){
         $.ajax({

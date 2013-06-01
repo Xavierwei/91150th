@@ -64,7 +64,7 @@ seajs.config({
       // for checking browser
       ,'jquery.hoverIntent': {
           src: '../../src/jquery-plugin/jquery.hoverIntent.minified',
-          exports: 'jquery.hoverIntent'
+          deps: ['jquery']
       }
     // for flash player
     ,'swfobject': {

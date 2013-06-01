@@ -1,43 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:vml="urn:schemas-microsoft-com:vml">
 <head>
-    <title></title>
-    <script type="text/javascript"
-            src="./lib/sea/sea-debug.js"
-            data-config="../../app/config"
-            data-main="../../app/gallery"></script>
-</head>
-<link href="./css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
-<link href="./css/gallery.css" rel="stylesheet" type="text/css" />
-<style>
-    body {background:#000;}
+  <meta charset="utf-8"/>
+  <title>911 50周年</title>
+  <meta name="viewport" content="width=1400, minimum-scale=1.0, maximum-scale=1.0" />
+  <title> 2013保时捷极至体验 </title>
+  <meta name="viewport" content="width=1024, minimum-scale=1.0, maximum-scale=1.0" />
+  <script type="text/javascript"
+    src="./lib/sea/sea-debug.js"
+    data-config="../../app/config"
+    data-main="../../app/ie8"></script>
+  <!--[if lt IE 9]><script>for(var a=['section','article','nav','header','footer','aside'],i=0,j=a.length;i<j;++i){document.createElement(a[i]);}</script>
+  <style type="text/css">
+    .vml{behavior:url(#default#VML);display:inline-block;}
+  </style>
+  <![endif]-->
+  <!--[if IE 6]>
+  <script type="text/javascript" src="./src/DD_belatedPNG_0.0.8a-min.js"></script>
+  <script type="text/javascript">
+    DD_belatedPNG.fix('.car,.wheel');
+  </script>
+  <![endif]-->
 
-</style>
+ <link href="./css/base.css" rel="stylesheet" type="text/css" />
+ <link href="./css/animate.css" rel="stylesheet" type="text/css" />
+ <link href="./css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+  <!--[if IE]>
+  <link href="./css/ie.css" rel="stylesheet" type="text/css" />
+  <![endif]-->
+<script type="text/javascript">
+ /*
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40136895-1']);
+  _gaq.push(['_setDomainName', 'porsche-event.cn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+*/
+</script>
 <body>
+<section class="main" style="opacity: 1;">
+  <div class="main-cars">
+    <div class="car wheelblur" style="display: block; margin-left: 0;">
+      <img src="images/robot.png">
+      <div class="front-wheel" ></div>
 
-<div id="gallery-wrap">
-    <div class="title"></div>
-    <div class="gallery">
-        <div class="photo">
-            <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
-        </div>
-        <div class="photo">
-            <a rel="gallery" href="pic/b2.jpg"><img src="pic/s2.jpg" /></a>
-        </div>
-        <div class="photo">
-            <a rel="gallery" href="pic/b3.jpg"><img src="pic/s3.jpg" /></a>
-        </div>
-        <div class="photo">
-            <a rel="gallery" href="pic/b4.jpg"><img src="pic/s4.jpg" /></a>
-        </div>
-        <div class="photo">
-            <a rel="gallery" href="pic/b5.jpg"><img src="pic/s5.jpg" /></a>
-        </div>
-        <div class="photo">
-            <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
-        </div>
+      <div class="end-wheel" ></div>
     </div>
-    <div class="close"></div>
-</div>
+  </div>
+</section>
+
 </body>
 </html>
