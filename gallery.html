@@ -1,58 +1,323 @@
-<!DOCTYPE html>
-<html xmlns:vml="urn:schemas-microsoft-com:vml">
-<head>
+<!DOCTYPE HTML>
+<html>
+ <head>
   <meta charset="utf-8"/>
-  <title>911 50周年</title>
-  <meta name="viewport" content="width=1400, minimum-scale=1.0, maximum-scale=1.0" />
-  <title> 2013保时捷极至体验 </title>
-  <meta name="viewport" content="width=1024, minimum-scale=1.0, maximum-scale=1.0" />
+  <title> pencil to the world </title>
   <script type="text/javascript"
     src="./lib/sea/sea-debug.js"
-    data-config="../../app/config"
-    data-main="../../app/ie8"></script>
-  <!--[if lt IE 9]><script>for(var a=['section','article','nav','header','footer','aside'],i=0,j=a.length;i<j;++i){document.createElement(a[i]);}</script>
-  <style type="text/css">
-    .vml{behavior:url(#default#VML);display:inline-block;}
-  </style>
-  <![endif]-->
-  <!--[if IE 6]>
-  <script type="text/javascript" src="./src/DD_belatedPNG_0.0.8a-min.js"></script>
-  <script type="text/javascript">
-    DD_belatedPNG.fix('.car,.wheel');
-  </script>
-  <![endif]-->
-
- <link href="./css/base.css" rel="stylesheet" type="text/css" />
- <link href="./css/animate.css" rel="stylesheet" type="text/css" />
- <link href="./css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
-  <!--[if IE]>
-  <link href="./css/ie.css" rel="stylesheet" type="text/css" />
-  <![endif]-->
-<script type="text/javascript">
- /*
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-40136895-1']);
-  _gaq.push(['_setDomainName', 'porsche-event.cn']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-*/
-</script>
-<body>
-<section class="main" style="opacity: 1;">
-  <div class="main-cars">
-    <div class="car wheelblur" style="display: block; margin-left: 0;">
-      <img src="images/robot.png">
-      <div class="front-wheel" ></div>
-
-      <div class="end-wheel" ></div>
+    data-config="../../app/config"></script>
+    <link rel="stylesheet" href="./css/base.css">
+ </head>
+ <body>
+<!--gallery panel-->
+<section id="gallery-mask" class="gallery-mask lpn-mask">
+  <span class="lpn-ghost"></span>
+  <div class="lpn-panel" style="overflow:visible;">
+    <div id="gallery-wrap">
+      <div class="title"><div class="btn1 selected" style="margin-left: 200px;margin-right: 19px;margin-top: -7px;" >图片</div><div class="btn1 " style="margin-top: -7px;">视频</div></div>
+      <div class="photo-gallery" init='false' style="display:none;">
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b2.jpg"><img src="pic/s2.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b3.jpg"><img src="pic/s3.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b4.jpg"><img src="pic/s4.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b5.jpg"><img src="pic/s5.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b4.jpg"><img src="pic/s4.jpg" /></a>
+        </div>
+      </div>
+      <div class="video-gallery" init='false' >
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+        </div>
+      </div>
+      <div class="photo-slider" style="display:none;">
+        <div class="slider-btn"></div>
+      </div>
+      <div class="video-slider">
+        <div class="slider-btn"></div>
+      </div>
+      <div class="close"></div>
     </div>
   </div>
 </section>
 
-</body>
+<!--
+    <section id="rule-mask" class="lpn-mask" style="display:none;">
+      <span class="lpn-ghost"></span>
+      <div class="lpn-panel">
+        <div class="rule-wrap">
+            <div class="rule-title">游戏规则</div>
+            <ul class="rule-con">
+                <li>用户玩到第一次游戏结束的时就会出现弹框 (5分钟以下）
+您坚持追逐了x分x秒，继续挑战即有机会获取以下奖品：1.每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值xx万。 2.坚持追逐5分钟以上，即可活动保时捷送出的50周年限量版明信片。
+
+</li>
+                <li>等用户玩到第一次游戏结束的时就会出现弹框 (5分钟以上）
+恭喜您坚持追逐了x分x秒，已经赢取了保时捷送出的50周年限量版明信片，请填写完整个人信息，工作人员会尽快与您联络奖品发送事宜。
+继续挑战：每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值xx万。
+
+保时捷（中国）汽车销售有限公司保留获奖规则解释权。</li>
+            </ul>
+        </div>
+        <div class="r-close"></div>
+      </div>
+    </section>
+  -->
+    <script type="text/javascript">
+        var _isIpad = false;
+        var selectTag = function($list , cb , selectClass , eventType){
+            selectClass = selectClass || 'selected';
+            eventType = eventType || 'click';
+            $list[eventType](function(ev){
+                $list.removeClass(selectClass);
+                $(this).addClass(selectClass);
+                cb && cb.call(this , $(this));
+            });
+        };
+        var _slideMousedown = function( $slider , $list , min , max , maxValue){
+          var slider = this
+           , off = $slider.offsetParent().offset();
+          var $con = $list;
+
+          var moveEvent = function( pageX ){
+              var value = Math.max( Math.min( pageX - off.left , max ) , min );
+              slider.style.left = value + 'px';
+              // change the scroll value
+              $con.css('marginLeft' ,  - maxValue * ( value - min ) / ( max - min )  );
+          }
+          var endEvent = function(ev){
+                  $(this)
+                      .off('.slide-drag');
+              }
+          // bind mouse move event
+          $(document)
+              .on('mousemove.slide-drag', function( ev ){
+                  moveEvent( ev.pageX );
+              })
+              .on('touchmove.slide-drag', function( ev ){
+                  moveEvent( ev.originalEvent.pageX );
+              })
+              .on('touchend.slide-drag', endEvent )
+              .on('mouseup.slide-drag', endEvent );
+      }
+
+      /*var initSliderBtn = function( $sliderWrap , $sliderBtn , $slider ){
+        $sliderBtn// when start to drag
+          .on('mousedown' , function( ev ){
+              _slideMousedown.call( this , $sliderWrap );
+          })
+          .on('touchstart' , function( ev ){
+              _slideMousedown.call( this , $sliderWrap );
+          });
+      }
+      */
+      var initSliderBtn = function( $slider , $list , min , max , maxValue){
+          $slider// when start to drag
+              .on('mousedown' , function( ev ){
+                  _slideMousedown.call( this , $slider , $list , min , max , maxValue );
+              })
+              .on('touchstart' , function( ev ){
+                  _slideMousedown.call( this , $slider , $list , min , max , maxValue );
+              });
+
+          $list
+              .mousewheel(function(event, delta, deltaX, deltaY){
+                  var $con = $(this);
+                  var marginLeft = parseInt( $con.css('marginLeft') );
+                  var width = $con.width();
+                  var photoLen = 357;
+                  var maxWidth = maxValue + width;
+                  if( delta > 0 ) {// up
+                    marginLeft += photoLen;
+                  } else {
+                    marginLeft -= photoLen;
+                  }
+
+                  marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+                  /*
+                  var scrollTop = $con.scrollTop();
+                  var height = $list.height();
+                  var conHeight = $list[0].scrollHeight;
+                  if( delta > 0 ) {// up
+                      scrollTop -= height * 5 / 10;
+                  } else { //down
+                      scrollTop += height * 5 / 10;
+                  }
+                  var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
+                  */
+                  var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
+                  $slider
+                      .stop( true , false )
+                      .animate({
+                          'left': Math.max( Math.min( left , max ) , min )
+                      } , 500 );
+                  // change the scroll value
+                  $con.stop( true , false )
+                      .animate({
+                          marginLeft: marginLeft
+                      } , 500 );
+              });
+
+          if( _isIpad ){ // bind touch move event
+              var px , marginLeft = 0;
+              $list
+                  .on('touchstart' , function( ev ){
+                      px = ev.originalEvent.pageX;
+                      marginLeft = parseInt( $(this).css('marginLeft') );
+                  })
+                  .on('touchmove' , function( ev ){
+                      var dis = ev.originalEvent.pageX - px;
+                      marginLeft += dis;
+
+                      marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+
+                      $(this).css('marginLeft' , marginLeft);
+
+                      var width = $con.width();
+                      var maxWidth = maxValue + width;
+
+                      var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) );
+
+                      // move the slider
+                      $slider
+                          .stop( true , false )
+                          .animate({
+                              'left': Math.max( Math.min( left , max ) , min )
+                          } , 500 );
+                  });
+          }
+      }
+      seajs.use( ['jquery.fancybox','jquery.mousewheel'] , function(){
+            // init tabs
+            selectTag($('#gallery-mask').find('.btn1') , function(){
+                var index = $(this).index();
+                // show gallery photos
+                $('#gallery-mask').find('.photo-gallery,.video-gallery')
+                    .hide()
+                    .eq( index )
+                    .fadeIn()
+                    .end() //show sliders
+                    .end()
+                    .find('.photo-slider,.video-slider')
+                    .hide()
+                    .eq( index )
+                    .fadeIn();
+            });
+
+            var $photoGallery = $('#gallery-mask').find('.photo-gallery');
+            var $photos = $photoGallery.find('.photo');
+            var len = $photos.length;
+
+            initSliderBtn( $('#gallery-mask').find('.photo-slider .slider-btn') ,
+             $('#gallery-mask').find('.photo-gallery') , 0 , 1024 ,
+             Math.max( Math.ceil( len / 2) - 3 , 0 ) * 357 );
+
+            $photos.each( function( i ){
+              var half = Math.ceil( len / 2 );
+              var left = ( i % half ) * 360;
+              var top = parseInt( i / half ) * 219;
+              if( i >= half ){
+                  left -= 79;
+              }
+              $(this).css({left:left,top:top});
+            } );
+
+            var $videoGallery = $('#gallery-mask').find('.video-gallery');
+            var $vphotos = $videoGallery.find('.photo');
+            var vlen = $vphotos.length;
+
+             initSliderBtn( $('#gallery-mask').find('.video-slider .slider-btn') ,
+             $('#gallery-mask').find('.video-gallery') , 0 , 1024 ,
+             Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
+
+            $vphotos.each( function( i ){
+              var half = Math.ceil( len / 2 );
+              var left = ( i % half ) * 360;
+              var top = parseInt( i / half ) * 219;
+              if( i >= half ){
+                  left -= 79;
+              }
+              $(this).css({left:left,top:top});
+            } );
+
+
+
+            $photos.find('a').fancybox({
+              openMethod : 'dropIn',
+              padding: 0,
+              tpl: {
+                  wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
+              },
+              afterShow: function(){
+                var picurl = $(this).attr('href');
+                $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
+                $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
+                    '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
+                    '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;amp;rcontent=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
+                    '<a target="_blank" href="http://v.t.qq.com/share/share.php?title=911%2050th&amp;&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
+                    '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
+                    '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
+                }
+            });
+
+            (function ($, F) {
+                F.transitions.dropIn = function() {
+                    var endPos = F._getPosition(true);
+                    endPos.opacity = 0;
+                    endPos.top = (parseInt(endPos.top, 10) - 400);
+
+                    F.wrap.css(endPos).show().animate({
+                        top: endPos.top + 400,
+                        opacity: 1
+                    }, {
+                        easing: 'easeOutQuart',
+                        duration: 800,
+                        complete: F._afterZoomIn
+                    });
+                };
+
+                F.transitions.dropOut = function() {
+                    F.wrap.removeClass('fancybox-opened').animate({
+                        top: '-=200'
+                    }, {
+                        duration: F.current.closeSpeed,
+                        complete: F._afterZoomOut
+                    });
+                };
+
+            }(jQuery, jQuery.fancybox));
+        });
+    </script>
+ </body>
 </html>

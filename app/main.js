@@ -107,7 +107,7 @@ define(function(require, exports, module) {
             //$('.main-metas').animate({left:'50%'},500,'easeOutQuart');
         });
 
-
+    /*
     var initSliderBtn = function( $slider , $list , min , max ){
         $slider// when start to drag
             .on('mousedown' , function( ev ){
@@ -194,33 +194,120 @@ define(function(require, exports, module) {
             .on('touchend.slide-drag', endEvent )
             .on('mouseup.slide-drag', endEvent );
     }
-    var $resultPanel = $('#result-mask');
-    var $sliderBtn = $resultPanel.find('.r-slider');
-    // init slide btn
-    initSliderBtn( $sliderBtn , $resultPanel.find('.r-list') , 79 , 289  );
+    */
+    var _slideMousedown = function( $slider , $list , min , max , maxValue){
+          var slider = this
+           , off = $slider.offsetParent().offset();
+          var $con = $list;
 
-    $resultPanel.find('.r-close')
-        .click(function(){
-            $resultPanel.find('.lpn-panel').animate({
-                height: 0
-            } , 600 , 'easeOutQuart' , function(){
-                $resultPanel.fadeOut();
-            });
-            reset();
-        })
-        .end()
-        .find('.btn')
-        .click(function(){
-            $resultPanel.animate({
-                opacity: 0
-            } , 800 , 'easeOutQuart' , function(){
-                //... go to ready status
-                $(this).hide();
+          var moveEvent = function( pageX ){
+              var value = Math.max( Math.min( pageX - off.left , max ) , min );
+              slider.style.left = value + 'px';
+              // change the scroll value
+              $con.css('marginLeft' ,  - maxValue * ( value - min ) / ( max - min )  );
+          }
+          var endEvent = function(ev){
+                  $(this)
+                      .off('.slide-drag');
+              }
+          // bind mouse move event
+          $(document)
+              .on('mousemove.slide-drag', function( ev ){
+                  moveEvent( ev.pageX );
+              })
+              .on('touchmove.slide-drag', function( ev ){
+                  moveEvent( ev.originalEvent.pageX );
+              })
+              .on('touchend.slide-drag', endEvent )
+              .on('mouseup.slide-drag', endEvent );
+      }
 
-            });
-            reset();
-        });
+      /*var initSliderBtn = function( $sliderWrap , $sliderBtn , $slider ){
+        $sliderBtn// when start to drag
+          .on('mousedown' , function( ev ){
+              _slideMousedown.call( this , $sliderWrap );
+          })
+          .on('touchstart' , function( ev ){
+              _slideMousedown.call( this , $sliderWrap );
+          });
+      }
+      */
+      var initSliderBtn = function( $slider , $list , min , max , maxValue){
+          $slider// when start to drag
+              .on('mousedown' , function( ev ){
+                  _slideMousedown.call( this , $slider , $list , min , max , maxValue );
+              })
+              .on('touchstart' , function( ev ){
+                  _slideMousedown.call( this , $slider , $list , min , max , maxValue );
+              });
 
+          $list
+              .mousewheel(function(event, delta, deltaX, deltaY){
+                  var $con = $(this);
+                  var marginLeft = parseInt( $con.css('marginLeft') );
+                  var width = $con.width();
+                  var photoLen = 357;
+                  var maxWidth = maxValue + width;
+                  if( delta > 0 ) {// up
+                    marginLeft += photoLen;
+                  } else {
+                    marginLeft -= photoLen;
+                  }
+
+                  marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+                  /*
+                  var scrollTop = $con.scrollTop();
+                  var height = $list.height();
+                  var conHeight = $list[0].scrollHeight;
+                  if( delta > 0 ) {// up
+                      scrollTop -= height * 5 / 10;
+                  } else { //down
+                      scrollTop += height * 5 / 10;
+                  }
+                  var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
+                  */
+                  var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
+                  $slider
+                      .stop( true , false )
+                      .animate({
+                          'left': Math.max( Math.min( left , max ) , min )
+                      } , 500 );
+                  // change the scroll value
+                  $con.stop( true , false )
+                      .animate({
+                          marginLeft: marginLeft
+                      } , 500 );
+              });
+
+          if( _isIpad ){ // bind touch move event
+              var px , marginLeft = 0;
+              $list
+                  .on('touchstart' , function( ev ){
+                      px = ev.originalEvent.pageX;
+                      marginLeft = parseInt( $(this).css('marginLeft') );
+                  })
+                  .on('touchmove' , function( ev ){
+                      var dis = ev.originalEvent.pageX - px;
+                      marginLeft += dis;
+
+                      marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+
+                      $(this).css('marginLeft' , marginLeft);
+
+                      var width = $con.width();
+                      var maxWidth = maxValue + width;
+
+                      var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) );
+
+                      // move the slider
+                      $slider
+                          .stop( true , false )
+                          .animate({
+                              'left': Math.max( Math.min( left , max ) , min )
+                          } , 500 );
+                  });
+          }
+      }
 
     // disabled contextmenu
     $(document).contextmenu(function(){return false;});
@@ -332,78 +419,15 @@ define(function(require, exports, module) {
                 if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    gameOver( status , status.result !=-1 ? status.result : dur <= GAME_MAX_DISTANCE );
+                    var isWin = status.result !=-1 ? status.result :
+                        status.time >= 5 * 60 * 1000;
+                    gameOver( status , isWin );
                 }
             }
         }
     });
 
-    var gameOver = function( result , isWin){
-        game.over( isWin );
 
-        $resultPanel.css('opacity' , 1).hide().fadeIn();
-        $resultPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
-
-        var $times = $resultPanel
-            .find('.r-time1 span,.r-time2 span,.r-time3 span');
-
-        // count time
-        new Animate([0] , [result.time] , 2000 , '' , function( arr ){
-            var time = arr[0] ;
-            var m = ~~ ( time / 1000 / 60 );
-            var s = ~~ ( time / 1000 % 60 );
-            var ss = ~~ ( time % 1000 / 10 );
-            var str = [ m > 9 ? m : '0' + m ,
-                 s > 9 ? s : '0' + s ,
-                 ss ].join('');
-            $times.each(function( i ,dom ){
-                this.className = 'time0' + str[i];
-            });
-        });
-
-        var $diss = $resultPanel.find('.r-distance span');
-        // count distance
-        new Animate([0] , [result.distance] , 2000 , '' , function( arr ){
-            var dis = ~~arr[0] + '' ;
-            dis = new Array( 6 - dis.length ).join('0') + dis;
-            $diss.each(function( i ,dom ){
-                this.className = 'distance' + i + dis[i];
-            });
-        });
-
-        // TODO..  set loading status
-        //$resultPanel.find('.r-list');
-            //.html('loading...');
-
-
-
-        // Save record
-        var _time = result.time;
-        var _distance = result.distance;
-        var m = ~~ ( _time / 1000 / 60 );
-        var s = ~~ ( _time / 1000 % 60 );
-        var ss = ~~ ( _time % 1000 / 10 );
-        // 0 : failure
-        // 1 : success
-        var _status = result.result;
-        var _name = $('#username').val();
-        var shareCopy = '我在911五十周年的竞速游戏中追逐了'+parseInt(_distance)+'公里，用了时'+m+':'+s+':'+ss;
-        $('#share_sina').attr('href','http://v.t.sina.com.cn/share/share.php?title='+shareCopy+'&url=http://50years911.porsche-events.cn%2f&pic=http://50years911.porsche-events.cn/91150th.jpg&appkey=2455498088');
-        $('#share_qzone').attr('href','http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+shareCopy);
-        $('#share_kaixin').attr('href','http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&rurl=http://50years911.porsche-events.cn%2f&rcontent='+shareCopy);
-        $('#share_qq').attr('href','http://v.t.qq.com/share/share.php?title='+shareCopy+'&pic=http://50years911.porsche-events.cn/91150th.jpg')
-        $('#share_renren').attr('href','http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&title='+shareCopy);
-        $('#share_sohu').attr('href','http://t.sohu.com/third/post.jsp?url=http://50years911.porsche-events.cn%2f&title='+shareCopy);
-         $.ajax({
-            url: "data/public/index.php/home/record",
-            dataType: "JSON",
-            type: "POST",
-            data: {month:_time,distance:_distance,status:_status,name:_name},
-            success: function(res){
-
-            }
-        });
-    }
     var _getRankList = function( month ){
         // Get list
         $.ajax({
@@ -435,18 +459,398 @@ define(function(require, exports, module) {
                 , t : str
                 , d : parseInt(item.distance) + 'm'
             } ) );
-            if( i ==4 ){
-                aHtml.push('</div><div class="r-list-r"><table><tbody>');
+            if( i == 4 ){
+                aHtml.push('</tbody></table></div><div class="r-list-r"><table><tbody>');
+            }
+            if( i == 9 ){
+                return false;
             }
         } );
 
         aHtml.push('</tbody></table></div>');
 
-        //$resultPanel.find('.r-list')
-        //    .html( aHtml.join('') );
-        $rankingPanel.find('.r-list')
+        $('#ranking-mask').find('.r-list')
             .html( aHtml.join('') );
     }
+
+    /*
+     * id  :
+     * init: function( $panel ){}
+     * onShow:
+     * onAfterShow:
+     * onAfterCLose:
+     * noBgClose: true | false
+     */
+    var panelData = {};
+    var showPanel = function( cfg , data ){
+        panelData = data;
+        var $panel = $( '#' + cfg.id );
+        if( !$panel.length ){
+            // add file from template
+            $(document.body).append( $('#' + cfg.id + '-tpl').html() );
+            $panel = $( '#' + cfg.id );
+
+
+
+            var closePanel = function(){
+                if( !cfg.noShowAnimate ){
+                    $panel.find('.lpn-panel').animate({
+                        height: 0
+                    } , 600 , 'easeOutQuart' , function(){
+                        var $t = $(this);
+                        $panel.fadeOut(function(){
+                            $panel.hide();
+                            $t.height('auto');
+                            if( cfg.onAfterCLose )
+                                cfg.onAfterCLose( $panel );
+                        });
+                    });
+                } else {
+                    $panel.fadeOut(function(){
+                        $panel.hide();
+                            if( cfg.onAfterCLose )
+                                cfg.onAfterCLose( $panel );
+                        });
+                }
+            }
+            $panel.on('close' , closePanel );
+
+            $panel.click(function(e){ // click itself to close the panel
+                if( e.target == this && !cfg.noBgClose ){
+                    closePanel();
+                }
+            })
+            .find('.r-close,.close') // click close btn
+            .click( closePanel );
+
+
+            if( cfg.init ){
+                cfg.init( $panel );
+            }
+        }
+
+        $panel.css('opacity' , 1).hide().fadeIn();
+
+        if( cfg.onShow )
+            cfg.onShow( $panel );
+
+        if( !cfg.noShowAnimate ){
+            var height = $panel.find('.lpn-panel').height();
+            $panel.find('.lpn-panel').css('height', 0 ).animate({height:height},500,'easeInQuart' , function(){
+                if( cfg.onAfterShow ) cfg.onAfterShow( $panel );
+            });
+        } else {
+            if( cfg.onAfterShow ) cfg.onAfterShow( $panel );
+        }
+    }
+
+    var panelConfigs = {
+        'result-panel' : {
+            id: 'result-mask',
+            noBgClose: true,
+            onAfterCLose: function(){
+                reset();
+            },
+            init: function( $resultPanel ){
+                var validateConfig = {
+                    rules: {
+                        email: {
+                            required: true,
+                            email: true
+                        },
+                        tel: {
+                            required: true,
+                            tel: true
+                        },
+                        name: "required",
+                        code: {
+                            required: true,
+                            number: true
+                        },
+                        address: "required"
+                    },
+                    messages: {
+                        email: "请输入正确的邮箱",
+                        name: "请输入姓名",
+                        tel: "请输入正确的手机号码",
+                        code: "请输入正确的邮编",
+                        address: "请输入地址"
+                    },
+                    submitHandler: function (form) {
+                        $.ajax({
+                            url: "data/public/index.php/home/register",
+                            dataType: "JSON",
+                            type: "POST",
+                            data: $(form).serialize(),
+                            success: function(res){
+                                if(res.code == 200){
+                                    $(form)
+                                        .parent()
+                                        .children()
+                                        .hide()
+                                        .filter('.result-form-suc')
+                                        .fadeIn();
+                                }
+                            }
+                        });
+                        return false;
+                    }
+                };
+                $resultPanel
+                    .find('.btn-again')
+                    .click(function(){
+                        $resultPanel
+                            .trigger('close');
+                    })
+                    .end()
+                    .find('.btn-submit')
+                    .click(function(){
+                        $('.result-form').submit();
+                    })
+                    .end()
+                    .find('.result-form').validate(validateConfig);
+            },
+            onShow: function( $resultPanel ){
+                var isWin = panelData.isWin;
+                var result = panelData.result;
+                $resultPanel.find('.result-con')
+                    .children()
+                    .hide()
+                    .filter( isWin ? '.result-tit,.result-form' : '.result-failure')
+                    .fadeIn();
+
+                var _time = result.time;
+                var m = ~~ ( _time / 1000 / 60 );
+                var s = ~~ ( _time / 1000 % 60 );
+                var ss = ~~ ( _time % 1000 / 10 );
+                var shareCopy = '我在911五十周年的竞速游戏中追逐了'+ ~~result.distance / 1000 +'公里，用时'+m+':'+s+':'+ss;
+                $('#share_sina').attr('href','http://v.t.sina.com.cn/share/share.php?title='+shareCopy+'&url=http://50years911.porsche-events.cn%2f&pic=http://50years911.porsche-events.cn/91150th.jpg&appkey=2455498088');
+                //$('#share_qzone').attr('href','http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+shareCopy);
+                //$('#share_kaixin').attr('href','http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&rurl=http://50years911.porsche-events.cn%2f&rcontent='+shareCopy);
+                $('#share_qq').attr('href','http://v.t.qq.com/share/share.php?title='+shareCopy+'&pic=http://50years911.porsche-events.cn/91150th.jpg')
+                $('#share_renren').attr('href','http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&title='+shareCopy);
+                $('#share_douban').attr('href','http://shuo.douban.com/!service/share?url=http://50years911.porsche-events.cn%2f&name='+shareCopy);
+            },
+            onAfterShow: function( $resultPanel ){
+                var $times = $resultPanel
+                    .find('.result-head span');
+                var result = panelData.result;
+                // count time
+                new Animate([0] , [result.time] , 2000 , '' , function( arr ){
+                    var time = arr[0] ;
+                    var m = ~~ ( time / 1000 / 60 );
+                    var s = ~~ ( time / 1000 % 60 );
+                    var ss = ~~ ( time % 1000 / 10 );
+                    var str = [ m > 9 ? m : '0' + m ,
+                         s > 9 ? s : '0' + s ,
+                         ss > 9 ? ss : '0' + ss].join('');
+                    $times.each(function( i ,dom ){
+                        this.className = 'time' + (i+1) + ' time' + (i%2?1:0) + str[i];
+                    });
+                });
+            }
+        },
+        'ranking-panel' : {
+            id: 'ranking-mask',
+            onAfterCLose: function(){
+                goon();
+            },
+            init: function( $rankingPanel ){
+                $rankingPanel
+                    .find('.r-head .btn') // click month to change the rank list
+                    .click(function(){
+                        // change style
+                        $(this)
+                            .siblings()
+                            .removeClass('selected')
+                            .end()
+                            .addClass('selected');
+                        // get month
+                        var month = parseInt( $(this).text() );
+                        // render list
+                        _getRankList( month );
+                    })
+                    .end();
+            },
+            onShow: function( $rankingPanel ){
+                pause();
+                // Get list
+                $.ajax({
+                    url: "data/public/index.php/home/getrecord",
+                    dataType: "JSON",
+                    success: function(res){
+                        _renderList( res.data );
+                    }
+                });
+            }
+        },
+        'spirit-panel' : {
+            id: 'spirit-mask',
+            noBgClose: true,
+            onAfterShow: function( $spiritPanel ){
+                setTimeout(function(){
+                    $spiritPanel.trigger('close');
+                } , 2000 );
+            },
+            onAfterCLose: function(){
+                showPanel( panelConfigs['result-panel'] , panelData );
+            }
+        },
+        'rule-panel' : {
+            id: 'rule-mask',
+            onShow: function(){
+
+            }
+        },
+        'gallery-panel' :{
+            id: 'gallery-mask',
+            noShowAnimate: true,
+            onAfterCLose: function(){
+                goon();
+            },
+            init: function( $gallery ){
+                // Gallery
+                // require jquery ani plugin
+                seajs.use( 'jquery.fancybox' , function(){
+
+                    // init tabs
+                     selectTag($('#gallery-mask').find('.btn1') , function(){
+                        var index = $(this).index();
+                        // show gallery photos
+                        $('#gallery-mask').find('.photo-gallery,.video-gallery')
+                            .hide()
+                            .eq( index )
+                            .fadeIn()
+                            .end() //show sliders
+                            .end()
+                            .find('.photo-slider,.video-slider')
+                            .hide()
+                            .eq( index )
+                            .fadeIn();
+                    });
+
+
+                    var $photoGallery = $('#gallery-mask').find('.photo-gallery');
+                    var $photos = $photoGallery.find('.photo');
+                    var len = $photos.length;
+                    // init slider
+                    initSliderBtn( $('#gallery-mask').find('.photo-slider .slider-btn') ,
+                     $('#gallery-mask').find('.photo-gallery') , 0 , 1024 ,
+                     Math.max( Math.ceil( len / 2) - 3 , 0 ) * 357 );
+
+                    $photos.each( function( i ){
+                      var half = Math.ceil( len / 2 );
+                      var left = ( i % half ) * 360;
+                      var top = parseInt( i / half ) * 219;
+                      if( i >= half ){
+                          left -= 79;
+                      }
+                      $(this).css({left:left,top:top});
+                    } );
+
+                    var $videoGallery = $('#gallery-mask').find('.video-gallery');
+                    var $vphotos = $videoGallery.find('.photo');
+                    var vlen = $vphotos.length;
+
+                     initSliderBtn( $('#gallery-mask').find('.video-slider .slider-btn') ,
+                     $('#gallery-mask').find('.video-gallery') , 0 , 1024 ,
+                     Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
+
+                    $vphotos.each( function( i ){
+                      var half = Math.ceil( len / 2 );
+                      var left = ( i % half ) * 360;
+                      var top = parseInt( i / half ) * 219;
+                      if( i >= half ){
+                          left -= 79;
+                      }
+                      $(this).css({left:left,top:top});
+                    } );
+
+
+
+                    $photos.find('a').fancybox({
+                      openMethod : 'dropIn',
+                      padding: 0,
+                      tpl: {
+                          wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
+                      },
+                      afterShow: function(){
+                        var picurl = $(this).attr('href');
+                        $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
+                        $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
+                            '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
+                            '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;amp;rcontent=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
+                            '<a target="_blank" href="http://v.t.qq.com/share/share.php?title=911%2050th&amp;&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
+                            '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
+                            '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
+                        }
+                    });
+
+                    (function ($, F) {
+                        F.transitions.dropIn = function() {
+                            var endPos = F._getPosition(true);
+                            endPos.opacity = 0;
+                            endPos.top = (parseInt(endPos.top, 10) - 400);
+
+                            F.wrap.css(endPos).show().animate({
+                                top: endPos.top + 400,
+                                opacity: 1
+                            }, {
+                                easing: 'easeOutQuart',
+                                duration: 800,
+                                complete: F._afterZoomIn
+                            });
+                        };
+
+                        F.transitions.dropOut = function() {
+                            F.wrap.removeClass('fancybox-opened').animate({
+                                top: '-=200'
+                            }, {
+                                duration: F.current.closeSpeed,
+                                complete: F._afterZoomOut
+                            });
+                        };
+
+                    }(jQuery, jQuery.fancybox));
+                });
+            },
+            onShow: function( $gallery ){
+                //Pause the game
+                pause();
+                $gallery.fadeIn();
+            }
+        }
+    }
+    var gameOver = function( result , isWin){
+        game.over( isWin );
+
+        var r = {};
+        $.extend( r , result );
+        // show spirit panel
+        showPanel( panelConfigs['spirit-panel'] , {result:r , isWin:isWin} );
+
+        // Save record
+        var _time = result.time;
+        var _distance = result.distance;
+        var m = ~~ ( _time / 1000 / 60 );
+        var s = ~~ ( _time / 1000 % 60 );
+        var ss = ~~ ( _time % 1000 / 10 );
+        // 0 : failure
+        // 1 : success
+        var _status = result.result;
+        var _name = $('#username').val();
+
+        $.ajax({
+            url: "data/public/index.php/home/record",
+            dataType: "JSON",
+            type: "POST",
+            data: {month:_time,distance:_distance,status:_status,name:_name},
+            success: function(res){
+
+            }
+        });
+    }
+
     var counterTimer = null;
     var counterAnimate = null;
     var counter = function( callback ){
@@ -467,56 +871,15 @@ define(function(require, exports, module) {
                 callback && callback();
                 return;
             }
-            // reset nums
-            /*
-            if( _isIpad ){
-                var top = parseInt( $t.css('top') );
-                var left = parseInt( $t.css('left') );
-                var height = $t.height();
-                var width = $t.width()
-                // if is first one
-                //if( len == $nums.length - 1 ){
-                    $t.css({
-                        'opacity': 1
-                        , 'top'  : top
-                    })
-                    .fadeIn();
-                //}
-
-                counterTimer = setTimeout( function(){
-                    // if has preg
-                    $t.animate({
-                            top: top + height,
-                            opacity : 0
-                        } , 200 , '' , function(){
-                            $(this).hide()
-                                // clear css
-                                .css({
-                                    'top': ''
-                                    ,'left':''
-                                    ,'width':''
-                                    ,'height':''
-                                });
-
-                            showNum();
-                        });
-
-                } , 800 );
-            } else {
-                */
-                M.motionBlur( $t[0] , 0 );
-                counterTimer = setTimeout( function(){
-                    counterAnimate = new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
-                        M.motionBlur( $t[0] , ~~arr[ 0 ] );
-                    } , function(){
-                        $t.hide();
-                        showNum();
-                    });
-    //                $t.animate({'margin-left':20},function(){
-    //                    $(this).hide();
-    //                });
-                } , 800 );
-            //}
+            M.motionBlur( $t[0] , 0 );
+            counterTimer = setTimeout( function(){
+                counterAnimate = new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
+                    M.motionBlur( $t[0] , ~~arr[ 0 ] );
+                } , function(){
+                    $t.hide();
+                    showNum();
+                });
+            } , 800 );
         })();
     }
 
@@ -527,7 +890,7 @@ define(function(require, exports, module) {
 
     var _driveCarToSence = function( $car ){
         var index =  $cars.index( $car[0] );
-        var dur = 2500 ;
+        var dur = 3500 ;
         var delay = 0;//Math.random() * 1000;
         var w = $car.width();
         var marginLeft = - w / 2;
@@ -962,65 +1325,60 @@ define(function(require, exports, module) {
         });
     })();
 
-
-    // click share btn to pause the game
-    var showShareBtns = function(){
-        $shareBgR.stop( true , false )
-            .animate({
-                right: -87
-            } , 500 , 'easeOutQuart' , function(){
-                $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
-                setTimeout(function(){
-                    $shareBtn.stop(true , false).fadeOut();
-                } , 100);
-            });
-    }
-    var hideShareBtns = function(){
-        $shareCon.stop(true , false).fadeOut( function(){
+    // main board init
+    !!(function(){
+        // 1.0   share btn
+        // click share btn to pause the game
+        var showShareBtns = function(){
             $shareBgR.stop( true , false )
                 .animate({
-                    right: 10
+                    right: -87
                 } , 500 , 'easeOutQuart' , function(){
-                    $shareBtn.stop(true , false).fadeIn();
-                } );
-        });
-    }
-    var $shareBgR = $('#main-board-bg-r');
-    var $shareBtn = $('#share-btn');
-    var $shareCon = $('#share-con');
-    $('#share-wrap')
-        .hoverIntent(function(){
-            pause();
-            showShareBtns()
-        } , function(){
-            goon();
-            hideShareBtns();
-        });
-
-    var $gallery = $('#gallery-mask')
-        .find('.close')
-        .click(function(){
-            $gallery.fadeOut( function(){
-                goon();
-            } );
-        })
-        .end();
-    $gallery.click(function(e){
-        var target = e.target;
-        if($(target).hasClass('gallery-mask'))
-        {
-            $gallery.fadeOut( function(){
-                goon();
+                    $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
+                    setTimeout(function(){
+                        $shareBtn.stop(true , false).fadeOut();
+                    } , 100);
+                });
+        }
+        var hideShareBtns = function(){
+            $shareCon.stop(true , false).fadeOut( function(){
+                $shareBgR.stop( true , false )
+                    .animate({
+                        right: 10
+                    } , 500 , 'easeOutQuart' , function(){
+                        $shareBtn.stop(true , false).fadeIn();
+                    } );
             });
         }
-    });
-    // show photos gallery
-    $('#gallery').click(function(){
-        //Pause the game
-        pause();
-        $gallery.fadeIn();
-    });
+        var $shareBgR = $('#main-board-bg-r');
+        var $shareBtn = $('#share-btn');
+        var $shareCon = $('#share-con');
+        $('#share-wrap')
+            .hoverIntent(function(){
+                pause();
+                showShareBtns()
+            } , function(){
+                goon();
+                hideShareBtns();
+            });
 
+        // 2. ranking panel
+        // main panel click event init
+        $('#ranking').click(function(){
+            showPanel(panelConfigs['ranking-panel']);
+        });
+
+        // 3. rule panel
+        $('#rule').click(function(){
+            showPanel(panelConfigs['rule-panel']);
+        });
+
+        // 3. gallery panel
+        $('#gallery').click(function(){
+            showPanel(panelConfigs['gallery-panel']);
+        });
+
+    })();
 
     // user login
     /*
@@ -1077,116 +1435,8 @@ define(function(require, exports, module) {
         }
     });
  */
-    // Gallery
-    // require jquery ani plugin
-    require('jquery.fancybox');
-
-    $('.photo').each(function(i){
-        var left = (i%3)*360;
-        var top = parseInt(i/3)*219;
-        if(parseInt(i/3) == 1){
-            left -= 79;
-        }
-        $(this).css({left:left,top:top});
-    });
-
-    $('.photo a').fancybox({
-        openMethod : 'dropIn',
-        padding: 0,
-        tpl: {
-            wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
-        },
-        afterShow: function(){
-            var picurl = $(this).attr('href');
-            $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
-            $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
-                '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
-                '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;amp;rcontent=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
-                '<a target="_blank" href="http://v.t.qq.com/share/share.php?title=911%2050th&amp;&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
-                '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
-                '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
-        }
-    });
-
-    (function ($, F) {
-        F.transitions.dropIn = function() {
-            var endPos = F._getPosition(true);
-            endPos.opacity = 0;
-            endPos.top = (parseInt(endPos.top, 10) - 400);
-
-            F.wrap.css(endPos).show().animate({
-                top: endPos.top + 400,
-                opacity: 1
-            }, {
-                easing: 'easeOutQuart',
-                duration: 800,
-                complete: F._afterZoomIn
-            });
-        };
-
-        F.transitions.dropOut = function() {
-            F.wrap.removeClass('fancybox-opened').animate({
-                top: '-=200'
-            }, {
-                duration: F.current.closeSpeed,
-                complete: F._afterZoomOut
-            });
-        };
-
-    }(jQuery, jQuery.fancybox));
 
 
-    // ranking list
-    var $rankingPanel = $('#ranking-mask');
-    $('#ranking').click(function(){
-        $rankingPanel.css('opacity' , 1).hide().fadeIn();
-        $rankingPanel.find('.lpn-panel').animate({height:458},500,'easeInQuart');
-        pause();
-        // Get list
-        $.ajax({
-            url: "data/public/index.php/home/getrecord",
-            dataType: "JSON",
-            success: function(res){
-                _renderList( res.data );
-            }
-        });
-    });
-
-    $rankingPanel.find('.r-close')
-        .click(function(){
-            $rankingPanel.find('.lpn-panel').animate({
-                height: 0
-            } , 600 , 'easeOutQuart' , function(){
-                $rankingPanel.hide();
-            });
-            goon();
-        })
-        .end()
-        .find('.r-head .btn') // click month to change the rank list
-        .click(function(){
-            // change style
-            $(this)
-                .siblings()
-                .removeClass('selected')
-                .end()
-                .addClass('selected');
-            // get month
-            var month = parseInt( $(this).text() );
-            // render list
-            _getRankList( month );
-        })
-        .end()
-        .click(function(e){ // click itself to close the panel
-            var target = $(e.target);
-            if(target.hasClass('ranking-mask')){
-                $rankingPanel.find('.lpn-panel').animate({
-                    height: 0
-                } , 600 , 'easeOutQuart' , function(){
-                    $rankingPanel.hide();
-                });
-                goon();
-            }
-        });
 
     $('body').delegate('#logout','click',function(){
         $.ajax({

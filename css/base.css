@@ -109,6 +109,21 @@ span.lpn-ghost {
   padding: 4px;
   border-radius: 4px;
   white-space: normal;
+  position: relative;
+  overflow: hidden;
+}
+.lpn-panel .r-close{
+  background:url(../images/result_close.png) no-repeat;
+  position: absolute;
+  height: 43px;
+  width: 68px;
+  right: 102px;
+  top: 396px;
+  cursor: pointer;
+  opacity:.7;
+}
+.lpn-panel .r-close:hover {
+    opacity:1;
 }
 .lpn-content{
   display: inline-block;
@@ -341,7 +356,7 @@ span.lpn-ghost {
   line-height: 90px;
   text-indent: 1.5em;
   cursor: pointer;
-  background: url(../images/share.png) no-repeat 38px -71px;;
+  background: url(../images/share.png) no-repeat 42px -71px;;
 }
 .main-board .board-share{
   display: none;
@@ -560,7 +575,7 @@ span.lpn-ghost {
   display:none;
 }
 
-#result-mask .lpn-panel {overflow:hidden;height:0;}
+#result-mask .lpn-panel {overflow:hidden;}
 .result{
   width: 1161px;
   height:458px;
@@ -641,19 +656,7 @@ span.lpn-ghost {
   font-size: 16px;
   font-family: 黑体;
 }
-.result-con .btn1{
-  float: left;
-  width: 108px;
-  height: 36px;
-  line-height: 36px;
-  background: url(../images/btn-bg1.png) no-repeat;
-  text-align: center;
-  font-size: 18px;
-  color: #bbb;
-  text-shadow: 1px 1px 1px #000;
-  cursor: pointer;
-  font-family: 黑体;
-}
+
 .result-tit{
   text-align: left;
   width: 350px;
@@ -676,21 +679,19 @@ span.lpn-ghost {
   margin: 10px 0;
 }
 
-.result-tit .btn1:hover{
-  color: white;
-}
 .result-form{
   float: left;
   width: 220px;
   color: #b5b5b5;
   font-size: 14px;
   font-family: 黑体;
-  margin-top: 53px;
+  margin-top: 33px;
   margin-left: 16px;
 }
 .result-form label{
   display: block;
-  margin-bottom: 17px;
+  margin-bottom: 22px;
+  position: relative;
 }
 
 .result-form input{
@@ -700,6 +701,12 @@ span.lpn-ghost {
   border: none;
   color: #9d9d9d;
 }
+.result-form label.error{
+  position: absolute;
+  left: 44px;
+  margin-bottom: 0;
+  color: #6b6b6b;
+}
 .result-form-suc{
   width: 120px;
   margin: 0 auto;
@@ -708,23 +715,17 @@ span.lpn-ghost {
   font-size: 24px;
 }
 .result-failure{
-  padding: 58px 100px 0 100px;
+  padding: 69px 110px 0 110px;
   text-align: left;
   font-size: 22px;
 }
-.result .r-close,.ranking .r-close{
-  background:url(../images/result_close.png) no-repeat;
-  position: absolute;
-  height: 43px;
-  width: 68px;
-  right: 102px;
-  top: 396px;
-  cursor: pointer;
-  opacity:.7;
+.result-failure p{
+  font-size: 13px;
+  color: #A2A2A2;
+  margin-top: 17px;
+  line-height: 1.8em;
 }
-.result .r-close:hover {
-    opacity:1;
-}
+
 .result .r-list,.ranking .r-list{
   position: absolute;
   top: 83px;
@@ -787,7 +788,7 @@ span.lpn-ghost {
 .ranking .r-list-l tr:nth-child(3){
   color: red;
 }
-
+/*
 .result .r-slider,.ranking .r-slider{
   position: absolute;
   width: 13px;
@@ -807,6 +808,33 @@ span.lpn-ghost {
   border-top: 1px solid #ababab;
   border-bottom: 1px solid #000;
   margin: 2px 2px;
+}
+*/
+.rule-wrap{
+  background: url(../images/panel-bg.png) no-repeat;
+  width: 1161px;
+  height: 458px;
+}
+
+.spirit-wrap{
+  background: url(../images/spirit.png) no-repeat;
+  width: 719px;
+  height: 198px;
+  overflow: hidden;
+}
+.spirit-wrap .spirit-head{
+ font-size: 24px;
+  margin-top: 47px;
+  margin-bottom: 13px;
+  text-shadow: 1px 1px 1px #000;
+}
+.spirit-wrap .spirit-con{
+  font-size: 16px;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+  text-align: left;
+  margin: 0 115px;
+  line-height: 28px;
 }
 
 .speed00,
@@ -1310,19 +1338,64 @@ span.lpn-ghost {
   color: white;
   opacity: 1;
 }
+.btn1{
+  float: left;
+  width: 116px;
+  height: 36px;
+  line-height: 36px;
+  background: url(../images/btn-bg1.png) no-repeat;
+  text-align: center;
+  font-size: 18px;
+  color: #bbb;
+  text-shadow: 1px 1px 1px #000;
+  cursor: pointer;
+  font-family: 黑体;
+}
+
+.btn1.selected,.btn1:hover{
+  color: white;
+}
 
 /*gallery*/
 #gallery-mask {background:rgba(0,0,0,0.7);}
 #gallery-wrap {position:relative;width:1042px;height:474px;margin:0 auto;}
-#gallery-mask .title {background:url(../images/gallery_title.png) no-repeat;width:168px;height:28px;margin:0 0 0 50px;}
+#gallery-mask .title {background:url(../images/gallery_title.png) no-repeat;width:768px;height:28px;margin:0 0 0 50px;}
+
+#gallery-mask .btn1{background: url(../images/btn-bg1-dis.png) no-repeat;}
+#gallery-mask .btn1.selected,#gallery-mask .btn1:hover{
+  background: url(../images/btn-bg1.png) no-repeat;
+}
 #gallery-mask .close {cursor:pointer;opacity:0.7;background:url(../images/gallery_close.png) no-repeat;width:62px;height:37px; position: absolute;bottom:0;right:6px;}
 #gallery-mask .close:hover {opacity:1;}
-#gallery-mask .gallery {position: relative;margin:10px 0 0;}
+#gallery-mask .photo-gallery , #gallery-mask .video-gallery{position: relative;margin:10px 0 0;height:436px;}
 #gallery-mask .photo {position: absolute; -webkit-backface-visibility: hidden;-webkit-transform: skew(-20deg,0);transform: skew(-20deg,0);float:left;width:357px;height:216px;overflow:hidden;margin:0 0 0 5px;cursor:pointer;}
 #gallery-mask .photo img {-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;display: block;width:455px;height:216px;-webkit-transform: skew(20deg,0);transform: skew(20deg,0);margin:0 0 0 -55px;display:block;}
 #gallery-mask .photo:hover {-webkit-transform: skew(0,0);transform: skew(0,0);overflow:visible;z-index:99;}
 #gallery-mask .photo:hover img {-webkit-transform: skew(0,0);transform: skew(0,0); border:3px solid #fff;}
 #gallery-mask .photo img,.photo {-webkit-transition:all 0.3s ease;}
+#gallery-mask .photo-slider,#gallery-mask .video-slider{
+  height: 2px;
+  margin-top: 24px;
+  background: #757575;
+  margin-left: -120px;
+  width: 1074px;
+  position: relative;
+}
+#gallery-mask .slider-btn{
+  height: 10px;
+  width: 50px;
+  background: white;
+  -webkit-transform: skew(-20deg);
+  -moz-transform: skew(-20deg);
+  -ms-transform: skew(-20deg);
+  -o-transform: skew(-20deg);
+  transform: skew(-20deg);
+  position: absolute;
+  top: -4px;
+  left: 0px;
+  cursor: w-resize;
+}
+
 
 .fancybox-download {background:url(../images/fanybox_download.png) no-repeat;width:86px;height:38px;display:block;position: absolute;top:5px;right:60px;z-index:9999;opacity:0.3}
 .fancybox-download:hover {opacity:1;}
