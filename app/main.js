@@ -766,7 +766,15 @@ define(function(require, exports, module) {
                       $(this).css({left:left,top:top});
                     } );
 
-
+                    console.log($vphotos.find('a'));
+                    $vphotos.find('a').fancybox({
+                        width: 720,
+                        height: 405,
+                        type: 'iframe',
+                        iframe: {scrolling:'no'},
+                        openMethod : 'dropIn',
+                        padding: 0
+                    });
 
                     $photos.find('a').fancybox({
                       openMethod : 'dropIn',

@@ -54,7 +54,6 @@ html , body{
   overflow: hidden;
 }
 body{
-  font-family: 黑体;
 }
 a:link, a:visited , a:hover , a:active {
   text-decoration: none;
@@ -354,7 +353,7 @@ span.lpn-ghost {
   height: 57px;
   width: 84px;
   line-height: 90px;
-  text-indent: 1.5em;
+  text-indent: 2em;
   cursor: pointer;
   background: url(../images/share.png) no-repeat 42px -71px;;
 }
@@ -593,16 +592,16 @@ span.lpn-ghost {
   background: url(../images/result-head.png) no-repeat;
 }
 .result-head span{
-  margin-right: 4px;
+    margin-right: 4px;
 }
 .result-head .time6{
-  margin-right: 10px;
+    margin-right: 9px;
 }
 .result-head .time4{
-  margin-right: 36px;
+    margin-right: 42px;
 }
 .result-head .time2{
-  margin-right: 39px;
+    margin-right: 46px;
 }
 /*.result .r-time1{
     position: absolute;
@@ -654,14 +653,12 @@ span.lpn-ghost {
   color: #999;
   line-height: 34px;
   font-size: 16px;
-  font-family: 黑体;
 }
 
 .result-tit{
   text-align: left;
   width: 350px;
   float: left;
-  font-family: 黑体;
   margin-top: 53px;
   margin-left: 116px;
 }
@@ -684,7 +681,6 @@ span.lpn-ghost {
   width: 220px;
   color: #b5b5b5;
   font-size: 14px;
-  font-family: 黑体;
   margin-top: 33px;
   margin-left: 16px;
 }
@@ -751,7 +747,6 @@ span.lpn-ghost {
 }
 .ranking .r-head-title{
   float: left;
-  font-family: 黑体;
   font-size: 24px;
 }
 .ranking .selected{
@@ -814,7 +809,16 @@ span.lpn-ghost {
   background: url(../images/panel-bg.png) no-repeat;
   width: 1161px;
   height: 458px;
+    padding:1px 0 0;
 }
+.rule-wrap .rule-title{
+    background:url(../images/rule_title.png) no-repeat;
+    width:93px;height:23px;
+    margin:70px auto 0 auto;
+    text-indent:-999em;
+}
+.rule-wrap ol {list-style:decimal;margin:30px 80px 0 80px;line-height:150%;color:#bbb;}
+.rule-wrap ol li {margin:20px 203px 0;text-align:left;}
 
 .spirit-wrap{
   background: url(../images/spirit.png) no-repeat;
@@ -827,6 +831,7 @@ span.lpn-ghost {
   margin-top: 47px;
   margin-bottom: 13px;
   text-shadow: 1px 1px 1px #000;
+
 }
 .spirit-wrap .spirit-con{
   font-size: 16px;
@@ -1316,7 +1321,6 @@ span.lpn-ghost {
 
 /* for button */
 .btn{
-  font-family: 黑体;
   display: inline-block;
   cursor: pointer;
   height: 30px;
@@ -1349,7 +1353,6 @@ span.lpn-ghost {
   color: #bbb;
   text-shadow: 1px 1px 1px #000;
   cursor: pointer;
-  font-family: 黑体;
 }
 
 .btn1.selected,.btn1:hover{
@@ -1395,7 +1398,14 @@ span.lpn-ghost {
   left: 0px;
   cursor: w-resize;
 }
+.video-gallery span { position: absolute;background:url(../images/video_play.png) no-repeat;width:119px;height:46px;bottom:0;left:0;text-indent:-999em;
+    -webkit-transform: skew(20deg);
+    -moz-transform: skew(20deg);
+    -ms-transform: skew(20deg);
+    -o-transform: skew(20deg);
+    transform: skew(20deg);}
 
+#gallery-mask .video-gallery .photo:hover span {-webkit-transform: skew(0,0);transform: skew(0,0);}
 
 .fancybox-download {background:url(../images/fanybox_download.png) no-repeat;width:86px;height:38px;display:block;position: absolute;top:5px;right:60px;z-index:9999;opacity:0.3}
 .fancybox-download:hover {opacity:1;}
