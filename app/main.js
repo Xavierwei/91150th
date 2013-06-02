@@ -397,7 +397,7 @@ define(function(require, exports, module) {
             //$carDot.css('left' , p1 + '%');
             // change robot dot position
 
-            $robotDot[0].style.marginLeft = Math.max( 0 , p * 300 ) + 'px';
+            $robotDot[0].style.marginLeft = Math.max( 0 , Math.min( p , 1 ) * 279 ) + 'px';
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -406,7 +406,7 @@ define(function(require, exports, module) {
             //$bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
             //        dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
             //        dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
-            $bar[0].className = 'b-bar' + ( rl > winWidth / 2 ? 3 : 0 );
+            $bar[0].className = 'b-bar' + ( status.speed < 100 ? 3 : 0 );
             // show time
             if( status.gameStatus == game.GAME_PLAYING ){
                 var time = status.time + ( +new Date() - status.startTime );
