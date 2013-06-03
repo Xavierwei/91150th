@@ -584,6 +584,30 @@ define(function(require, exports, module) {
                             data: $(form).serialize(),
                             success: function(res){
                                 if(res.code == 200){
+                                    var result;
+                                    result.time = 8338367;
+                                    result.result = 3;
+
+                                    // Save record
+                                    var _time = result.time;
+                                    var _distance = result.distance;
+                                    var m = ~~ ( _time / 1000 / 60 );
+                                    var s = ~~ ( _time / 1000 % 60 );
+                                    var ss = ~~ ( _time % 1000 / 10 );
+                                    // 0 : failure
+                                    // 1 : success
+                                    var _status = result.result;
+                                    var _name = $('#username').val();
+                                    var _uid = res.data.attributes.uid;
+                                    $.ajax({
+                                        url: "data/public/index.php/home/record",
+                                        dataType: "JSON",
+                                        type: "POST",
+                                        data: {uid:_uid, month:_time,distance:_distance,status:_status,name:_name},
+                                        success: function(res){
+
+                                        }
+                                    });
                                     $(form)
                                         .parent()
                                         .children()
@@ -766,7 +790,6 @@ define(function(require, exports, module) {
                       $(this).css({left:left,top:top});
                     } );
 
-                    console.log($vphotos.find('a'));
                     $vphotos.find('a').fancybox({
                         width: 720,
                         height: 405,
