@@ -23,7 +23,7 @@ define(function(require, exports, module) {
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
-    //require('swfobject');
+    // require('swfobject');
 
     // extend jquery
     if( !$.browser ){
@@ -195,7 +195,7 @@ define(function(require, exports, module) {
             .on('mouseup.slide-drag', endEvent );
     }
     */
-    var _slideMousedown = function( $slider , $list , min , max , maxValue){
+    var _slideMousedown = function( $slider , $list , min , max , maxValue ){
           var slider = this
            , off = $slider.offsetParent().offset();
           var $con = $list;
@@ -421,7 +421,7 @@ define(function(require, exports, module) {
                     || status.result !=-1 ){
                     var isWin = status.result !=-1 ? status.result :
                         status.time >= 5 * 60 * 1000;
-                    gameOver( status , isWin );
+                    gameOver( status , true );
                 }
             }
         }
@@ -489,8 +489,6 @@ define(function(require, exports, module) {
             // add file from template
             $(document.body).append( $('#' + cfg.id + '-tpl').html() );
             $panel = $( '#' + cfg.id );
-
-
 
             var closePanel = function(){
                 if( !cfg.noShowAnimate ){
@@ -584,9 +582,9 @@ define(function(require, exports, module) {
                             data: $(form).serialize(),
                             success: function(res){
                                 if(res.code == 200){
-                                    var result;
-                                    result.time = 8338367;
-                                    result.result = 3;
+                                    var result = panelData.result;
+                                    //result.time = 8338367;
+                                    //result.result = 3;
 
                                     // Save record
                                     var _time = result.time;
@@ -723,7 +721,10 @@ define(function(require, exports, module) {
         'rule-panel' : {
             id: 'rule-mask',
             onShow: function(){
-
+              pause();
+            },
+            onAfterCLose: function(){
+              goon();
             }
         },
         'gallery-panel' :{
@@ -1017,13 +1018,13 @@ define(function(require, exports, module) {
         // reset the game
         game.reset();
         // ..1. reset start btn
-//        $startBtn//.attr('src' , $startBtn.attr('osrc'))
-//            .css({
-//                    opacity : 1
-//                ,   marginLeft: 0
-//            })
-//            .removeClass( lockClass )
-//            .show();
+        $startBtn//.attr('src' , $startBtn.attr('osrc'))
+            .css({
+                    opacity : 1
+                ,   marginLeft: 0
+            })
+            .removeClass( lockClass )
+            .show();
         // ..2. reset ready panel
         $counter.hide();
         // ..3. reset cars position
@@ -1050,8 +1051,7 @@ define(function(require, exports, module) {
         // reset road
         motionRoad( 0 );
         gStatus = null;
-        ready();
-
+        //ready();
     }
 
     var goon = function(){
