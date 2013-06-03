@@ -95,7 +95,8 @@ define(function( require , exports , model ){
 
             if( ev.preventDefault )
                 ev.preventDefault();
-             window.event.returnValue =  false;
+            if( window.event )
+                window.event.returnValue =  false;
         }
 
 
