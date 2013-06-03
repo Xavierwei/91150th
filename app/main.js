@@ -1468,7 +1468,7 @@ define(function(require, exports, module) {
  */
 
 
-
+  /*
     $('body').delegate('#logout','click',function(){
         $.ajax({
             url: "data/public/index.php/home/logout",
@@ -1477,5 +1477,82 @@ define(function(require, exports, module) {
             }
         });
     });
+   */
+
+
+   // render video
+   var $videoPanel = $('#video-mask');
+   window.readyForVideo = true;
+   window.playfinished = function(){
+      $videoPanel.find('.video-skip').click();
+   }
+
+   // bind play video event
+   $(window).on( 'play-video' , function(){
+      $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
+        $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
+
+        $videoPanel.delay(900).fadeIn(400);
+        $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
+        $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
+            $(this).animate({'opacity':1});
+        },function(){
+            $(this).animate({'opacity':.7});
+        });
+
+        showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 405 );
+   } );
+
+   function showVideo( id , src , w , h ){
+    if( _isIpad ){
+      src = src.replace(/\.[^.]+$/ , '.mp4');
+      initVideo( id , src , w , h );
+    } else {
+      initFlash( id , src , w , h );
+    }
+   }
+   var initVideo = function( id , src , w , h ){
+    var $wrap = $( '#' + id );
+    var $video = $('<video width="' + w + '" height="' + h + '" controls><source src="' + src + '" type="video/mp4" /></video>');
+    $video.appendTo( $wrap );
+    $video[0].play();
+   }
+   var initFlash = function( wrapId , src , stageW , stageH ){
+      // JAVASCRIPT VARS
+      var cacheBuster = "?t=" + Date.parse(new Date());
+
+      // PARAMS
+      var params = {};
+      params.allowfullscreen = "true";
+      params.allowScriptAccess = "always";
+      params.scale = "noscale";
+      params.wmode = "transparent";
+      //params.wmode = "transparent";
+
+      // ATTRIBUTES
+      var attributes = {};
+      attributes.id = wrapId;
+
+
+      /* FLASH VARS */
+      var flashvars = {};
+
+      // PLAYER DIMENSIONS inside the SWF
+      // if this are not defined then the player will take the stage dimensions defined in the "JAVASCRIPT VARS" section above
+      flashvars.componentW = stageW;
+      flashvars.componentH = stageH;  // if controller under is set to true then you must change this variable(substract the controller height)
+
+      // if you don't define these then the one defined in the XML file will be taken in consideration
+      flashvars.previewFilePath = "video.jpg";
+      flashvars.videoFilePath = "videos/en_desk.flv";
+
+      // player settings(if not defined then the player will have the default settings defined in AS)
+      flashvars.settingsXMLFile = "settings.xml";
+
+
+      /** EMBED CODE **/
+      swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
+    }
+
 
 });
