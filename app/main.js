@@ -248,16 +248,13 @@ define(function(require, exports, module) {
                   })
                   .on('touchmove' , function( ev ){
                       var dis = ev.originalEvent.pageX - px;
-                      marginLeft += dis;
+                      var mleft = marginLeft + dis;
 
-                      marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+                      mleft = - Math.min( maxValue , Math.abs( Math.min( mleft, 0 ) ) );
 
-                      $(this).css('marginLeft' , marginLeft);
+                      $(this).css('marginLeft' , mleft);
 
-                      var width = $con.width();
-                      var maxWidth = maxValue + width;
-
-                      var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) );
+                      var left = min + ( max - min ) * - mleft / maxValue ;
 
                       // move the slider
                       $slider
@@ -785,7 +782,7 @@ define(function(require, exports, module) {
                      Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
 
                     $vphotos.each( function( i ){
-                      var half = Math.ceil( len / 2 );
+                      var half = Math.ceil( vlen / 2 );
                       var left = ( i % half ) * 360;
                       var top = parseInt( i / half ) * 219;
                       if( i >= half ){
