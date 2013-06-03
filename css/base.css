@@ -96,6 +96,8 @@ a {
   _left : expression( ( ignoreMe2 = document.documentElement.scrollLeft ) + 'px' );
   */
 }
+
+.no-rgba .lpn-mask {background:url(../images/fancybox_overlay.png)}
 span.lpn-ghost {
   display: inline-block;
   height: 100%;
@@ -546,6 +548,8 @@ span.lpn-ghost {
   z-index: 999998;
   display:none;
 }
+
+.no-rgba .video-mask {background:url(../images/fancybox_overlay.png)}
 .video-wrap{
   width: 775px;
   /*height: 460px;*/
@@ -711,6 +715,7 @@ span.lpn-ghost {
   font-size: 24px;
 }
 .result-failure{
+    color:#fff;
   padding: 69px 110px 0 110px;
   text-align: left;
   font-size: 22px;
@@ -831,6 +836,7 @@ span.lpn-ghost {
   margin-top: 47px;
   margin-bottom: 13px;
   text-shadow: 1px 1px 1px #000;
+    color:#fff;
 
 }
 .spirit-wrap .spirit-con{
@@ -1361,6 +1367,7 @@ span.lpn-ghost {
 
 /*gallery*/
 #gallery-mask {background:rgba(0,0,0,0.7);}
+.no-rgba #gallery-mask {background:url(../images/fancybox_overlay.png)}
 #gallery-wrap {position:relative;width:1042px;height:474px;margin:0 auto;}
 #gallery-mask .title {background:url(../images/gallery_title.png) no-repeat;width:768px;height:28px;margin:0 0 0 50px;}
 
@@ -1414,6 +1421,8 @@ span.lpn-ghost {
 
 .icon-pause {display:none;position: absolute;top:5%;left:50%;background:none;width:37px;height:50px;margin-left:-18px;z-index:9999999;opacity:.6;}
 .bg-pause {display:none;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:19998; position: fixed;}
+
+.no-rgba .bg-pause {background:url(../images/fancybox_overlay.png)}
 
 #fancybox-loading div {
     -webkit-animation: loadingAnimation 0.4s 50 linear;
