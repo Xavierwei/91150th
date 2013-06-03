@@ -1504,7 +1504,7 @@ define(function(require, exports, module) {
    } );
 
    function showVideo( id , src , w , h ){
-    if( _isIpad ){
+    if( _isIpad || 1 ){
       src = src.replace(/\.[^.]+$/ , '.mp4');
       initVideo( id , src , w , h );
     } else {
@@ -1514,7 +1514,10 @@ define(function(require, exports, module) {
    var initVideo = function( id , src , w , h ){
     var $wrap = $( '#' + id );
     var $video = $('<video width="' + w + '" height="' + h + '" controls><source src="' + src + '" type="video/mp4" /></video>');
-    $video.appendTo( $wrap );
+    $video.appendTo( $wrap )
+      .on('ended' , function(){
+        window.playfinished();
+      });
     $video[0].play();
    }
    var initFlash = function( wrapId , src , stageW , stageH ){
@@ -1551,7 +1554,9 @@ define(function(require, exports, module) {
 
 
       /** EMBED CODE **/
-      swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
+      seajs.use('swfobject' , function(){
+        swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
+      });
     }
 
 
