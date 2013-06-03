@@ -94,14 +94,25 @@
 
     <script type="text/tpl" id="rule-mask-tpl">
 <!--game rule-->
-<section id="rule-mask" class="video-mask lpn-mask">
-  <span class="lpn-ghost"></span>
-  <div class="lpn-panel">
-    <div class="rule-wrap">
-    </div>
-    <div class="r-close"></div>
-  </div>
-</section>
+        <section id="rule-mask" class="video-mask lpn-mask">
+            <span class="lpn-ghost"></span>
+            <div class="lpn-panel">
+                <div class="rule-wrap">
+                    <div class="rule-title">游戏规则</div>
+                    <ol>
+                        <li>用户玩到第一次游戏结束的时就会出现弹框 (5分钟以下）<br/>
+                            您坚持追逐了x分x秒，继续挑战即有机会获取以下奖品：1.每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值xx万。 2.坚持追逐5分钟以上，即可活动保时捷送出的50周年限量版明信片。</li>
+                        <li>等用户玩到第一次游戏结束的时就会出现弹框 (5分钟以上）<br/>
+                            恭喜您坚持追逐了x分x秒，已经赢取了保时捷送出的50周年限量版明信片，请填写完整个人信息，工作人员会尽快与您联络奖品发送事宜。<br/>
+                            继续挑战：每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值xx万。<br/><br/>
+                            保时捷（中国）汽车销售有限公司保留获奖规则解释权。
+                        </li>
+                    </ol>
+
+                </div>
+                <div class="r-close"></div>
+            </div>
+        </section>
     </script>
     <script type="text/tpl" id="ranking-mask-tpl">
 <!-- ranking panel -->
@@ -112,8 +123,8 @@
             <div class="r-close"></div>
             <div class="r-head">
               <div class="btn selected">6月份<div class="btn-r"></div></div>
-              <div class="btn">7月份<div class="btn-r"></div></div>
-              <div class="btn">8月份<div class="btn-r"></div></div>
+              <!--<div class="btn">7月份<div class="btn-r"></div></div>-->
+              <!--<div class="btn">8月份<div class="btn-r"></div></div>-->
               <span class='r-head-title'>排行榜</span>
             </div>
             <div class="r-list">
@@ -140,7 +151,7 @@
   <div class="lpn-panel" style="overflow:visible;">
     <div id="gallery-wrap">
       <div class="title"><div class="btn1 selected" style="margin-left: 200px;margin-right: 19px;margin-top: -7px;" >图片</div><div class="btn1 " style="margin-top: -7px;">视频</div></div>
-      <div class="photo-gallery" init='false' style="display:none;">
+      <div class="photo-gallery" init='false'>
         <div class="photo">
           <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
         </div>
@@ -158,32 +169,26 @@
         </div>
         <div class="photo">
           <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
-        </div>
-        <div class="photo">
-          <a rel="gallery" href="pic/b4.jpg"><img src="pic/s4.jpg" /></a>
         </div>
       </div>
-      <div class="video-gallery" init='false' >
+      <div class="video-gallery" init='false' style="display:none;">
         <div class="photo">
-          <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+          <a href="pic/b4.jpg"><img src="pic/s1.jpg" /><span>播放</span></a>
         </div>
         <div class="photo">
-          <a rel="gallery" href="pic/b2.jpg"><img src="pic/s2.jpg" /></a>
+          <a href="video2.html"><img src="pic/s2.jpg" /><span>播放</span></a>
         </div>
         <div class="photo">
-          <a rel="gallery" href="pic/b3.jpg"><img src="pic/s3.jpg" /></a>
+          <a href="video2.html"><img src="pic/s3.jpg" /><span>播放</span></a>
         </div>
         <div class="photo">
-          <a rel="gallery" href="pic/b4.jpg"><img src="pic/s4.jpg" /></a>
+          <a href="video2.html"><img src="pic/s4.jpg" /><span>播放</span></a>
         </div>
         <div class="photo">
-          <a rel="gallery" href="pic/b5.jpg"><img src="pic/s5.jpg" /></a>
+          <a href="video2.html"><img src="pic/s5.jpg" /><span>播放</span></a>
         </div>
         <div class="photo">
-          <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
-        </div>
-        <div class="photo">
-          <a rel="gallery" href="pic/b4.jpg"><img src="pic/s4.jpg" /></a>
+          <a href="video2.html"><img src="pic/s6.jpg" /><span>播放</span></a>
         </div>
       </div>
       <div class="photo-slider" style="display:none;">
