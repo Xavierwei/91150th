@@ -1504,7 +1504,7 @@ define(function(require, exports, module) {
    } );
 
    function showVideo( id , src , w , h ){
-    if( _isIpad || 1 ){
+    if( _isIpad ){
       src = src.replace(/\.[^.]+$/ , '.mp4');
       initVideo( id , src , w , h );
     } else {
