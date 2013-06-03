@@ -94,10 +94,10 @@ define(function(require, exports, module) {
     // bind skip event
     $videoPanel.find('.video-skip')
         .click(function(){
-            $videoPanel.find('.video-wrap').animate({'margin-top':-300,opacity:0},1000,'easeInQuart',function(){
+            $videoPanel.find('.lpn-panel').animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
                 $videoPanel.hide();
                 $videoPanel.find('*').remove();
-                $('.main-metas').animate({left:'50%'},500,'easeOutQuart', function(){
+                $('.main-metas').animate({left:'50%'},500,'easeInOutQuart', function(){
                     _fixIpad();
                 });
                 //$('#login-mask').show();
@@ -421,7 +421,7 @@ define(function(require, exports, module) {
                     || status.result !=-1 ){
                     var isWin = status.result !=-1 ? status.result :
                         status.time >= 5 * 60 * 1000;
-                    gameOver( status , true );
+                    gameOver( status , isWin );
                 }
             }
         }
@@ -712,7 +712,7 @@ define(function(require, exports, module) {
             onAfterShow: function( $spiritPanel ){
                 setTimeout(function(){
                     $spiritPanel.trigger('close');
-                } , 2000 );
+                } , 3000 );
             },
             onAfterCLose: function(){
                 showPanel( panelConfigs['result-panel'] , panelData );
@@ -956,7 +956,7 @@ define(function(require, exports, module) {
     // 3.driver car to the right position
     var ready = function(  ){
 
-        $('.main-board').animate({left:'50%'},1200,'easeOutQuart');
+        $('.main-board').animate({left:'50%'},1000,'easeInOutQuart');
         // drive robot along
 
         // 2.counter the seconds
@@ -1019,7 +1019,7 @@ define(function(require, exports, module) {
         game.reset();
         // ..1. reset start btn
         $startBtn//.attr('src' , $startBtn.attr('osrc'))
-            .css({
+            .animate({
                     opacity : 1
                 ,   marginLeft: 0
             })
@@ -1034,7 +1034,7 @@ define(function(require, exports, module) {
             .hide();
         // ..5. reset bar
         $bar[0].className = 'b-bar0';
-
+        $('.main-board').animate({left:'-50%'});
 
         // reset speed board
         $speeds[0].className = 'speed00';

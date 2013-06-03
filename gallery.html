@@ -7,9 +7,10 @@
     src="./lib/sea/sea-debug.js"
     data-config="../../app/config"></script>
     <link rel="stylesheet" href="./css/base.css">
+     <link rel="stylesheet" href="./css/jquery.fancybox.css">
  </head>
  <body>
-  <section id="result-mask" class="result-mask lpn-mask">
+  <section id="result-mask" class="result-mask lpn-mask" style="display:none;">
   <span class="lpn-ghost"></span>
   <div class="lpn-panel">
     <div class="result">
@@ -64,7 +65,7 @@
   </div>
 </section>
 <!--gallery panel-->
-<section id="gallery-mask" style="display:none;" class="gallery-mask lpn-mask">
+<section id="gallery-mask" style="" class="gallery-mask lpn-mask">
   <span class="lpn-ghost"></span>
   <div class="lpn-panel" style="overflow:visible;">
     <div id="gallery-wrap">
@@ -336,7 +337,7 @@
               .find('.result-form').validate(validateConfig);
       });
 
-      seajs.use( ['jquery.fancybox','jquery.mousewheel'] , function(){
+      seajs.use( ['jquery.fancybox','jquery.mousewheel','jquery.easing'] , function(){
             // init tabs
             selectTag($('#gallery-mask').find('.btn1') , function(){
                 var index = $(this).index();
