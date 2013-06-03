@@ -17,8 +17,6 @@ define(function(require, exports, module) {
         });
     };
     // require jquery ani plugin
-    require('jquery.validate');
-    require('jquery.mousewheel');
     require('jquery.hoverIntent');
     // require('jquery.queryloader');
     // require('jquery.easing');
@@ -241,44 +239,6 @@ define(function(require, exports, module) {
                   _slideMousedown.call( this , $slider , $list , min , max , maxValue );
               });
 
-          $list
-              .mousewheel(function(event, delta, deltaX, deltaY){
-                  var $con = $(this);
-                  var marginLeft = parseInt( $con.css('marginLeft') );
-                  var width = $con.width();
-                  var photoLen = 357;
-                  var maxWidth = maxValue + width;
-                  if( delta > 0 ) {// up
-                    marginLeft += photoLen;
-                  } else {
-                    marginLeft -= photoLen;
-                  }
-
-                  marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
-                  /*
-                  var scrollTop = $con.scrollTop();
-                  var height = $list.height();
-                  var conHeight = $list[0].scrollHeight;
-                  if( delta > 0 ) {// up
-                      scrollTop -= height * 5 / 10;
-                  } else { //down
-                      scrollTop += height * 5 / 10;
-                  }
-                  var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
-                  */
-                  var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
-                  $slider
-                      .stop( true , false )
-                      .animate({
-                          'left': Math.max( Math.min( left , max ) , min )
-                      } , 500 );
-                  // change the scroll value
-                  $con.stop( true , false )
-                      .animate({
-                          marginLeft: marginLeft
-                      } , 500 );
-              });
-
           if( _isIpad ){ // bind touch move event
               var px , marginLeft = 0;
               $list
@@ -306,6 +266,46 @@ define(function(require, exports, module) {
                               'left': Math.max( Math.min( left , max ) , min )
                           } , 500 );
                   });
+          } else {
+            seajs.use('jquery.mousewheel' , function(){
+              $list
+                .mousewheel(function(event, delta, deltaX, deltaY){
+                    var $con = $(this);
+                    var marginLeft = parseInt( $con.css('marginLeft') );
+                    var width = $con.width();
+                    var photoLen = 357;
+                    var maxWidth = maxValue + width;
+                    if( delta > 0 ) {// up
+                      marginLeft += photoLen;
+                    } else {
+                      marginLeft -= photoLen;
+                    }
+
+                    marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+                    /*
+                    var scrollTop = $con.scrollTop();
+                    var height = $list.height();
+                    var conHeight = $list[0].scrollHeight;
+                    if( delta > 0 ) {// up
+                        scrollTop -= height * 5 / 10;
+                    } else { //down
+                        scrollTop += height * 5 / 10;
+                    }
+                    var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
+                    */
+                    var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
+                    $slider
+                        .stop( true , false )
+                        .animate({
+                            'left': Math.max( Math.min( left , max ) , min )
+                        } , 500 );
+                    // change the scroll value
+                    $con.stop( true , false )
+                        .animate({
+                            marginLeft: marginLeft
+                        } , 500 );
+                });
+            });
           }
       }
 
@@ -618,19 +618,22 @@ define(function(require, exports, module) {
                         return false;
                     }
                 };
-                $resultPanel
-                    .find('.btn-again')
-                    .click(function(){
-                        $resultPanel
-                            .trigger('close');
-                    })
-                    .end()
-                    .find('.btn-submit')
-                    .click(function(){
-                        $('.result-form').submit();
-                    })
-                    .end()
-                    .find('.result-form').validate(validateConfig);
+
+                seajs.use('jquery.validate' , function(){
+                  $resultPanel
+                      .find('.btn-again')
+                      .click(function(){
+                          $resultPanel
+                              .trigger('close');
+                      })
+                      .end()
+                      .find('.btn-submit')
+                      .click(function(){
+                          $('.result-form').submit();
+                      })
+                      .end()
+                      .find('.result-form').validate(validateConfig);
+                });
             },
             onShow: function( $resultPanel ){
                 var isWin = panelData.isWin;
