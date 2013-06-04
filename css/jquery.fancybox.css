@@ -32,7 +32,7 @@
 }
 
 .fancybox-opened {
-	z-index: 8030;
+	z-index: 9999998;
 }
 
 .fancybox-opened .fancybox-skin {
@@ -90,7 +90,10 @@
 #fancybox-loading div {
 	width: 44px;
 	height: 44px;
-	background: url('../images/loading.png') center center no-repeat;
+	background: #000 url('../images/loading.gif') center center no-repeat;
+    -webkit-border-radius: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .fancybox-close {

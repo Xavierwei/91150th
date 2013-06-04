@@ -1034,7 +1034,7 @@ define(function(require, exports, module) {
             .hide();
         // ..5. reset bar
         $bar[0].className = 'b-bar0';
-        $('.main-board').animate({left:'-50%'});
+        //$('.main-board').animate({left:'-50%'});
 
         // reset speed board
         $speeds[0].className = 'speed00';
@@ -1493,7 +1493,7 @@ define(function(require, exports, module) {
         $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
 
         $videoPanel.delay(900).fadeIn(400);
-        $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
+        $videoPanel.find('.video-wrap').delay(1300).animate({height:359},400,'easeOutQuart');
         $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
             $(this).animate({'opacity':1});
         },function(){
@@ -1557,7 +1557,6 @@ define(function(require, exports, module) {
       /** EMBED CODE **/
       seajs.use('swfobject' , function(){
         swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
-          console.log('play');
       });
     }
 
