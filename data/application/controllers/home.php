@@ -70,10 +70,13 @@ class Home_Controller extends Base_Controller {
         $address = Input::get("address");
 
         $users = DB::table('user')
-            ->where('tel',  $tel)
-            ->orWhere('email', $email)
+            ->where('tel', '=', $tel)
+            ->or_where('email','=', $email)
             ->get();
-        print_r($users);
+        if(count($users) > 0)
+        {
+            return Response::json(array("error" => "exist", "code" => 500, "data" => array()));
+        }
 
         $tmpuser = array(
             "name" => $name,
