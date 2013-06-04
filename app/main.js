@@ -11,7 +11,7 @@ define(function(require, exports, module) {
             cb && cb.call(this , $(this));
         });
     };
-    var format = function(string,obj){
+    var format = function( string , obj ){
         return string.replace(/#\{(.*?)\}/g , function($0 , $1){
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
