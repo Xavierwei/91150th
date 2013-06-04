@@ -3,7 +3,7 @@
  <head>
   <meta charset="utf-8"/>
   <title>911 50周年</title>
-  <meta name="viewport" content="width=device-width, minimum-scale=0.8, maximum-scale=0.8" />
+  <meta name="viewport" content="width=device-width, minimum-scale=0.81, maximum-scale=0.81" />
   <script type="text/javascript" src="./src/modernizr-2.5.3.min.js"></script>
   <script type="text/javascript"
     src="./lib/sea/sea-debug.js"
@@ -24,6 +24,7 @@
  <link href="./css/base.css" rel="stylesheet" type="text/css" />
  <link href="./css/animate.css" rel="stylesheet" type="text/css" />
  <link href="./css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+ <link rel="stylesheet" media="all and (orientation:portrait)" href="./css/portrait.css">
   <!--[if IE]>
   <link href="./css/ie.css" rel="stylesheet" type="text/css" />
   <![endif]-->
@@ -100,10 +101,10 @@
                     <div class="rule-title">游戏规则</div>
                     <ol>
                         <li>用户玩到第一次游戏结束的时就会出现弹框 (5分钟以下）<br/>
-                            您坚持追逐了x分x秒，继续挑战即有机会获取以下奖品：1.每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值xx万。 2.坚持追逐5分钟以上，即可活动保时捷送出的50周年限量版明信片。</li>
-                        <li>等用户玩到第一次游戏结束的时就会出现弹框 (5分钟以上）<br/>
-                            恭喜您坚持追逐了x分x秒，已经赢取了保时捷送出的50周年限量版明信片，请填写完整个人信息，工作人员会尽快与您联络奖品发送事宜。<br/>
-                            继续挑战：每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值xx万。<br/><br/>
+                            请继续挑战，成绩超过5分钟者即有机会获取以下奖品：1.每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值36,500元。 2.坚持追逐5分钟以上，即可活动保时捷送出的50周年限量版明信片。</li>
+                        <li>用户玩到第一次游戏结束的时就会出现弹框 (5分钟以上）<br/>
+                            您已经赢取了保时捷送出的50周年限量版明信片，请填写完整个人信息，工作人员会尽快与您联络奖品发送事宜。<br/>
+                            继续挑战：每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值36,500元。<br/><br/>
                             保时捷（中国）汽车销售有限公司保留获奖规则解释权。
                         </li>
                     </ol>
@@ -150,7 +151,7 @@
   <div class="lpn-panel" style="overflow:visible;">
     <div id="gallery-wrap">
       <div class="title"><div class="btn1 selected" style="margin-left: 200px;margin-right: 19px;margin-top: -7px;" >图片</div><div class="btn1 " style="margin-top: -7px;">视频</div></div>
-      <div class="photo-gallery" init='false'>
+      <div class="photo-gallery" init='true'>
         <div class="photo">
           <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
         </div>
@@ -169,18 +170,15 @@
         <div class="photo">
           <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
         </div>
-        <div class="photo">
-            <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
-        </div>
-        <div class="photo">
-          <a rel="gallery" href="pic/b5.jpg"><img src="pic/s5.jpg" /></a>
-        </div>
-        <div class="photo">
-          <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
-        </div>
-        <div class="photo">
-          <a rel="gallery" href="pic/b6.jpg"><img src="pic/s6.jpg" /></a>
-        </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/b2.jpg"><img src="pic/s2.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/b3.jpg"><img src="pic/s3.jpg" /></a>
+          </div>
       </div>
       <div class="video-gallery" init='false' style="display:none;">
         <div class="photo">
@@ -201,8 +199,20 @@
         <div class="photo">
           <a href="video2.html"><img src="pic/s6.jpg" /><span>播放</span></a>
         </div>
+          <div class="photo">
+              <a href="video2.html"><img src="pic/s1.jpg" /><span>播放</span></a>
+          </div>
+          <div class="photo">
+              <a href="video2.html"><img src="pic/s2.jpg" /><span>播放</span></a>
+          </div>
+          <div class="photo">
+              <a href="video2.html"><img src="pic/s3.jpg" /><span>播放</span></a>
+          </div>
+          <div class="photo">
+              <a href="video2.html"><img src="pic/s4.jpg" /><span>播放</span></a>
+          </div>
       </div>
-      <div class="photo-slider" >
+      <div class="photo-slider">
         <div class="slider-btn"></div>
       </div>
       <div class="video-slider" style="display:none;">
@@ -286,7 +296,7 @@
         <div class="road" id="road"></div>
       </div>
       <div class="main-top">
-        <img class="main-logo" src="images/m-logo.png" />
+          <a href="http://www.porsche.com/china/" target="_blank"><img class="main-logo" src="images/m-logo.png" /></a>
         <img class="main-com-logo" src="images/m-com-logo.png" />
       </div>
       <div class="main-board">

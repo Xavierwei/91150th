@@ -1376,13 +1376,13 @@ span.lpn-ghost {
 #gallery-mask .btn1.selected,#gallery-mask .btn1:hover{
   background: url(../images/btn-bg1.png) no-repeat;
 }
-#gallery-mask .close {cursor:pointer;opacity:0.7;background:url(../images/gallery_close.png) no-repeat;width:62px;height:37px; position: absolute;bottom:0;right:6px;}
+#gallery-mask .close {cursor:pointer;opacity:0.7;background:url(../images/gallery_close.png) no-repeat;width:62px;height:37px; position: absolute;bottom:-38px;right:30px;}
 #gallery-mask .close:hover {opacity:1;}
 #gallery-mask .photo-gallery , #gallery-mask .video-gallery{position: relative;margin:10px 0 0;height:436px;}
-#gallery-mask .photo {position: absolute; -webkit-backface-visibility: hidden;-webkit-transform: skew(-20deg,0);transform: skew(-20deg,0);float:left;width:357px;height:216px;overflow:hidden;margin:0 0 0 5px;cursor:pointer;}
-#gallery-mask .photo img {-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;display: block;width:455px;height:216px;-webkit-transform: skew(20deg,0);transform: skew(20deg,0);margin:0 0 0 -55px;display:block;}
-#gallery-mask .photo:hover {-webkit-transform: skew(0,0);transform: skew(0,0);overflow:visible;z-index:99;}
-#gallery-mask .photo:hover img {-webkit-transform: skew(0,0);transform: skew(0,0); border:3px solid #fff;}
+#gallery-mask .photo {position: absolute; -webkit-backface-visibility: hidden;-webkit-transform: skew(-20deg,0);transform: skew(-20deg,0);-ms-transform: skew(-20deg,0);-o-transform: skew(-20deg,0);float:left;width:357px;height:216px;overflow:hidden;margin:0 0 0 5px;cursor:pointer;}
+#gallery-mask .photo img {-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;display: block;width:455px;height:216px;-webkit-transform: skew(20deg,0);transform: skew(20deg,0);-ms-transform: skew(20deg,0);-o-transform: skew(20deg,0);margin:0 0 0 -55px;display:block;}
+#gallery-mask .photo:hover {-webkit-transform: skew(0,0);transform: skew(0,0);-ms-transform: skew(0,0);-o-transform: skew(0,0);overflow:visible;z-index:99;}
+#gallery-mask .photo:hover img {-webkit-transform: skew(0,0);transform: skew(0,0);-ms-transform: skew(0,0);-o-transform: skew(0,0); border:3px solid #fff;}
 #gallery-mask .photo img,.photo {-webkit-transition:all 0.3s ease;}
 #gallery-mask .photo-slider,#gallery-mask .video-slider{
   height: 2px;
