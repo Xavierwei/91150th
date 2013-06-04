@@ -377,7 +377,7 @@ define(function(require, exports, module) {
             */
 
             //rl = 10 * p * GAME_MAX_DISTANCE + winWidth / 2;
-            rl =  - (  status.speed - 100 ) / ( GAME_MAX_SPEED - 100) * car2width / 3 - 85
+            rl =  - (  status.speed - 100 ) / ( GAME_MAX_SPEED - 100) * car2width / 2 - 85
                      + winWidth / 2 ;
             if( lastl ){
                 rl = rl + ( lastl - rl ) * 9 / 10;
