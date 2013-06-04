@@ -779,7 +779,7 @@ define(function(require, exports, module) {
                       var half = Math.ceil( len / 2 );
                       var left = ( i % half ) * 360;
                       var top = parseInt( i / half ) * 219;
-                      if( i >= half ){
+                      if( i >= half && $('.csstransforms').length > 0 ){
                           left -= 79;
                       }
                       $(this).css({left:left,top:top});
@@ -797,7 +797,7 @@ define(function(require, exports, module) {
                       var half = Math.ceil( vlen / 2 );
                       var left = ( i % half ) * 360;
                       var top = parseInt( i / half ) * 219;
-                      if( i >= half ){
+                      if( i >= half && $('.csstransforms').length > 0 ){
                           left -= 79;
                       }
                       $(this).css({left:left,top:top});
