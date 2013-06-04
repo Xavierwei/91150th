@@ -1500,7 +1500,7 @@ define(function(require, exports, module) {
             $(this).animate({'opacity':.7});
         });
 
-        showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 405 );
+        showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 305 );
    } );
 
    function showVideo( id , src , w , h ){
@@ -1522,6 +1522,7 @@ define(function(require, exports, module) {
    }
    var initFlash = function( wrapId , src , stageW , stageH ){
       // JAVASCRIPT VARS
+
       var cacheBuster = "?t=" + Date.parse(new Date());
 
       // PARAMS
@@ -1556,6 +1557,7 @@ define(function(require, exports, module) {
       /** EMBED CODE **/
       seajs.use('swfobject' , function(){
         swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
+          console.log('play');
       });
     }
 
