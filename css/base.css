@@ -561,8 +561,8 @@ span.lpn-ghost {
 .video-wrap video,.video-wrap object{
   width: 720px;
   background: black;
-  height: 405px;
-  margin-top: 27px;
+  height: 305px;
+  margin-top: 23px;
 }
 .video-skip{
   color: white;
@@ -1424,25 +1424,8 @@ span.lpn-ghost {
 
 .no-rgba .bg-pause {background:url(../images/fancybox_overlay.png)}
 
-#fancybox-loading div {
-    -webkit-animation: loadingAnimation 0.4s 50 linear;
-    -moz-animation: loadingAnimation 0.4s 50 linear;
-    -o-animation: loadingAnimation 0.4s 50 linear;
-}
-@-webkit-keyframes loadingAnimation {
-    from { -webkit-transform: rotate(4deg); }
-    to { -webkit-transform: rotate(360deg); }
-}
-@-moz-keyframes loadingAnimation {
-    from { -moz-transform: rotate(4deg); }
-    to { -moz-transform: rotate(360deg); }
-}
-@-o-keyframes loadingAnimation {
-    from { -o-transform: rotate(4deg); }
-    to { -o-transform: rotate(360deg); }
-}
 
-.fancybox-share:hover .fancybox-share-list {display:block;}
+.no-touch .fancybox-share:hover .fancybox-share-list {display:block;}
 .fancybox-share-list {display:none;position: absolute;background:rgba(0,0,0,0.6);padding:5px 0;top:36px;left:1px;}
 .fancybox-share-list a{
     display:block;
@@ -1452,6 +1435,11 @@ span.lpn-ghost {
     margin: 0 6px;
     opacity: .7;
 }
+.touch .fancybox-download {-webkit-transform:scale(1.2);right:90px;top:20px;}
+.touch .fancybox-share {-webkit-transform:scale(1.2);top:20px;right:20px;}
+.touch .fancybox-share-list {padding:10px;top:45%;display:none;left:35%;-webkit-transform:scale(1.2);z-index:999999999;}
+.touch .fancybox-share-list .share-close {background:url(../images/share_close.png);width:33px;height:33px; position: absolute;right:0;top:-33px;}
+.touch .fancybox-share-list a {float:left;}
 .fancybox-share-list a:hover {
     opacity: 1;
 }

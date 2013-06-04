@@ -18,6 +18,7 @@ define(function(require, exports, module) {
     };
     // require jquery ani plugin
     require('jquery.hoverIntent');
+    require('jquery.finger');
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
@@ -417,7 +418,7 @@ define(function(require, exports, module) {
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
                     var isWin = status.result !=-1 ? status.result :
-                        status.time >= 5 * 60 * 1000;
+                        time >= 0.6 * 60 * 1000;
                     gameOver( status , isWin );
                 }
             }
@@ -554,8 +555,7 @@ define(function(require, exports, module) {
                             email: true
                         },
                         tel: {
-                            required: true,
-                            tel: true
+                            required: true
                         },
                         name: "required",
                         code: {
@@ -567,7 +567,6 @@ define(function(require, exports, module) {
                     messages: {
                         email: "请输入正确的邮箱",
                         name: "请输入姓名",
-                        tel: "请输入正确的手机号码",
                         code: "请输入正确的邮编",
                         address: "请输入地址"
                     },
@@ -598,7 +597,7 @@ define(function(require, exports, module) {
                                         url: "data/public/index.php/home/record",
                                         dataType: "JSON",
                                         type: "POST",
-                                        data: {uid:_uid, month:_time,distance:_distance,status:_status,name:_name},
+                                        data: {uid:_uid, time:_time,distance:_distance,status:_status,name:_name},
                                         success: function(res){
 
                                         }
@@ -815,7 +814,21 @@ define(function(require, exports, module) {
                             '<a target="_blank" href="http://v.t.qq.com/share/share.php?title=911%2050th&amp;&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
                             '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
                             '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
-                        }
+
+                            if(_isIpad){
+                                $('.fancybox-share-list').appendTo('.fancybox-outer');
+                                $('.fancybox-share-list').append('<div class="share-close"></div>')
+                            }
+                            $('.fancybox-share').on('touchend',function(e){
+                                e.preventDefault();
+                                $('.fancybox-share-list').fadeIn();
+                            });
+                            $('.share-close').click(function(){
+                                $('.fancybox-share-list').fadeOut();
+                            });
+
+                      }
+
                     });
 
                     (function ($, F) {
@@ -872,15 +885,15 @@ define(function(require, exports, module) {
         var _status = result.result;
         var _name = $('#username').val();
 
-        $.ajax({
-            url: "data/public/index.php/home/record",
-            dataType: "JSON",
-            type: "POST",
-            data: {month:_time,distance:_distance,status:_status,name:_name},
-            success: function(res){
-
-            }
-        });
+//        $.ajax({
+//            url: "data/public/index.php/home/record",
+//            dataType: "JSON",
+//            type: "POST",
+//            data: {month:_time,distance:_distance,status:_status,name:_name},
+//            success: function(res){
+//
+//            }
+//        });
     }
 
     var counterTimer = null;
@@ -1034,7 +1047,7 @@ define(function(require, exports, module) {
             .hide();
         // ..5. reset bar
         $bar[0].className = 'b-bar0';
-        $('.main-board').animate({left:'-50%'});
+        //$('.main-board').animate({left:'-50%'});
 
         // reset speed board
         $speeds[0].className = 'speed00';
@@ -1055,8 +1068,11 @@ define(function(require, exports, module) {
     }
 
     var goon = function(){
-        if( gStatus && gStatus.gameStatus != game.GAME_PAUSE )
+        if( !gStatus || gStatus && gStatus.gameStatus != game.GAME_PAUSE )
+        {
+            $('.bg-pause').fadeOut();
             return;
+        }
         //1. show ready panel
         // 2.counter the seconds
         // show counter btn
@@ -1294,7 +1310,7 @@ define(function(require, exports, module) {
 
         currRoadConfig = roadConfig[currRoadIndex];
 
-        var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 2 ) * currRoadConfig.width;
+        var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 3 ) * currRoadConfig.width;
         if( _isIpad || !isSupportCanvas){
             $road.width( width );
             if( bGetNext ){
@@ -1493,7 +1509,7 @@ define(function(require, exports, module) {
         $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
 
         $videoPanel.delay(900).fadeIn(400);
-        $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
+        $videoPanel.find('.video-wrap').delay(1300).animate({height:359},400,'easeOutQuart');
         $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
             $(this).animate({'opacity':1});
         },function(){
@@ -1557,9 +1573,10 @@ define(function(require, exports, module) {
       /** EMBED CODE **/
       seajs.use('swfobject' , function(){
         swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
-          console.log('play');
       });
     }
+
+    $('body').nodoubletapzoom();
 
 
 });

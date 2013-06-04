@@ -74,6 +74,10 @@ seajs.config({
       src: '../../src/swfobject/swfobject',
       exports: 'swfobject'
     }
+      ,'jquery.finger': {
+          src: '../../src/jquery.finger',
+          deps: ['jquery']
+      }
   },
   alias : {
     'util' : '../src/util/util'
