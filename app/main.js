@@ -333,6 +333,7 @@ define(function(require, exports, module) {
         duration  : 2000
         , maxSpeed: GAME_MAX_SPEED
         , minRobotSpeed  : 150
+        , robotStartDistance : GAME_MAX_DISTANCE / 2
         , speedCallBack  : function( status ){
             // render car speed
             $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
@@ -344,7 +345,7 @@ define(function(require, exports, module) {
             // For a reason , we set the robot car , has run the 1/6 of all the
             // distane .
             //var robotDistance = status.robotDistance + robotStartDistancePercent * GAME_MAX_DISTANCE;
-            var robotDistance = status.robotDistance;
+            var robotDistance = status.robotDistance + GAME_MAX_DISTANCE / 2;
             dur = robotDistance - status.distance;
             p = dur / GAME_MAX_DISTANCE;
 
@@ -959,10 +960,13 @@ define(function(require, exports, module) {
 
         // run car dot
         var $dot = index == 0 ? $carDot : $robotDot;
-        var marginLeft = index == 0 ? '20px' : '0';
+        var marginLeft = index == 0 ? 21 : 0;
         $dot.delay(delay)
             .fadeIn()
-            .css('marginLeft' , marginLeft );
+            .css('marginLeft' , marginLeft )
+            .animate({
+              'marginLeft': 279 / 2
+            } , dur , 'easeInQuart');
 
         var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
         // run the wheel
