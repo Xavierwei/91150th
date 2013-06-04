@@ -93,6 +93,7 @@ class Home_Controller extends Base_Controller {
             "status" => Input::get("status"),
 			"weibo_uid" => Input::get("weibo_uid"),
 			"name" => Input::get("name"),
+            "uid" => Input::get("uid"),
 		);
 		$record = GameRecord::create($tmprecord);
 		return Response::json(array("data" => $record, "code" => 200, "error" => ""));

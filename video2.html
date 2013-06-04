@@ -9,12 +9,33 @@
 <body>
 <div id="FlashContent"></div>
 
+<script type="text/javascript" src="./lib/jquery/jquery-1.10.js"></script>
 <script type="text/javascript" src="./src/swfobject/swfobject.js"></script>
 <script type="text/javascript">
 
-
-    var initFlash = function( stageW , stageH ){
+    var _isIpad = (function(){
+        return !!navigator.userAgent.toLowerCase().match(/ipad/i) ;
+    })();
+    function showVideo( id , src , w , h ){
+        if( _isIpad ){
+            src = src.replace(/\.[^.]+$/ , '.mp4');
+            initVideo( id , src , w , h );
+        } else {
+            initFlash( id , src , w , h );
+        }
+    }
+    var initVideo = function( id , src , w , h ){
+        var $wrap = $( '#' + id );
+        var $video = $('<video width="' + w + '" height="' + h + '" controls><source src="' + src + '" type="video/mp4" /></video>');
+        $video.appendTo( $wrap )
+                .on('ended' , function(){
+                    window.playfinished();
+                });
+        $video[0].play();
+    }
+    var initFlash = function( wrapId , src , stageW , stageH ){
         // JAVASCRIPT VARS
+
         var cacheBuster = "?t=" + Date.parse(new Date());
 
         // PARAMS
@@ -27,7 +48,7 @@
 
         // ATTRIBUTES
         var attributes = {};
-        attributes.id = 'FlashContent';
+        attributes.id = wrapId;
 
 
         /* FLASH VARS */
@@ -36,7 +57,7 @@
         // PLAYER DIMENSIONS inside the SWF
         // if this are not defined then the player will take the stage dimensions defined in the "JAVASCRIPT VARS" section above
         flashvars.componentW = stageW;
-        flashvars.componentH = stageH;	// if controller under is set to true then you must change this variable(substract the controller height)
+        flashvars.componentH = stageH;  // if controller under is set to true then you must change this variable(substract the controller height)
 
         // if you don't define these then the one defined in the XML file will be taken in consideration
         flashvars.previewFilePath = "video.jpg";
@@ -46,10 +67,13 @@
         flashvars.settingsXMLFile = "settings.xml";
 
 
-        /** EMBED CODE **/
         swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
     }
-    initFlash(720,405);
+
+
+    showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 305 );
+
+
 
 
 </script>

@@ -66,7 +66,7 @@ define(function( require , exports , model ){
 
     var __gameControll = {
         overMiniTime : 3000,
-        overMaxDuration : 6000,
+        overMaxDuration : 26000,
         // slow to game over false
         overStartTime : 0,
         overDuration : 0,
