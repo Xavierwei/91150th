@@ -20,10 +20,11 @@ seajs.config({
         src: '../../src/jquery-plugin/validate/jquery.validate',
         deps: ['jquery']
     }
-    ,'jquery.queryloader' :{
+    /*,'jquery.queryloader' :{
         src: '../../src/jquery-plugin/jquery.queryloader22',
         deps: ['jquery']
     }
+    */
     ,'jquery.ani' : {
         src: '../../src/jquery-plugin/ani/ani',
         deps: ['jquery.easing']
@@ -53,9 +54,11 @@ seajs.config({
     }
 
     // for bootstrap
+    /*
     ,'bootstrap': {
         src: '../raphael/raphael-min'
     }
+    */
 	// for checking browser
 	,'modernizr': {
         src: '../../src/modernizr-2.5.3.min',

@@ -17,8 +17,6 @@ define(function(require, exports, module) {
         });
     };
     // require jquery ani plugin
-    require('jquery.validate');
-    require('jquery.mousewheel');
     require('jquery.hoverIntent');
     // require('jquery.queryloader');
     // require('jquery.easing');
@@ -241,44 +239,6 @@ define(function(require, exports, module) {
                   _slideMousedown.call( this , $slider , $list , min , max , maxValue );
               });
 
-          $list
-              .mousewheel(function(event, delta, deltaX, deltaY){
-                  var $con = $(this);
-                  var marginLeft = parseInt( $con.css('marginLeft') );
-                  var width = $con.width();
-                  var photoLen = 357;
-                  var maxWidth = maxValue + width;
-                  if( delta > 0 ) {// up
-                    marginLeft += photoLen;
-                  } else {
-                    marginLeft -= photoLen;
-                  }
-
-                  marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
-                  /*
-                  var scrollTop = $con.scrollTop();
-                  var height = $list.height();
-                  var conHeight = $list[0].scrollHeight;
-                  if( delta > 0 ) {// up
-                      scrollTop -= height * 5 / 10;
-                  } else { //down
-                      scrollTop += height * 5 / 10;
-                  }
-                  var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
-                  */
-                  var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
-                  $slider
-                      .stop( true , false )
-                      .animate({
-                          'left': Math.max( Math.min( left , max ) , min )
-                      } , 500 );
-                  // change the scroll value
-                  $con.stop( true , false )
-                      .animate({
-                          marginLeft: marginLeft
-                      } , 500 );
-              });
-
           if( _isIpad ){ // bind touch move event
               var px , marginLeft = 0;
               $list
@@ -288,16 +248,13 @@ define(function(require, exports, module) {
                   })
                   .on('touchmove' , function( ev ){
                       var dis = ev.originalEvent.pageX - px;
-                      marginLeft += dis;
+                      var mleft = marginLeft + dis;
 
-                      marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+                      mleft = - Math.min( maxValue , Math.abs( Math.min( mleft, 0 ) ) );
 
-                      $(this).css('marginLeft' , marginLeft);
+                      $(this).css('marginLeft' , mleft);
 
-                      var width = $con.width();
-                      var maxWidth = maxValue + width;
-
-                      var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) );
+                      var left = min + ( max - min ) * - mleft / maxValue ;
 
                       // move the slider
                       $slider
@@ -306,6 +263,46 @@ define(function(require, exports, module) {
                               'left': Math.max( Math.min( left , max ) , min )
                           } , 500 );
                   });
+          } else {
+            seajs.use('jquery.mousewheel' , function(){
+              $list
+                .mousewheel(function(event, delta, deltaX, deltaY){
+                    var $con = $(this);
+                    var marginLeft = parseInt( $con.css('marginLeft') );
+                    var width = $con.width();
+                    var photoLen = 357;
+                    var maxWidth = maxValue + width;
+                    if( delta > 0 ) {// up
+                      marginLeft += photoLen;
+                    } else {
+                      marginLeft -= photoLen;
+                    }
+
+                    marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+                    /*
+                    var scrollTop = $con.scrollTop();
+                    var height = $list.height();
+                    var conHeight = $list[0].scrollHeight;
+                    if( delta > 0 ) {// up
+                        scrollTop -= height * 5 / 10;
+                    } else { //down
+                        scrollTop += height * 5 / 10;
+                    }
+                    var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
+                    */
+                    var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
+                    $slider
+                        .stop( true , false )
+                        .animate({
+                            'left': Math.max( Math.min( left , max ) , min )
+                        } , 500 );
+                    // change the scroll value
+                    $con.stop( true , false )
+                        .animate({
+                            marginLeft: marginLeft
+                        } , 500 );
+                });
+            });
           }
       }
 
@@ -618,19 +615,22 @@ define(function(require, exports, module) {
                         return false;
                     }
                 };
-                $resultPanel
-                    .find('.btn-again')
-                    .click(function(){
-                        $resultPanel
-                            .trigger('close');
-                    })
-                    .end()
-                    .find('.btn-submit')
-                    .click(function(){
-                        $('.result-form').submit();
-                    })
-                    .end()
-                    .find('.result-form').validate(validateConfig);
+
+                seajs.use('jquery.validate' , function(){
+                  $resultPanel
+                      .find('.btn-again')
+                      .click(function(){
+                          $resultPanel
+                              .trigger('close');
+                      })
+                      .end()
+                      .find('.btn-submit')
+                      .click(function(){
+                          $('.result-form').submit();
+                      })
+                      .end()
+                      .find('.result-form').validate(validateConfig);
+                });
             },
             onShow: function( $resultPanel ){
                 var isWin = panelData.isWin;
@@ -782,7 +782,7 @@ define(function(require, exports, module) {
                      Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
 
                     $vphotos.each( function( i ){
-                      var half = Math.ceil( len / 2 );
+                      var half = Math.ceil( vlen / 2 );
                       var left = ( i % half ) * 360;
                       var top = parseInt( i / half ) * 219;
                       if( i >= half ){
@@ -1468,7 +1468,7 @@ define(function(require, exports, module) {
  */
 
 
-
+  /*
     $('body').delegate('#logout','click',function(){
         $.ajax({
             url: "data/public/index.php/home/logout",
@@ -1477,5 +1477,87 @@ define(function(require, exports, module) {
             }
         });
     });
+   */
+
+
+   // render video
+   var $videoPanel = $('#video-mask');
+   window.readyForVideo = true;
+   window.playfinished = function(){
+      $videoPanel.find('.video-skip').click();
+   }
+
+   // bind play video event
+   $(window).on( 'play-video' , function(){
+      $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
+        $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
+
+        $videoPanel.delay(900).fadeIn(400);
+        $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
+        $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
+            $(this).animate({'opacity':1});
+        },function(){
+            $(this).animate({'opacity':.7});
+        });
+
+        showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 405 );
+   } );
+
+   function showVideo( id , src , w , h ){
+    if( _isIpad ){
+      src = src.replace(/\.[^.]+$/ , '.mp4');
+      initVideo( id , src , w , h );
+    } else {
+      initFlash( id , src , w , h );
+    }
+   }
+   var initVideo = function( id , src , w , h ){
+    var $wrap = $( '#' + id );
+    var $video = $('<video width="' + w + '" height="' + h + '" controls><source src="' + src + '" type="video/mp4" /></video>');
+    $video.appendTo( $wrap )
+      .on('ended' , function(){
+        window.playfinished();
+      });
+    $video[0].play();
+   }
+   var initFlash = function( wrapId , src , stageW , stageH ){
+      // JAVASCRIPT VARS
+      var cacheBuster = "?t=" + Date.parse(new Date());
+
+      // PARAMS
+      var params = {};
+      params.allowfullscreen = "true";
+      params.allowScriptAccess = "always";
+      params.scale = "noscale";
+      params.wmode = "transparent";
+      //params.wmode = "transparent";
+
+      // ATTRIBUTES
+      var attributes = {};
+      attributes.id = wrapId;
+
+
+      /* FLASH VARS */
+      var flashvars = {};
+
+      // PLAYER DIMENSIONS inside the SWF
+      // if this are not defined then the player will take the stage dimensions defined in the "JAVASCRIPT VARS" section above
+      flashvars.componentW = stageW;
+      flashvars.componentH = stageH;  // if controller under is set to true then you must change this variable(substract the controller height)
+
+      // if you don't define these then the one defined in the XML file will be taken in consideration
+      flashvars.previewFilePath = "video.jpg";
+      flashvars.videoFilePath = "videos/en_desk.flv";
+
+      // player settings(if not defined then the player will have the default settings defined in AS)
+      flashvars.settingsXMLFile = "settings.xml";
+
+
+      /** EMBED CODE **/
+      seajs.use('swfobject' , function(){
+        swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
+      });
+    }
+
 
 });

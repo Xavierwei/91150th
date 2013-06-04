@@ -359,13 +359,12 @@
         </div>
       </div>
     </section>
-    <input type="hidden" name="username" id="username" />
+    <!--<input type="hidden" name="username" id="username" />-->
     <!---\\ moving end -->
     <!--load jquery and plugin-->
     <script type="text/javascript" src="./lib/jquery/jquery-1.10.js"></script>
     <script type="text/javascript" src="./src/jquery-plugin/easing/jquery.easing.1.3.js"></script>
     <script type="text/javascript" src="./src/jquery-plugin/jquery.queryloader2.js"></script>
-    <script type="text/javascript" src="./src/swfobject/swfobject.js"></script>
     <script type="text/javascript">
     // query loading
     var $probar = $('#process-bar');
@@ -384,94 +383,15 @@
                     $(this).hide();
                 });
             $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
-                initAnimation();
+              var interval = setInterval(function(){
+                if( window.readyForVideo ){
+                  $(window).trigger('play-video');
+                  clearInterval( interval );
+                }
+              } , 50);
             });
         }
     });
-    // get username
-    /*
-    $.ajax({
-        url: "data/public/index.php/home/checkuser",
-        dataType: "JSON",
-        success: function(res){
-            if(res.code==200)
-            {
-                var username = res.data.original.name;
-                $('#username').val(username);
-                $('#login-status').html(username + ' <a href="javascript:void(0)" id="logout">退出</a>');
-            }
-            else
-            {
-                $('#username').val('');
-            }
-
-        }
-    });
-*/
-
-    var $videoPanel = $('#video-mask');
-    var initAnimation = function(){
-        $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
-        $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
-        if($('#username').val() != '')
-        {
-            $('.main-metas').animate({left:'50%'},500,'easeOutQuart');
-        }
-        else
-        {
-            $videoPanel.delay(900).fadeIn(400);
-            $videoPanel.find('.video-wrap').delay(1300).animate({height:460},400,'easeOutQuart');
-            $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
-                $(this).animate({'opacity':1});
-            },function(){
-                $(this).animate({'opacity':.7});
-            });
-            initFlash(720,405);
-        }
-    }
-
-
-    var initFlash = function( stageW , stageH ){
-      // JAVASCRIPT VARS
-      var cacheBuster = "?t=" + Date.parse(new Date());
-
-      // PARAMS
-      var params = {};
-      params.allowfullscreen = "true";
-      params.allowScriptAccess = "always";
-      params.scale = "noscale";
-      params.wmode = "transparent";
-      //params.wmode = "transparent";
-
-      // ATTRIBUTES
-      var attributes = {};
-      attributes.id = 'FlashContent';
-
-
-      /* FLASH VARS */
-      var flashvars = {};
-
-      // PLAYER DIMENSIONS inside the SWF
-      // if this are not defined then the player will take the stage dimensions defined in the "JAVASCRIPT VARS" section above
-      flashvars.componentW = stageW;
-      flashvars.componentH = stageH;	// if controller under is set to true then you must change this variable(substract the controller height)
-
-      // if you don't define these then the one defined in the XML file will be taken in consideration
-      flashvars.previewFilePath = "video.jpg";
-      flashvars.videoFilePath = "videos/en_desk.flv";
-
-      // player settings(if not defined then the player will have the default settings defined in AS)
-      flashvars.settingsXMLFile = "settings.xml";
-
-
-      /** EMBED CODE **/
-      swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
-    }
-
-    var playfinished = function(){
-      $('.video-skip').click();
-    }
-
 
     </script>
  </body>

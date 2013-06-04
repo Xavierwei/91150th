@@ -236,6 +236,7 @@ span.lpn-ghost {
 .main-bg .road , .main-bg #can-road{
   height: 256px;
   position: absolute;
+  z-index: 1001;
   bottom: 0;
 }
 /*---> main logo  */
@@ -260,7 +261,7 @@ span.lpn-ghost {
   position: absolute;
   z-index: 19999;
   bottom: 45px;
-  left: -50%;
+  left: -737px;
   margin-left: -370px;
   color: #999;
 }
