@@ -753,6 +753,7 @@ span.lpn-ghost {
 .ranking .r-head-title{
   float: left;
   font-size: 24px;
+  color:#fff;
 }
 .ranking .selected{
   color: white;
@@ -1383,11 +1384,13 @@ span.lpn-ghost {
 #gallery-mask .photo:hover {-webkit-transform: skew(0,0);transform: skew(0,0);-ms-transform: skew(0,0);-o-transform: skew(0,0);overflow:visible;z-index:99;}
 #gallery-mask .photo:hover img {-webkit-transform: skew(0,0);transform: skew(0,0);-ms-transform: skew(0,0);-o-transform: skew(0,0); border:3px solid #fff;}
 #gallery-mask .photo img,.photo {-webkit-transition:all 0.3s ease;}
+#gallery-mask .slider-wrap {height:40px;padding:1px;margin:0 0 0 -120px;}
+.no-csstransforms #gallery-mask .slider-wrap {margin-left:0;}
+.no-csstransforms #gallery-mask .close {right:-120px;}
 #gallery-mask .photo-slider,#gallery-mask .video-slider{
   height: 2px;
   margin-top: 24px;
   background: #757575;
-  margin-left: -120px;
   width: 1074px;
   position: relative;
 }
