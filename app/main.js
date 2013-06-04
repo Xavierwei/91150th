@@ -419,9 +419,9 @@ define(function(require, exports, module) {
                 if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    var isWin = status.result !=-1 ? status.result :
-                        time >= 0.6 * 60 * 1000;
-
+                    var isWin = status.result !=-1 ? status.result : time >= 0.3 * 60 * 1000;
+                    console.log(status);
+                    console.log(isWin);
                     game.over( isWin );
 
                     var r = {};

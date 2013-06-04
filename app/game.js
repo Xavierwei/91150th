@@ -66,8 +66,8 @@ define(function( require , exports , model ){
 
 
     var __gameControll = {
-        overMiniTime : 3000,
-        overMaxDuration : 3000,
+        overMiniTime : 1000,
+        overMaxDuration : 1000,
         // slow to game over false
         overStartTime : 0,
         overDuration : 0,
@@ -158,7 +158,7 @@ define(function( require , exports , model ){
             // game contoll , after 6000ms , controll the game
             if( _getPlayTime() > __gameControll.overMiniTime ){
                 // 1.game over contorll
-                if( status.speed < 20 ){
+                if( status.speed < 10 ){
                     if( __gameControll.overStartTime == 0  )
                         __gameControll.overStartTime = + new Date();
                 } else {
@@ -346,7 +346,7 @@ define(function( require , exports , model ){
                 //var speed = Math.round( spx + spy ) / _winWidth * 1.4;
                 var screenWidth = Math.sqrt(_winWidth)*15;
                 //console.log(screenWidth);
-                var speed = Math.round( spx + spy ) / _winWidth * 1.9;
+                var speed = Math.round( spx + spy ) / _winWidth * 2;
                 //console.log(speed);
                 // count robot
                 // var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;
