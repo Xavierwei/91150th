@@ -392,12 +392,12 @@ define(function(require, exports, module) {
             // change car dot position
             //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             //p2 = p1 + p * 88 ;
-            //$carDot.css('left' , p1 + '%');
+            $carDot.css('left' , Math.min( Math.max( (0.5 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 )  );
             // change robot dot position
 
             // if game is not over
-            if( status.result == -1 )
-              $robotDot[0].style.marginLeft = Math.max( 0 , Math.min( p , 1 ) * 279 ) + 'px';
+            //if( status.result == -1 )
+              //$robotDot[0].style.marginLeft = Math.max( 0 , Math.min( p , 1 ) * 279 ) + 'px';
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -427,7 +427,7 @@ define(function(require, exports, module) {
                     // if speed less than 20 , move the dot to right quickly
                     if( status.result !=-1 ){
                       $robotDot.animate({
-                        marginLeft: 279
+                        left: 300
                       } , 1000 , '' , function(){
                         gameOver( r , isWin );
                       });
@@ -958,12 +958,11 @@ define(function(require, exports, module) {
 
         // run car dot
         var $dot = index == 0 ? $carDot : $robotDot;
-        var marginLeft = index == 0 ? 21 : 0;
         $dot.delay(delay)
             .fadeIn()
-            .css('marginLeft' , marginLeft )
+            .css('left' , 21 )
             .animate({
-              'marginLeft': 279 / 2
+              'left': 300 / 2 + 21
             } , dur , 'easeInQuart');
 
         var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
@@ -1005,7 +1004,7 @@ define(function(require, exports, module) {
         // drive ’my car ‘ to sence
         //_driveCarToSence( $cars.eq(0) );
         // show car dot
-        $carDot.show().css('marginLeft' , 21);
+        $carDot.show().css('left' , 21);
         _driveCarToSence( $cars.eq(1) );
 
 
@@ -1073,6 +1072,9 @@ define(function(require, exports, module) {
 
         currRoadIndex = 0;
         bgIndex = 0;
+
+        // reset body or window scroll left , fix ipad , input fouce bug
+        _fixIpad();
         // reset road
         motionRoad( 0 );
     }

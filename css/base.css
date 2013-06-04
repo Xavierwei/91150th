@@ -325,10 +325,11 @@ span.lpn-ghost {
 .main-board .board-m-t .b-robot
 {
   display: none;
+  position: absolute;
+  left: 0;
+  top: 6px;
   width: 9px;
   height: 11px;
-  margin-right: -13px;
-  margin-left: 20px;
 }
 
 .main-board .board-m-b{

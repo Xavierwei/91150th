@@ -273,7 +273,7 @@ define(function( require , exports , model ){
                 __gameOverControll();
 
                 // game robot controll
-                robotSpeed = __gameRobotControll( robotSpeed );
+                //robotSpeed = __gameRobotControll( robotSpeed );
 
                 _animate.turnTo( [ mouseSpeed ,  robotSpeed ] );
             } else {
