@@ -58,15 +58,16 @@ define(function( require , exports , model ){
         // 1  : success
         , result : -1
     }
-    var GAME_READY = 0;
-    var GAME_PLAYING = 1;
-    var GAME_PAUSE = 2;
-    var GAME_OVER = 3;
+    var GAME_NOT_START = 0;
+    var GAME_READY = 1;
+    var GAME_PLAYING = 2;
+    var GAME_PAUSE = 3;
+    var GAME_OVER = 4;
 
 
     var __gameControll = {
         overMiniTime : 3000,
-        overMaxDuration : 26000,
+        overMaxDuration : 3000,
         // slow to game over false
         overStartTime : 0,
         overDuration : 0,
@@ -461,10 +462,12 @@ define(function( require , exports , model ){
     // pause all animate , timeout and interval
     // remove the mousemove event listener
     var pause = function(){
-        if( status.gameStatus != GAME_PLAYING )
+        if( status.gameStatus != GAME_PLAYING && status.gameStatus != GAME_READY )
             return;
         // count the last duration
-        status.time += + new Date() - status.startTime;
+        if( status.startTime ){
+            status.time += + new Date() - status.startTime;
+        }
         status.gameStatus = GAME_PAUSE;
         speedExchange.stop();
         _removeEvent();
@@ -521,16 +524,23 @@ define(function( require , exports , model ){
         speedExchange.stop();
     }
 
+    var ready = function(){
+        status.gameStatus = GAME_READY;
+    }
+
     extend( exports , {
         setConfig : setConfig
+        , status  : status
+        , ready   : ready
         , reset   : reset
         , start   : start
         , play  : play
         , pause : pause
         , over  : over
-        , GAME_PLAYING : GAME_PLAYING
-        , GAME_PAUSE : GAME_PAUSE
-        , GAME_OVER : GAME_OVER
-        , GAME_READY : GAME_READY
+        , GAME_NOT_START    : GAME_NOT_START
+        , GAME_PLAYING      : GAME_PLAYING
+        , GAME_PAUSE        : GAME_PAUSE
+        , GAME_OVER         : GAME_OVER
+        , GAME_READY        : GAME_READY
     } );
 });

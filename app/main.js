@@ -319,7 +319,7 @@ define(function(require, exports, module) {
     var Animate = A.Animate;
     var isSupportCanvas = M.isSupportCanvas;
     // save the game status
-    var gStatus = null;
+    var gStatus = game.status;
     var winWidth = $(window)
                     .resize(function(){
                         winWidth = $(this).width();
@@ -334,7 +334,6 @@ define(function(require, exports, module) {
         , maxSpeed: GAME_MAX_SPEED
         , minRobotSpeed  : 150
         , speedCallBack  : function( status ){
-            gStatus = status;
             // render car speed
             $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
             $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
@@ -395,7 +394,9 @@ define(function(require, exports, module) {
             //$carDot.css('left' , p1 + '%');
             // change robot dot position
 
-            $robotDot[0].style.marginLeft = Math.max( 0 , Math.min( p , 1 ) * 279 ) + 'px';
+            // if game is not over
+            if( status.result == -1 )
+              $robotDot[0].style.marginLeft = Math.max( 0 , Math.min( p , 1 ) * 279 ) + 'px';
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -419,7 +420,19 @@ define(function(require, exports, module) {
                     || status.result !=-1 ){
                     var isWin = status.result !=-1 ? status.result :
                         time >= 0.6 * 60 * 1000;
-                    gameOver( status , isWin );
+
+                    game.over( isWin );
+
+                    var r = {};
+                    $.extend( r , status );
+                    // if speed less than 20 , move the dot to right quickly
+                    if( status.result !=-1 ){
+                      $robotDot.animate({
+                        marginLeft: 279
+                      } , 1000 , '' , function(){
+                        gameOver( r , isWin );
+                      });
+                    }
                 }
             }
         }
@@ -867,12 +880,8 @@ define(function(require, exports, module) {
         }
     }
     var gameOver = function( result , isWin){
-        game.over( isWin );
-
-        var r = {};
-        $.extend( r , result );
         // show spirit panel
-        showPanel( panelConfigs['spirit-panel'] , {result:r , isWin:isWin} );
+        showPanel( panelConfigs['spirit-panel'] , {result:result , isWin:isWin} );
 
         // Save record
         var _time = result.time;
@@ -969,6 +978,7 @@ define(function(require, exports, module) {
     // 3.driver car to the right position
     var ready = function(  ){
 
+        game.ready();
         $('.main-board').animate({left:'50%'},1000,'easeInOutQuart');
         // drive robot along
 
@@ -1063,13 +1073,10 @@ define(function(require, exports, module) {
         bgIndex = 0;
         // reset road
         motionRoad( 0 );
-        gStatus = null;
-        //ready();
     }
 
     var goon = function(){
-        if( !gStatus || gStatus && gStatus.gameStatus != game.GAME_PAUSE )
-        {
+        if( gStatus.gameStatus != game.GAME_READY && gStatus.gameStatus != game.GAME_PAUSE ){
             $('.bg-pause').fadeOut();
             return;
         }
@@ -1085,7 +1092,8 @@ define(function(require, exports, module) {
     }
 
     var pause = function(){
-        if( gStatus && gStatus.gameStatus == game.GAME_OVER  ) return;
+        if( gStatus.gameStatus == game.GAME_OVER
+        || gStatus.gameStatus == game.GAME_NOT_START ) return;
         // hide the counter panel
         $counter.hide();
         // stop the counterTimer
@@ -1093,7 +1101,7 @@ define(function(require, exports, module) {
         $('.icon-pause').fadeIn();
         $('.bg-pause').fadeIn();
         // pause the game
-        if( gStatus && gStatus.gameStatus == game.GAME_PLAYING )
+        if( gStatus.gameStatus == game.GAME_PLAYING || gStatus.gameStatus == game.GAME_READY  )
             game.pause();
 
         // show goon panel
