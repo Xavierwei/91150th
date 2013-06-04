@@ -232,75 +232,75 @@ define(function(require, exports, module) {
       */
       var initSliderBtn = function( $slider , $list , min , max , maxValue){
           $slider// when start to drag
-              .on('mousedown' , function( ev ){
-                  _slideMousedown.call( this , $slider , $list , min , max , maxValue );
-              })
-              .on('touchstart' , function( ev ){
-                  _slideMousedown.call( this , $slider , $list , min , max , maxValue );
-              });
+            .on('mousedown' , function( ev ){
+                _slideMousedown.call( this , $slider , $list , min , max , maxValue );
+            })
+            .on('touchstart' , function( ev ){
+                _slideMousedown.call( this , $slider , $list , min , max , maxValue );
+            });
 
           if( _isIpad ){ // bind touch move event
-              var px , marginLeft = 0;
-              $list
-                  .on('touchstart' , function( ev ){
-                      px = ev.originalEvent.pageX;
-                      marginLeft = parseInt( $(this).css('marginLeft') );
-                  })
-                  .on('touchmove' , function( ev ){
-                      var dis = ev.originalEvent.pageX - px;
-                      var mleft = marginLeft + dis;
+            var px , marginLeft = 0;
+            $list
+              .on('touchstart' , function( ev ){
+                px = ev.originalEvent.pageX;
+                marginLeft = parseInt( $(this).css('marginLeft') );
+              })
+              .on('touchmove' , function( ev ){
+                var dis = ev.originalEvent.pageX - px;
+                var mleft = marginLeft + dis;
 
-                      mleft = - Math.min( maxValue , Math.abs( Math.min( mleft, 0 ) ) );
+                mleft = - Math.min( maxValue , Math.abs( Math.min( mleft, 0 ) ) );
 
-                      $(this).css('marginLeft' , mleft);
+                $(this).css('marginLeft' , mleft);
 
-                      var left = min + ( max - min ) * - mleft / maxValue ;
+                var left = min + ( max - min ) * - mleft / maxValue ;
 
-                      // move the slider
-                      $slider
-                          .stop( true , false )
-                          .animate({
-                              'left': Math.max( Math.min( left , max ) , min )
-                          } , 500 );
-                  });
+                // move the slider
+                $slider
+                  .stop( true , false )
+                  .animate({
+                      'left': Math.max( Math.min( left , max ) , min )
+                  } , 500 );
+              });
           } else {
             seajs.use('jquery.mousewheel' , function(){
               $list
                 .mousewheel(function(event, delta, deltaX, deltaY){
-                    var $con = $(this);
-                    var marginLeft = parseInt( $con.css('marginLeft') );
-                    var width = $con.width();
-                    var photoLen = 357;
-                    var maxWidth = maxValue + width;
-                    if( delta > 0 ) {// up
-                      marginLeft += photoLen;
-                    } else {
-                      marginLeft -= photoLen;
-                    }
+                  var $con = $(this);
+                  var marginLeft = parseInt( $con.css('marginLeft') );
+                  var width = $con.width();
+                  var photoLen = 357;
+                  var maxWidth = maxValue + width;
+                  if( delta > 0 ) {// up
+                    marginLeft += photoLen;
+                  } else {
+                    marginLeft -= photoLen;
+                  }
 
-                    marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
-                    /*
-                    var scrollTop = $con.scrollTop();
-                    var height = $list.height();
-                    var conHeight = $list[0].scrollHeight;
-                    if( delta > 0 ) {// up
-                        scrollTop -= height * 5 / 10;
-                    } else { //down
-                        scrollTop += height * 5 / 10;
-                    }
-                    var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
-                    */
-                    var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
-                    $slider
-                        .stop( true , false )
-                        .animate({
-                            'left': Math.max( Math.min( left , max ) , min )
-                        } , 500 );
-                    // change the scroll value
-                    $con.stop( true , false )
-                        .animate({
-                            marginLeft: marginLeft
-                        } , 500 );
+                  marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
+                  /*
+                  var scrollTop = $con.scrollTop();
+                  var height = $list.height();
+                  var conHeight = $list[0].scrollHeight;
+                  if( delta > 0 ) {// up
+                      scrollTop -= height * 5 / 10;
+                  } else { //down
+                      scrollTop += height * 5 / 10;
+                  }
+                  var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
+                  */
+                  var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
+                  $slider
+                      .stop( true , false )
+                      .animate({
+                          'left': Math.max( Math.min( left , max ) , min )
+                      } , 500 );
+                  // change the scroll value
+                  $con.stop( true , false )
+                      .animate({
+                          marginLeft: marginLeft
+                      } , 500 );
                 });
             });
           }
