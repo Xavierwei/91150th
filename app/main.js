@@ -311,6 +311,8 @@ define(function(require, exports, module) {
     var GAME_MAX_DISTANCE = 4000;
     var p1 , p2 , p , l , dur , rl , lastl;
     var robotStartDistancePercent = 1 / 6;
+
+    var maxDur = 0;
     game.setConfig({
         duration  : 2000
         , maxSpeed: GAME_MAX_SPEED
@@ -329,7 +331,11 @@ define(function(require, exports, module) {
             //var robotDistance = status.robotDistance + robotStartDistancePercent * GAME_MAX_DISTANCE;
             var robotDistance = status.robotDistance + GAME_MAX_DISTANCE / 2;
             dur = robotDistance - status.distance;
+
+            maxDur = Math.max( maxDur , dur );
+            p1 = maxDur / GAME_MAX_DISTANCE;
             p = dur / GAME_MAX_DISTANCE;
+
 
             // change car position
             // GAME_PLAYING  and GAME_OVER all need to modify the car position
@@ -374,7 +380,7 @@ define(function(require, exports, module) {
             // change car dot position
             //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             //p2 = p1 + p * 88 ;
-            $carDot.css('left' , Math.min( Math.max( (0.5 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 )  );
+            $carDot.css('left' , Math.min( Math.max( (p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 )  );
             // change robot dot position
 
             // if game is not over
@@ -1055,6 +1061,7 @@ define(function(require, exports, module) {
         currRoadIndex = 0;
         bgIndex = 0;
 
+        $road.css('background-image' , 'url(./images/' + roadConfig[currRoadIndex].src + ')');
         // reset body or window scroll left , fix ipad , input fouce bug
         _fixIpad();
         // reset road
