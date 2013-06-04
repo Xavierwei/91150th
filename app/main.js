@@ -400,10 +400,10 @@ define(function(require, exports, module) {
             moveBgAndMotionRoad( status );
 
             // change bar background
-            //$bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
-            //        dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
-            //        dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
-            $bar[0].className = 'b-bar' + ( status.speed < 100 ? 3 : 0 );
+            $bar[0].className = 'b-bar' + ( dur < GAME_MAX_DISTANCE * 0.4 ? 0 :
+                    dur < GAME_MAX_DISTANCE * 0.65 ? 1 :
+                    dur < GAME_MAX_DISTANCE * 0.9 ? 2 : 3 ) ;
+            // $bar[0].className = 'b-bar' + ( status.speed < 100 ? 3 : 0 );
             // show time
             if( status.gameStatus == game.GAME_PLAYING ){
                 var time = status.time + ( +new Date() - status.startTime );
