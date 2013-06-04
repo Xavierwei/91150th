@@ -79,6 +79,7 @@
     </section>
     -->
     <!--video panel-->
+    <!--
     <section id="video-mask" class="video-mask lpn-mask">
       <span class="lpn-ghost"></span>
       <div class="lpn-panel">
@@ -88,10 +89,10 @@
         <div class="video-skip"></div>
       </div>
     </section>
-
+    -->
     <script type="text/tpl" id="rule-mask-tpl">
 <!--game rule-->
-        <section id="rule-mask" class="video-mask lpn-mask">
+        <section id="rule-mask" class="rule-mask lpn-mask">
             <span class="lpn-ghost"></span>
             <div class="lpn-panel">
                 <div class="rule-wrap">
@@ -381,8 +382,8 @@
                 });
             $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
               var interval = setInterval(function(){
-                if( window.readyForVideo ){
-                  $(window).trigger('play-video');
+                if( window.readyForGame ){
+                  $(window).trigger('game-start');
                   clearInterval( interval );
                 }
               } , 50);

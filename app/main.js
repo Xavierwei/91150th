@@ -87,24 +87,6 @@ define(function(require, exports, module) {
     }
 
 
-    // loading bar
-    var $videoPanel = $('#video-mask');
-
-    // bind skip event
-    $videoPanel.find('.video-skip')
-        .click(function(){
-            $videoPanel.find('.lpn-panel').animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
-                $videoPanel.hide();
-                $videoPanel.find('*').remove();
-                $('.main-metas').animate({left:'50%'},500,'easeInOutQuart', function(){
-                    _fixIpad();
-                });
-                //$('#login-mask').show();
-                //$('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
-            });
-
-            //$('.main-metas').animate({left:'50%'},500,'easeOutQuart');
-        });
 
     /*
     var initSliderBtn = function( $slider , $list , min , max ){
@@ -1204,6 +1186,23 @@ define(function(require, exports, module) {
         width: 3071
     }];
 
+    // init bgconfig width
+    $.each( bgConfig , function( i ){
+      $('<img/>')
+        .load( function(){
+          bgConfig[i].width = this.width;
+        } )
+        .attr('src' , './images/' + bgConfig[i].src );
+    } );
+
+    $.each( bgSenceConfig , function( i ){
+      $('<img/>')
+        .load( function(){
+          bgSenceConfig[i].width = this.width;
+        } )
+        .attr('src' , './images/' + bgSenceConfig[i].src );
+    } );
+
     var bgIndex = 0;
     var lastBgDistance = 0;
     // cache last motion arguments
@@ -1507,9 +1506,33 @@ define(function(require, exports, module) {
     });
    */
 
-
+    window.readyForGame = true;
+    $(window).on( 'game-start' , function(){
+        $('.main-metas').animate({left:'50%'},500,'easeInOutQuart', function(){
+            _fixIpad();
+        });
+    });
    // render video
-   var $videoPanel = $('#video-mask');
+   /*
+
+   // loading bar
+    var $videoPanel = $('#video-mask');
+
+    // bind skip event
+    $videoPanel.find('.video-skip')
+        .click(function(){
+            $videoPanel.find('.lpn-panel').animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
+                $videoPanel.hide();
+                $videoPanel.find('*').remove();
+                $('.main-metas').animate({left:'50%'},500,'easeInOutQuart', function(){
+                    _fixIpad();
+                });
+                //$('#login-mask').show();
+                //$('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
+            });
+
+            //$('.main-metas').animate({left:'50%'},500,'easeOutQuart');
+        });
    window.readyForVideo = true;
    window.playfinished = function(){
       $videoPanel.find('.video-skip').click();
@@ -1530,6 +1553,7 @@ define(function(require, exports, module) {
 
         showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 305 );
    } );
+  */
 
    function showVideo( id , src , w , h ){
     if( _isIpad ){
