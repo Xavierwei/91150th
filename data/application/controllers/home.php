@@ -63,12 +63,25 @@ class Home_Controller extends Base_Controller {
 		if (!Input::has("name") || !Input::has("email")) {
 			return Response::json(array("error" => "argument missed", "code" => 500, "data" => array()));
 		}
-		$name = Input::get("name");
-		$email = Input::get("email");
-		$tmpuser = array(
-			"name" => $name,
-			"email" => $email
-		);
+        $name = Input::get("name");
+        $email = Input::get("email");
+        $tel = Input::get("tel");
+        $code = Input::get("code");
+        $address = Input::get("address");
+
+        $users = DB::table('user')
+            ->where('tel',  $tel)
+            ->orWhere('email', $email)
+            ->get();
+        print_r($users);
+
+        $tmpuser = array(
+            "name" => $name,
+            "email" => $email,
+            "tel" => $tel,
+            "code" => $code,
+            "address" => $address
+        );
 
 		$user = User::create($tmpuser);
         $this->_put_user($user);
