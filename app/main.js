@@ -566,6 +566,7 @@ define(function(require, exports, module) {
                     },
                     messages: {
                         email: "请输入正确的邮箱",
+                        tel: "请输入电话",
                         name: "请输入姓名",
                         code: "请输入正确的邮编",
                         address: "请输入地址"
@@ -608,6 +609,14 @@ define(function(require, exports, module) {
                                         .hide()
                                         .filter('.result-form-suc')
                                         .fadeIn();
+                                }
+                                if(res.code == 500)
+                                {
+                                    if(res.error == 'exist')
+                                    {
+                                        $('.result-form-exist').fadeIn();
+                                    }
+
                                 }
                             }
                         });

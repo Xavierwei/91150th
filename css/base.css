@@ -707,12 +707,16 @@ span.lpn-ghost {
   left: 44px;
   margin-bottom: 0;
   color: #6b6b6b;
+    font-size:12px;
 }
 .result-form-suc{
-  width: 120px;
+    background:url(../images/register-btn2.png) no-repeat;
+  width: 185px;
+    height:59px;
   margin: 0 auto;
-  margin-top: 108px;
-  text-align: center;
+  margin-top: 98px;
+  text-align: left;
+    text-indent:-999em;
   font-size: 24px;
 }
 .result-failure{
@@ -726,6 +730,12 @@ span.lpn-ghost {
   color: #A2A2A2;
   margin-top: 17px;
   line-height: 1.8em;
+}
+.result-form-exist {
+    position: absolute;
+    top:218px;
+    left:365px;
+    color:#eb151f;
 }
 
 .result .r-list,.ranking .r-list{
@@ -755,6 +765,12 @@ span.lpn-ghost {
   float: left;
   font-size: 24px;
   color:#fff;
+  background:url(../images/ranking-title.png) no-repeat;
+  width:186px;
+  height:59px;
+  text-indent:-999em;
+  margin-top:-20px;
+  text-align: left;
 }
 .ranking .selected{
   color: white;
@@ -819,10 +835,17 @@ span.lpn-ghost {
     padding:1px 0 0;
 }
 .rule-wrap .rule-title{
-    background:url(../images/rule_title.png) no-repeat;
-    width:93px;height:23px;
+    background:url(../images/rule-title.png) no-repeat;
+    width:186px;height:59px;
     margin:70px auto 0 auto;
     text-indent:-999em;
+}
+.rule-wrap .rule-content {
+    background:url(../images/rule-content.png) no-repeat;
+    width:757px;height:173px;
+    position: absolute;
+    left:215px;
+    top:153px;
 }
 .rule-wrap ol {list-style:decimal;margin:30px 80px 0 80px;line-height:150%;color:#bbb;}
 .rule-wrap ol li {margin:20px 203px 0;text-align:left;}
@@ -1370,8 +1393,8 @@ span.lpn-ghost {
 /*gallery*/
 #gallery-mask {background:rgba(0,0,0,0.7);}
 .no-rgba #gallery-mask {background:url(../images/fancybox_overlay.png)}
-#gallery-wrap {position:relative;width:1042px;height:474px;margin:0 auto;}
-#gallery-mask .title {background:url(../images/gallery_title.png) no-repeat;width:768px;height:28px;margin:0 0 0 50px;}
+#gallery-wrap {position:relative;width:1042px;height:501px;margin:0 auto;}
+#gallery-mask .title {background:url(../images/gallery-title.png) no-repeat;width:768px;height:55px;margin:0 0 0 50px;}
 
 #gallery-mask .btn1{background: url(../images/btn-bg1-dis.png) no-repeat;}
 #gallery-mask .btn1.selected,#gallery-mask .btn1:hover{
@@ -1392,7 +1415,7 @@ span.lpn-ghost {
   height: 2px;
   margin-top: 24px;
   background: #757575;
-  width: 1074px;
+  width: 1058px;
   position: relative;
 }
 #gallery-mask .slider-btn{
