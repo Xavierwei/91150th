@@ -3,7 +3,7 @@
  <head>
   <meta charset="utf-8"/>
   <title>保时捷911-50周年</title>
-  <meta name="viewport" content="width=device-width, minimum-scale=0.81, maximum-scale=0.81, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, minimum-scale=0.84, maximum-scale=0.84, user-scalable=no" />
   <script type="text/javascript" src="./src/modernizr-2.5.3.min.js"></script>
   <script type="text/javascript"
     src="./lib/sea/sea-debug.js"
@@ -97,15 +97,9 @@
             <div class="lpn-panel">
                 <div class="rule-wrap">
                     <div class="rule-title">游戏规则</div>
-                    <ol>
-                        <li>用户玩到第一次游戏结束的时就会出现弹框 (5分钟以下）<br/>
-                            请继续挑战，成绩超过5分钟者即有机会获取以下奖品：1.每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值36,500元。 2.坚持追逐5分钟以上，即可活动保时捷送出的50周年限量版明信片。</li>
-                        <li>用户玩到第一次游戏结束的时就会出现弹框 (5分钟以上）<br/>
-                            您已经赢取了保时捷送出的50周年限量版明信片，请填写完整个人信息，工作人员会尽快与您联络奖品发送事宜。<br/>
-                            继续挑战：每个月追逐时间排行榜的第一名，可获得保时捷送出的“驾驶学校”课程，价值36,500元。<br/><br/>
-                            保时捷（中国）汽车销售有限公司保留获奖规则解释权。
-                        </li>
-                    </ol>
+                    <div class="rule-content">
+                        <div class="rule-content-link"></div>
+                    </div>
 
                 </div>
                 <div class="r-close"></div>
@@ -148,7 +142,7 @@
   <span class="lpn-ghost"></span>
   <div class="lpn-panel" style="overflow:visible;">
     <div id="gallery-wrap">
-      <div class="title"><div class="btn1 selected" style="margin-left: 200px;margin-right: 19px;margin-top: -7px;" >图片</div><div class="btn1 " style="margin-top: -7px;">视频</div></div>
+      <div class="title"><div class="btn1 selected" style="margin-left: 200px;margin-right: 19px;margin-top: 13px;" >图片</div><div class="btn1 " style="margin-top: 13px;">视频</div></div>
       <div class="photo-gallery" init='true'>
         <div class="photo">
           <a rel="gallery" href="pic/b1.jpg"><img src="pic/s1.jpg" /></a>
@@ -236,32 +230,29 @@
       </div>
       <div class="result-con">
         <div class="result-tit" style="display:none;">
-            <strong>恭喜您！</strong>
+            <div class="result-con-title"></div>
             <ul>
                 <li>获得保时捷独家送出50周年限量版明信片。</li>
-                <li>每个月坚持追逐时间最久第一名，可获得保时捷送出的“驾驶学校”课程，价值xx万。</li>
+                <li>每个月坚持追逐时间最久第一名，可获得保时捷送出的“驾驶学校”课程，价值36,500万。</li>
                 <li>为确保能把奖品及时准确送到，请将个人信息填写完整。</li>
             </ul>
             <div class="btn1 btn-again" style="margin-top: 11px;margin-left: -21px;margin-right: 30px;">再玩一次</div>
             <div class="btn1 btn-submit" style="margin-top: 11px;">提交信息</div>
         </div>
         <form class="result-form" style="display:none;">
-            <label>姓名：<input name="name" type="text"></label>
-            <label>手机：<input name="tel" type="text"></label>
-            <label>邮箱：<input name="email" type="text"></label>
-            <label>邮编：<input name="code" type="text"></label>
-            <label>地址：<input name="address" type="text"></label>
+            <label>姓名<input name="name" type="text"></label>
+            <label>手机<input name="tel" type="text"></label>
+            <label>邮箱<input name="email" type="text"></label>
+            <label>邮编<input name="code" type="text"></label>
+            <label>地址<input name="address" type="text"></label>
         </form>
         <div class="result-form-suc" style="display:none;">
-            提交成功！<br/>
-            <div class="btn1 btn-again" style="margin-top: 38px;">再玩一次</div>
+            <br/>
+            <div class="btn1 btn-again" style="margin-top: 48px;margin-left:35px;">再玩一次</div>
         </div>
+        <div class="result-form-exist">您已提交相关信息</div>
         <div class="result-failure">
-            请继续挑战有机会获取以下奖品：<br/>
-            <p>
-                1.每个月坚持追逐时间最久第一名，可获得保时捷送出的“驾驶学校”课程，价值36,500元。<br/>
-                2.追逐5分钟以上，即可获得保时捷送出的 50 周年限量版明信片。
-            </p>
+            <div class="result-failure-content"></div>
             <div class="btn1 btn-again" style="margin-top: 28px;margin-left: 241px;">再玩一次</div>
         </div>
       </div>
