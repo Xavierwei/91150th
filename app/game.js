@@ -126,10 +126,6 @@ define(function( require , exports , model ){
             _speedExchange( cb );
         }
 
-        // for debug
-        var _dfpsStartTime;
-        var _dfpsTimes = 0;
-        var _d$fp = $('#fps');
         /*
         var __robotExchange = function( cb ){
 
@@ -270,7 +266,7 @@ define(function( require , exports , model ){
                 }
 
                 // game over controll
-                __gameOverControll();
+                //__gameOverControll();
 
                 // game robot controll
                 //robotSpeed = __gameRobotControll( robotSpeed );
@@ -278,15 +274,6 @@ define(function( require , exports , model ){
                 _animate.turnTo( [ mouseSpeed ,  robotSpeed ] );
             } else {
                 _animate = new Animate( [ 0 , 0 ] , [ mouseSpeed * config.maxSpeed , config.maxSpeed ] , config.duration , '' , function(arr){
-                    ////////////////////////////// for debug
-                    _dfpsTimes++;
-                    if( new Date() - _dfpsStartTime > 1000){
-                        //_d$fp.html('fps:' + _dfpsTimes );
-                        _dfpsStartTime = new Date();
-                        _dfpsTimes = 0;
-                        //_d$fp.show().prepend('status.distance :  '  + status.distance + '<br/>');
-                    }
-                    ////////////////////////////// for debug
                     status.speed = ~~arr[0];
                     // count the distance of car
                     status.distance += status.speed * _disDuration;
@@ -312,15 +299,6 @@ define(function( require , exports , model ){
                 _animate.turnTo( [ mouseSpeed * config.maxSpeed ] );
             } else {
                 _animate = new Animate( [ 0 ] , [ mouseSpeed * config.maxSpeed ] , config.duration , '' , function(arr){
-                    ////////////////////////////// for debug
-                    _dfpsTimes++;
-                    if( new Date() - _dfpsStartTime > 1000 ){
-                        _d$fp.html('fps:' + _dfpsTimes );
-                        _dfpsStartTime = new Date();
-                        _dfpsTimes = 0;
-                    }
-
-                    ////////////////////////////// for debug
                     status.speed = ~~arr[0];
                     // count the distance of car
                     status.distance += status.speed * _disDuration;
@@ -331,8 +309,6 @@ define(function( require , exports , model ){
         }
         */
         var _speedExchange = function( myCarCb ){
-            _dfpsStartTime = + new Date();
-            _dfpsTimes = 0;
             _caTimer = setTimeout(function(){
                 // if game over
                 if( status.speed == 0 && status.gameStatus == GAME_OVER ){
@@ -522,6 +498,9 @@ define(function( require , exports , model ){
         } );
         // pause all the animate , interval and timeout
         speedExchange.stop();
+
+        if( config.onreset )
+            config.onreset();
     }
 
     var ready = function(){

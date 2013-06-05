@@ -315,9 +315,12 @@ define(function(require, exports, module) {
     var maxDur = 0;
     game.setConfig({
         duration  : 2000
-        , maxSpeed: GAME_MAX_SPEED
+        , maxSpeed : GAME_MAX_SPEED
         , minRobotSpeed  : 150
         , robotStartDistance : GAME_MAX_DISTANCE / 2
+        , onreset : function(){
+            maxDur = 0;
+        }
         , speedCallBack  : function( status ){
             // render car speed
             $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
@@ -380,12 +383,13 @@ define(function(require, exports, module) {
             // change car dot position
             //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             //p2 = p1 + p * 88 ;
-            $carDot.css('left' , Math.min( Math.max( (p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 )  );
+            p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 );
+            $carDot.css('left' , p2  );
             // change robot dot position
 
             // if game is not over
             //if( status.result == -1 )
-              //$robotDot[0].style.marginLeft = Math.max( 0 , Math.min( p , 1 ) * 279 ) + 'px';
+            $robotDot.css('left' ,  Math.max( 0 , Math.min( p , 1 ) * 279 ) );
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -412,6 +416,8 @@ define(function(require, exports, module) {
 
                     var r = {};
                     $.extend( r , status );
+                    gameOver( r , isWin );
+                    /*
                     // if speed less than 20 , move the dot to right quickly
                     if( status.result !=-1 ){
                       $robotDot.animate({
@@ -420,6 +426,7 @@ define(function(require, exports, module) {
                         gameOver( r , isWin );
                       });
                     }
+                    */
                 }
             }
         }
