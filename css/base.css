@@ -244,14 +244,13 @@ span.lpn-ghost {
   position: absolute;
   z-index: 99999;
   top: 17px;
-  left: -200px;
+  left: 0;
 }
 .main-com-logo{
   position: absolute;
   z-index: 99999;
   top: 17px;
   right: 15px;
-  display:none;
 }
 /*---> */
 
@@ -645,6 +644,12 @@ span.lpn-ghost {
   left: 183px;
   background: url(../images/result-con-bg.png) no-repeat;
 }
+.result-con-title {
+    background:url(../images/result-con-title.png) no-repeat;
+    width:139px;
+    height:59px;
+    margin:-35px 0 0 -10px;
+}
 .result .r-share{
   position: absolute;
   width: 320px;
@@ -693,11 +698,13 @@ span.lpn-ghost {
   display: block;
   margin-bottom: 22px;
   position: relative;
+  color:#ff0000;
 }
 
 .result-form input{
   width: 170px;
   padding: 4px 0 4px 7px;
+  margin:0 0 0 5px;
   background: black;
   border: none;
   color: #9d9d9d;
@@ -716,14 +723,18 @@ span.lpn-ghost {
   margin: 0 auto;
   margin-top: 98px;
   text-align: left;
-    text-indent:-999em;
   font-size: 24px;
 }
 .result-failure{
     color:#fff;
-  padding: 69px 110px 0 110px;
+  padding: 43px 110px 0 110px;
   text-align: left;
   font-size: 22px;
+}
+.result-failure-content {
+    background:url(../images/result-below5.png) no-repeat;
+    width:638px;
+    height:117px;
 }
 .result-failure p{
   font-size: 13px;
@@ -846,6 +857,9 @@ span.lpn-ghost {
     position: absolute;
     left:215px;
     top:153px;
+}
+.rule-content-link {
+    width:64px;height:25px;position:absolute;top:86px;left:155px;
 }
 .rule-wrap ol {list-style:decimal;margin:30px 80px 0 80px;line-height:150%;color:#bbb;}
 .rule-wrap ol li {margin:20px 203px 0;text-align:left;}
@@ -1462,8 +1476,8 @@ span.lpn-ghost {
     margin: 0 6px;
     opacity: .7;
 }
-.touch .fancybox-download {-webkit-transform:scale(1.2);right:90px;top:20px;}
-.touch .fancybox-share {-webkit-transform:scale(1.2);top:20px;right:20px;}
+.touch .fancybox-download {-webkit-transform:scale(1.8);right:115px;top:25px;}
+.touch .fancybox-share {-webkit-transform:scale(1.8);top:25px;right:25px;}
 .touch .fancybox-share-list {padding:10px;top:45%;display:none;left:35%;-webkit-transform:scale(1.2);z-index:999999999;}
 .touch .fancybox-share-list .share-close {background:url(../images/share_close.png);width:33px;height:33px; position: absolute;right:0;top:-33px;}
 .touch .fancybox-share-list a {float:left;}

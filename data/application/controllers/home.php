@@ -95,7 +95,10 @@ class Home_Controller extends Base_Controller {
 	}
 
     public function action_getrecord() {
-        $record = GameRecord::order_by('time', 'asc')->take(20)->get();
+
+        $record = DB::table('game_record')
+            ->join('user', 'user.uid', '=', 'game_record.uid')
+            ->order_by('game_record.time', 'asc')->take(20)->get();
         return Response::json(array("data" => $record, "code" => 200, "error" => ""));
     }
 
