@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'PorscheNewsGothic-Bold';
+    src: url('lt21023.eot');
+    src: url('lt21023.eot?#iefix') format('embedded-opentype'),
+    url('lt21023.woff') format('woff'),
+    url('lt21023.ttf') format('truetype'),
+    url('lt21023.svg#PorscheNewsGothic-Bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 /* reset css */
 html, body, p, h1, h2, h3, h4, h5, h6,
 ul, li, ol, dl, dd, dt,
@@ -78,7 +88,7 @@ a {
 }
 .fr {float:right;}
 .fl {float:left;}
-
+.stren { font-family: 'PorscheNewsGothic-Bold';}
 /* loading css */
 .lpn-mask{
   position: fixed;
@@ -646,9 +656,9 @@ span.lpn-ghost {
 }
 .result-con-title {
     background:url(../images/result-con-title.png) no-repeat;
-    width:139px;
-    height:59px;
-    margin:-35px 0 0 -10px;
+    width:356px;
+    height:133px;
+    margin:-9px 0 0 -27px
 }
 .result .r-share{
   position: absolute;
@@ -717,11 +727,11 @@ span.lpn-ghost {
     font-size:12px;
 }
 .result-form-suc{
-    background:url(../images/register-btn2.png) no-repeat;
-  width: 185px;
+    background:url(../images/register-btn2.png) no-repeat center top;
+  width: 253px;
     height:59px;
   margin: 0 auto;
-  margin-top: 98px;
+  margin-top: 68px;
   text-align: left;
   font-size: 24px;
 }
@@ -883,7 +893,7 @@ span.lpn-ghost {
   color: white;
   text-shadow: 1px 1px 1px #000;
   text-align: left;
-  margin: 0 115px;
+  margin: 70px 115px 0 115px;
   line-height: 28px;
 }
 

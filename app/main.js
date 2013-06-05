@@ -638,6 +638,13 @@ define(function(require, exports, module) {
                       })
                       .end()
                       .find('.result-form').validate(validateConfig);
+
+                      $resultPanel.find('.btn-gallery')
+                      .click(function(){
+                          $resultPanel
+                              .trigger('close');
+                          showPanel(panelConfigs['gallery-panel']);
+                      });
                 });
             },
             onShow: function( $resultPanel ){
@@ -731,9 +738,7 @@ define(function(require, exports, module) {
             init: function(){
               $('.rule-content-link').click(function(){
                 $('.r-close').click();
-                setTimeout(function(){
-                    $('#ranking').click();
-                },500);
+                showPanel( panelConfigs['ranking-panel'] , panelData );
               });
             },
             onShow: function(){
@@ -921,7 +926,7 @@ define(function(require, exports, module) {
                 .fadeIn();
             if( len == -1 ){
                 // hide the counter panel
-                $counter.find('.c-mouse').animate({'margin-left':1000,'opacity':0},400,'easeOutQuart');
+                $counter.find('.c-mouse,.c-mouse-text').animate({'margin-left':1000,'opacity':0},400,'easeOutQuart');
                 $counter.find('.c-bg').delay(200).animate({'margin-left':1000,'opacity':0},400,'easeOutQuart',function(){
                     $(this).parent().hide();
                 });
@@ -1034,7 +1039,7 @@ define(function(require, exports, module) {
                 , marginLeft: 0
                 })
             .end()
-            .find('.c-mouse')
+            .find('.c-mouse,.c-mouse-text')
             .css({
                   opacity   : 1
                 , marginLeft: 0
