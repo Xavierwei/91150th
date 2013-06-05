@@ -315,9 +315,12 @@ define(function(require, exports, module) {
     var maxDur = 0;
     game.setConfig({
         duration  : 2000
-        , maxSpeed: GAME_MAX_SPEED
+        , maxSpeed : GAME_MAX_SPEED
         , minRobotSpeed  : 150
         , robotStartDistance : GAME_MAX_DISTANCE / 2
+        , onreset : function(){
+            maxDur = 0;
+        }
         , speedCallBack  : function( status ){
             // render car speed
             $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
@@ -380,12 +383,14 @@ define(function(require, exports, module) {
             // change car dot position
             //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             //p2 = p1 + p * 88 ;
-            $carDot.css('left' , Math.min( Math.max( (p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 )  );
+            p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 );
+            $carDot.css('left' , p2  );
             // change robot dot position
 
             // if game is not over
             //if( status.result == -1 )
-              //$robotDot[0].style.marginLeft = Math.max( 0 , Math.min( p , 1 ) * 279 ) + 'px';
+            $robotDot.css('left' , Math.max( 300 / 2 + 21 ,
+             Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -412,6 +417,8 @@ define(function(require, exports, module) {
 
                     var r = {};
                     $.extend( r , status );
+                    gameOver( r , isWin );
+                    /*
                     // if speed less than 20 , move the dot to right quickly
                     if( status.result !=-1 ){
                       $robotDot.animate({
@@ -420,6 +427,7 @@ define(function(require, exports, module) {
                         gameOver( r , isWin );
                       });
                     }
+                    */
                 }
             }
         }
@@ -442,7 +450,7 @@ define(function(require, exports, module) {
         var tpl = '<tr><td>#{i}</td><td>#{n}</td><td>#{t}</td><td>#{d}</td></tr>';
 
         $.each( dataArr , function( i , data ){
-            var item = data;
+            var item = data.original;
             var time = item.time;
             var m = ~~ ( time / 1000 / 60 );
             var s = ~~ ( time / 1000 % 60 );
@@ -566,7 +574,6 @@ define(function(require, exports, module) {
                     },
                     messages: {
                         email: "请输入正确的邮箱",
-                        tel: "请输入电话",
                         name: "请输入姓名",
                         code: "请输入正确的邮编",
                         address: "请输入地址"
@@ -609,14 +616,6 @@ define(function(require, exports, module) {
                                         .hide()
                                         .filter('.result-form-suc')
                                         .fadeIn();
-                                }
-                                if(res.code == 500)
-                                {
-                                    if(res.error == 'exist')
-                                    {
-                                        $('.result-form-exist').fadeIn();
-                                    }
-
                                 }
                             }
                         });
@@ -1419,7 +1418,7 @@ define(function(require, exports, module) {
         var showShareBtns = function(){
             $shareBgR.stop( true , false )
                 .animate({
-                    right: -87
+                    right: -118
                 } , 500 , 'easeOutQuart' , function(){
                     $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
                     setTimeout(function(){
@@ -1431,7 +1430,7 @@ define(function(require, exports, module) {
             $shareCon.stop(true , false).fadeOut( function(){
                 $shareBgR.stop( true , false )
                     .animate({
-                        right: 10
+                        right: -75
                     } , 500 , 'easeOutQuart' , function(){
                         $shareBtn.stop(true , false).fadeIn();
                     } );
@@ -1448,6 +1447,12 @@ define(function(require, exports, module) {
                 goon();
                 hideShareBtns();
             });
+        $shareBgR.find('.inner')
+          .hoverIntent(function(){
+              pause();
+          } , function(){
+              goon();
+          });
 
         // 2. ranking panel
         // main panel click event init
