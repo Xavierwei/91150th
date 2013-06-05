@@ -389,7 +389,8 @@ define(function(require, exports, module) {
 
             // if game is not over
             //if( status.result == -1 )
-            $robotDot.css('left' ,  Math.max( 0 , Math.min( p , 1 ) * 279 ) );
+            $robotDot.css('left' , Math.max( 300 / 2 + 21 ,
+             Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -449,7 +450,7 @@ define(function(require, exports, module) {
         var tpl = '<tr><td>#{i}</td><td>#{n}</td><td>#{t}</td><td>#{d}</td></tr>';
 
         $.each( dataArr , function( i , data ){
-            var item = data;
+            var item = data.original;
             var time = item.time;
             var m = ~~ ( time / 1000 / 60 );
             var s = ~~ ( time / 1000 % 60 );
@@ -573,7 +574,6 @@ define(function(require, exports, module) {
                     },
                     messages: {
                         email: "请输入正确的邮箱",
-                        tel: "请输入电话",
                         name: "请输入姓名",
                         code: "请输入正确的邮编",
                         address: "请输入地址"
@@ -616,14 +616,6 @@ define(function(require, exports, module) {
                                         .hide()
                                         .filter('.result-form-suc')
                                         .fadeIn();
-                                }
-                                if(res.code == 500)
-                                {
-                                    if(res.error == 'exist')
-                                    {
-                                        $('.result-form-exist').fadeIn();
-                                    }
-
                                 }
                             }
                         });
@@ -735,14 +727,6 @@ define(function(require, exports, module) {
         },
         'rule-panel' : {
             id: 'rule-mask',
-            init: function(){
-              $('.rule-content-link').click(function(){
-                $('.r-close').click();
-                setTimeout(function(){
-                    $('#ranking').click();
-                },500);
-              });
-            },
             onShow: function(){
               pause();
             },
@@ -1421,7 +1405,7 @@ define(function(require, exports, module) {
         var showShareBtns = function(){
             $shareBgR.stop( true , false )
                 .animate({
-                    right: -87
+                    right: -118
                 } , 500 , 'easeOutQuart' , function(){
                     $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
                     setTimeout(function(){
@@ -1433,7 +1417,7 @@ define(function(require, exports, module) {
             $shareCon.stop(true , false).fadeOut( function(){
                 $shareBgR.stop( true , false )
                     .animate({
-                        right: 10
+                        right: -75
                     } , 500 , 'easeOutQuart' , function(){
                         $shareBtn.stop(true , false).fadeIn();
                     } );
@@ -1450,6 +1434,12 @@ define(function(require, exports, module) {
                 goon();
                 hideShareBtns();
             });
+        $shareBgR.find('.inner')
+          .hoverIntent(function(){
+              pause();
+          } , function(){
+              goon();
+          });
 
         // 2. ranking panel
         // main panel click event init
