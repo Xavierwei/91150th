@@ -154,7 +154,7 @@ define(function( require , exports , model ){
             // game contoll , after 6000ms , controll the game
             if( _getPlayTime() > __gameControll.overMiniTime ){
                 // 1.game over contorll
-                if( status.speed < 10 ){
+                if( status.speed < 50 ){
                     if( __gameControll.overStartTime == 0  )
                         __gameControll.overStartTime = + new Date();
                 } else {
