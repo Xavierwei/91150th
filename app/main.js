@@ -381,12 +381,14 @@ define(function(require, exports, module) {
                 rl = rl + ( lastl - rl ) * 9 / 10;
             }
             lastl = rl;
-            $cars.eq(1)
-                //.stop( true , false )
-                .css({
-                    marginLeft: rl
-                })
-                [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
+
+            if( status.result == -1 )
+              $cars.eq(1)
+                  //.stop( true , false )
+                  .css({
+                      marginLeft: rl
+                  })
+                  [ status.robotSpeed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
             $car2Wheels.rotate( robotDistance * 80 );
 
             // change car dot position
@@ -408,9 +410,9 @@ define(function(require, exports, module) {
             // change robot dot position
 
             // if game is not over
-            if( status.result == -1 )
-              $robotDot.css( 'left' , Math.max( 300 / 2 + 21 ,
-                Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
+            //if( status.result == -1 )
+              //$robotDot.css( 'left' , Math.max( 300 / 2 + 21 ,
+               // Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -440,6 +442,10 @@ define(function(require, exports, module) {
                     // gameOver( r , isWin );
                     // if speed less than 20 , move the dot to right quickly
                     if( status.result !=-1 ){
+                      $cars.eq(1)
+                        .animate({
+                          marginLeft: winWidth / 2
+                        } , 1000 );
                       $robotDot.animate({
                         left: 300
                       } , 1000 , '' , function(){
