@@ -316,7 +316,7 @@ define(function(require, exports, module) {
     game.setConfig({
         duration  : 2000
         , maxSpeed : GAME_MAX_SPEED
-        , minRobotSpeed  : 150
+        , minRobotSpeed  : 100
         , robotStartDistance : GAME_MAX_DISTANCE / 2
         , onreset : function(){
             maxDur = 0;
@@ -383,14 +383,14 @@ define(function(require, exports, module) {
             // change car dot position
             //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             //p2 = p1 + p * 88 ;
-            p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 );
-            $carDot.css('left' , p2  );
+            p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
+            $carDot.css('left' , 21 + Math.min( p2 * 2 , 300 / 2 ) );
             // change robot dot position
 
             // if game is not over
             //if( status.result == -1 )
             $robotDot.css('left' , Math.max( 300 / 2 + 21 ,
-             Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
+              Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
