@@ -679,7 +679,7 @@ define(function(require, exports, module) {
                 var m = ~~ ( _time / 1000 / 60 );
                 var s = ~~ ( _time / 1000 % 60 );
                 var ss = ~~ ( _time % 1000 / 10 );
-                var shareCopy = '我刚参加了保时捷911五十周年的特别活动，追逐了'+ ~~result.distance / 1000 +'公里，用时'+m+':'+s+':'+ss+"，你也来试试吧! ";
+                var shareCopy = '%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e8%bf%bd%e9%80%90%e4%ba%86'+ ~~result.distance / 1000 +'%e5%85%ac%e9%87%8c%ef%bc%8c%e7%94%a8%e6%97%b6'+m+':'+s+':'+ss+"%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7! ";
                 $('#share_sina').attr('href','http://v.t.sina.com.cn/share/share.php?title='+shareCopy+'&url=http://50years911.porsche-events.cn%2f&pic=http://50years911.porsche-events.cn/91150th.jpg');
                 //$('#share_qzone').attr('href','http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+shareCopy);
                 //$('#share_kaixin').attr('href','http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&rurl=http://50years911.porsche-events.cn%2f&rcontent='+shareCopy);
@@ -848,7 +848,7 @@ define(function(require, exports, module) {
                       },
                       afterShow: function(){
                         var picurl = $(this).attr('href');
-                        var sharecopy = '#911五十周年# 我正在浏览保时捷911五十周年图片，你也来看看吧！';
+                        var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
                         $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
                         $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
                             '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
