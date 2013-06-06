@@ -191,7 +191,7 @@ span.lpn-ghost {
   padding-top: 35px;
   font-size: 18px;
   color: #9D9D9D;
-  font-family: 'STHeiti',Arial,simsun;
+  font-family: 'STHeiti',simsun,Arial;
 }
 .login-form label{
   float: left;
@@ -303,6 +303,7 @@ span.lpn-ghost {
   float: left;
   margin-top: 26px;
   margin-left: 15px;
+  width:85px;
 }
 .main-board .board-m-t{
   position: absolute;
@@ -390,17 +391,22 @@ span.lpn-ghost {
   opacity: .7;
 }
 
+.main-board-bg-r .follow_sina {
+    position: absolute;
+    width: 113px;
+    height: 100px;
+    top: 0;
+    right: 3px;
+    background:url(../images/p-bg-r2.png) no-repeat;
+}
 .main-board-bg-r .inner{
-  position: absolute;
-  width: 66px;
-  height: 90px;
-  top: 7px;
-  right: 25px;
+
   -webkit-transform:skew( -20deg );
   -moz-transform:skew( -20deg );
   -o-transform:skew( -20deg );
   -ms-transform:skew( -20deg );
   transform:skew( -20deg );
+    margin:10px 0 0;
 }
 .main-board-bg-r a.sina{
   width: 36px;
@@ -412,7 +418,7 @@ span.lpn-ghost {
   width: 36px;
   height: 30px;
   top: 16px;
-  right: 13px;
+  right: 17px;
   background-position: 4px 5px;
     -webkit-transform:skew( 20deg );
   -moz-transform:skew( 20deg );
@@ -422,9 +428,8 @@ span.lpn-ghost {
 }
 .main-board-bg-r span{
   position: absolute;
-  right: 20px;
+  right: 24px;
   top: 49px;
-  font-family: 黑体;
     -webkit-transform:skew( 20deg );
   -moz-transform:skew( 20deg );
   -o-transform:skew( 20deg );
@@ -457,7 +462,7 @@ span.lpn-ghost {
   background-position: -99px -26px;
 }
 .main-board .board-share a.douban,.r-share a.douban{
-  background-position: -41px -53px;
+  background-position: -33px -53px;
 }
 .main-bottom{
   position: absolute;
@@ -757,7 +762,6 @@ span.lpn-ghost {
   display: block;
   margin-bottom: 22px;
   position: relative;
-  color:#ff0000;
 }
 
 .result-form input{
@@ -942,8 +946,9 @@ span.lpn-ghost {
   color: white;
   text-shadow: 1px 1px 1px #000;
   text-align: left;
-  margin: 70px 115px 0 115px;
+  margin: 70px 0 0;
   line-height: 28px;
+  text-align:center;
 }
 
 .speed00,

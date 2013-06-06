@@ -61,7 +61,7 @@
 
         // if you don't define these then the one defined in the XML file will be taken in consideration
         flashvars.previewFilePath = "video.jpg";
-        flashvars.videoFilePath = "videos/en_desk.flv";
+        flashvars.videoFilePath = "videos/video<?php print $_GET['id'];?>.flv";
 
         // player settings(if not defined then the player will have the default settings defined in AS)
         flashvars.settingsXMLFile = "settings.xml";
@@ -71,7 +71,7 @@
     }
 
 
-    showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 305 );
+    showVideo( 'FlashContent' , "./videos/video<?php print $_GET['id'];?>.flv" , 720 , 406 );
 
 
 

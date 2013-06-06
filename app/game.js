@@ -322,7 +322,7 @@ define(function( require , exports , model ){
                 //var speed = Math.round( spx + spy ) / _winWidth * 1.4;
                 var screenWidth = Math.sqrt(_winWidth)*15;
                 //console.log(screenWidth);
-                var speed = Math.round( spx + spy ) / _winWidth * 3.5;
+                var speed = Math.round( spx + spy ) / _winWidth * 4.5;
                 //console.log(speed);
                 // count robot
                 // var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;

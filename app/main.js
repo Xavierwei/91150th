@@ -465,7 +465,7 @@ define(function(require, exports, module) {
         var tpl = '<tr><td>#{i}</td><td>#{n}</td><td>#{t}</td><td>#{d}</td></tr>';
 
         $.each( dataArr , function( i , data ){
-            var item = data.original;
+            var item = data;
             var time = item.time;
             var m = ~~ ( time / 1000 / 60 );
             var s = ~~ ( time / 1000 % 60 );
@@ -674,8 +674,8 @@ define(function(require, exports, module) {
                 var m = ~~ ( _time / 1000 / 60 );
                 var s = ~~ ( _time / 1000 % 60 );
                 var ss = ~~ ( _time % 1000 / 10 );
-                var shareCopy = '我在911五十周年的竞速游戏中追逐了'+ ~~result.distance / 1000 +'公里，用时'+m+':'+s+':'+ss;
-                $('#share_sina').attr('href','http://v.t.sina.com.cn/share/share.php?title='+shareCopy+'&url=http://50years911.porsche-events.cn%2f&pic=http://50years911.porsche-events.cn/91150th.jpg&appkey=2455498088');
+                var shareCopy = '我刚参加了保时捷911五十周年的特别活动，追逐了'+ ~~result.distance / 1000 +'公里，用时'+m+':'+s+':'+ss+"，你也来试试吧! ";
+                $('#share_sina').attr('href','http://v.t.sina.com.cn/share/share.php?title='+shareCopy+'&url=http://50years911.porsche-events.cn%2f&pic=http://50years911.porsche-events.cn/91150th.jpg');
                 //$('#share_qzone').attr('href','http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+shareCopy);
                 //$('#share_kaixin').attr('href','http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&rurl=http://50years911.porsche-events.cn%2f&rcontent='+shareCopy);
                 $('#share_qq').attr('href','http://v.t.qq.com/share/share.php?title='+shareCopy+'&pic=http://50years911.porsche-events.cn/91150th.jpg')
@@ -843,13 +843,14 @@ define(function(require, exports, module) {
                       },
                       afterShow: function(){
                         var picurl = $(this).attr('href');
+                        var sharecopy = "#911五十周年# 我正在浏览保时捷911五十周年图片，你也来看看吧！";
                         $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
-                        $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
-                            '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
-                            '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;amp;rcontent=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
-                            '<a target="_blank" href="http://v.t.qq.com/share/share.php?title=911%2050th&amp;&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
-                            '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
-                            '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
+                        $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title="+sharecopy+"&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
+                            '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title="+sharecopy+"&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
+                            '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;rcontent="+sharecopy+"&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
+                            '<a target="_blank" href="http://v.t.qq.com/share/share.php?title="+sharecopy+"&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
+                            '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title="+sharecopy+"&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
+                            '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title="+sharecopy+"&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
 
                             if(_isIpad){
                                 $('.fancybox-share-list').appendTo('.fancybox-outer');
@@ -905,6 +906,7 @@ define(function(require, exports, module) {
     var gameOver = function( result , isWin){
         // show spirit panel
         showPanel( panelConfigs['spirit-panel'] , {result:result , isWin:isWin} );
+        $('.follow_sina').fadeIn();
 
         // Save record
         var _time = result.time;
@@ -1053,12 +1055,18 @@ define(function(require, exports, module) {
                 , marginLeft: 0
                 })
             .end()
-            .find('.c-mouse,.c-mouse-text')
+            .find('.c-mouse')
             .css({
                   opacity   : 1
                 , marginLeft: 0
             })
-            .addClass('shake');
+            .addClass('shake')
+            .end()
+            .find('.c-mouse-text')
+            .css({
+                opacity   : 1
+                , marginLeft: 0
+            });
 
         counter( cb );
     }
@@ -1193,6 +1201,7 @@ define(function(require, exports, module) {
                 $(this).hide();
                 ready();
             });
+            $('.follow_sina').fadeOut();
 
             // run the robot car
             // setTimeout(runRobot,2000);
