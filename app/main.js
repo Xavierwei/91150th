@@ -308,7 +308,7 @@ define(function(require, exports, module) {
                     }).width();
     var screenWidth = screen.width;
     var GAME_MAX_SPEED = 312;
-    var GAME_MAX_DISTANCE = 4000;
+    var GAME_MAX_DISTANCE = 2000;
     var p1 , p2 , p , l , dur , rl , lastl;
     var robotStartDistancePercent = 1 / 6;
 
@@ -395,12 +395,15 @@ define(function(require, exports, module) {
             // p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
 
             // ugly
-            if( status.distance < 200 ){
+            /* if( status.distance < 200 ){
               p2 = status.distance / GAME_MAX_DISTANCE * 300 ;
             } else {
               var _tmp = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
               p2 = _tmp + ( p2 - _tmp ) * 0.995;
             }
+            */
+
+            p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
             $carDot.css('left' , 21 + Math.min( p2  , 300 / 2 ) );
             // change robot dot position
 
