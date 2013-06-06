@@ -578,7 +578,8 @@ define(function(require, exports, module) {
                             email: true
                         },
                         tel: {
-                            required: true
+                            required: true,
+                            number: true
                         },
                         name: "required",
                         code: {
@@ -590,6 +591,7 @@ define(function(require, exports, module) {
                     messages: {
                         email: "请输入正确的邮箱",
                         name: "请输入姓名",
+                        tel: "请输入正确的手机号",
                         code: "请输入正确的邮编",
                         address: "请输入地址"
                     },
