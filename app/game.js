@@ -266,7 +266,7 @@ define(function( require , exports , model ){
                 }
 
                 // game over controll
-                //__gameOverControll();
+                __gameOverControll();
 
                 // game robot controll
                 //robotSpeed = __gameRobotControll( robotSpeed );

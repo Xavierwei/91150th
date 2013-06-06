@@ -313,6 +313,7 @@ define(function(require, exports, module) {
     var robotStartDistancePercent = 1 / 6;
 
     var maxDur = 0;
+    var isBigThan100 = false;
     game.setConfig({
         duration  : 2000
         , maxSpeed : GAME_MAX_SPEED
@@ -320,12 +321,14 @@ define(function(require, exports, module) {
         , robotStartDistance : GAME_MAX_DISTANCE / 2
         , onreset : function(){
             maxDur = 0;
+            isBigThan100 = false;
         }
         , speedCallBack  : function( status ){
             // render car speed
             $speeds[0].className = 'speed0' + ~~ (status.speed / 100 );
             $speeds[1].className = 'speed1' + ~~ (status.speed / 10 % 10 );
             $speeds[2].className = 'speed2' + ~~ (status.speed % 10 );
+
 
             // l = 0;
             // because , before start the game , the robot car should run first
@@ -368,6 +371,12 @@ define(function(require, exports, module) {
             //rl = 10 * p * GAME_MAX_DISTANCE + winWidth / 2;
             rl =  - (  status.speed - 100 ) / ( GAME_MAX_SPEED - 100) * car2width / 2 - 85
                      + winWidth / 2 ;
+            if( status.speed > 100 )
+              isBigThan100 = true;
+
+            if( isBigThan100 ){
+              rl = Math.min( rl , winWidth / 2 - 120 );
+            }
             if( lastl ){
                 rl = rl + ( lastl - rl ) * 9 / 10;
             }
@@ -383,14 +392,22 @@ define(function(require, exports, module) {
             // change car dot position
             //p1 = 6 + status.speed / GAME_MAX_SPEED * 3;
             //p2 = p1 + p * 88 ;
-            p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
-            $carDot.css('left' , 21 + Math.min( p2 * 2 , 300 / 2 ) );
+            // p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
+
+            // ugly
+            if( status.distance < 200 ){
+              p2 = status.distance / GAME_MAX_DISTANCE * 300 ;
+            } else {
+              var _tmp = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
+              p2 = _tmp + ( p2 - _tmp ) * 0.995;
+            }
+            $carDot.css('left' , 21 + Math.min( p2  , 300 / 2 ) );
             // change robot dot position
 
             // if game is not over
-            //if( status.result == -1 )
-            $robotDot.css('left' , Math.max( 300 / 2 + 21 ,
-              Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
+            if( status.result == -1 )
+              $robotDot.css( 'left' , Math.max( 300 / 2 + 21 ,
+                Math.max( 0 , Math.min( p , 1 )* 279 ) + 21 ) );
 
             //  move bg and motion road
             moveBgAndMotionRoad( status );
@@ -417,8 +434,7 @@ define(function(require, exports, module) {
 
                     var r = {};
                     $.extend( r , status );
-                    gameOver( r , isWin );
-                    /*
+                    // gameOver( r , isWin );
                     // if speed less than 20 , move the dot to right quickly
                     if( status.result !=-1 ){
                       $robotDot.animate({
@@ -427,7 +443,6 @@ define(function(require, exports, module) {
                         gameOver( r , isWin );
                       });
                     }
-                    */
                 }
             }
         }
@@ -1439,19 +1454,33 @@ define(function(require, exports, module) {
         var $shareBgR = $('#main-board-bg-r');
         var $shareBtn = $('#share-btn');
         var $shareCon = $('#share-con');
+        var _pauseTimer = null;
+        var _goonTimer = null;
         $('#share-wrap')
             .hoverIntent(function(){
-                pause();
-                showShareBtns()
+              clearTimeout( _goonTimer );
+              _pauseTimer = setTimeout(function(){
+                  pause();
+                  showShareBtns()
+                } , 50 );
             } , function(){
-                goon();
-                hideShareBtns();
+              clearTimeout( _pauseTimer );
+              _goonTimer = setTimeout( function(){
+                  goon();
+                  hideShareBtns();
+                } , 50 );
             });
         $shareBgR.find('.inner')
           .hoverIntent(function(){
+            clearTimeout( _goonTimer );
+            _pauseTimer = setTimeout(function(){
               pause();
+            } , 50 );
           } , function(){
+            clearTimeout( _pauseTimer );
+            _goonTimer = setTimeout(function(){
               goon();
+            } , 50 );
           });
 
         // 2. ranking panel
