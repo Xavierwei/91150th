@@ -191,7 +191,7 @@ span.lpn-ghost {
   padding-top: 35px;
   font-size: 18px;
   color: #9D9D9D;
-  font-family: 'STHeiti',Arial,simsun;
+  font-family: 'STHeiti',simsun,Arial;
 }
 .login-form label{
   float: left;
@@ -457,7 +457,7 @@ span.lpn-ghost {
   background-position: -99px -26px;
 }
 .main-board .board-share a.douban,.r-share a.douban{
-  background-position: -41px -53px;
+  background-position: -33px -53px;
 }
 .main-bottom{
   position: absolute;
@@ -757,7 +757,6 @@ span.lpn-ghost {
   display: block;
   margin-bottom: 22px;
   position: relative;
-  color:#ff0000;
 }
 
 .result-form input{
@@ -942,8 +941,9 @@ span.lpn-ghost {
   color: white;
   text-shadow: 1px 1px 1px #000;
   text-align: left;
-  margin: 70px 115px 0 115px;
+  margin: 70px 0 0;
   line-height: 28px;
+  text-align:center;
 }
 
 .speed00,
