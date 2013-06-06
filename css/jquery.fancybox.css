@@ -99,8 +99,8 @@
 .fancybox-close {
     background:url(../images/gallery_close.png);
 	position: absolute;
-	bottom: -42px;
-	right: 0px;
+	top: 0px;
+	right: -67px;
 	width: 62px;
 	height: 39px;
 	cursor: pointer;

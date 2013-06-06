@@ -303,6 +303,7 @@ span.lpn-ghost {
   float: left;
   margin-top: 26px;
   margin-left: 15px;
+  width:85px;
 }
 .main-board .board-m-t{
   position: absolute;
@@ -390,17 +391,22 @@ span.lpn-ghost {
   opacity: .7;
 }
 
+.main-board-bg-r .follow_sina {
+    position: absolute;
+    width: 113px;
+    height: 100px;
+    top: 0;
+    right: 3px;
+    background:url(../images/p-bg-r2.png) no-repeat;
+}
 .main-board-bg-r .inner{
-  position: absolute;
-  width: 66px;
-  height: 90px;
-  top: 7px;
-  right: 25px;
+
   -webkit-transform:skew( -20deg );
   -moz-transform:skew( -20deg );
   -o-transform:skew( -20deg );
   -ms-transform:skew( -20deg );
   transform:skew( -20deg );
+    margin:10px 0 0;
 }
 .main-board-bg-r a.sina{
   width: 36px;
@@ -412,7 +418,7 @@ span.lpn-ghost {
   width: 36px;
   height: 30px;
   top: 16px;
-  right: 13px;
+  right: 17px;
   background-position: 4px 5px;
     -webkit-transform:skew( 20deg );
   -moz-transform:skew( 20deg );
@@ -422,9 +428,8 @@ span.lpn-ghost {
 }
 .main-board-bg-r span{
   position: absolute;
-  right: 20px;
+  right: 24px;
   top: 49px;
-  font-family: 黑体;
     -webkit-transform:skew( 20deg );
   -moz-transform:skew( 20deg );
   -o-transform:skew( 20deg );
