@@ -308,7 +308,7 @@ define(function(require, exports, module) {
                     }).width();
     var screenWidth = screen.width;
     var GAME_MAX_SPEED = 312;
-    var GAME_MAX_DISTANCE = 2000;
+    var GAME_MAX_DISTANCE = 400;
     var p1 , p2 , p , l , dur , rl , lastl;
     var robotStartDistancePercent = 1 / 6;
 
@@ -432,7 +432,7 @@ define(function(require, exports, module) {
                 if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    var isWin = time >= 0.3 * 60 * 1000;
+                    var isWin = time >= 3 * 60 * 1000;
                     game.over( isWin );
 
                     var r = {};
@@ -636,6 +636,16 @@ define(function(require, exports, module) {
                                         .hide()
                                         .filter('.result-form-suc')
                                         .fadeIn();
+                                }
+                                else
+                                {
+                                    if(res.code == 500){
+                                        if(res.error == 'exist')
+                                        {
+                                            $('.result-form-exist').fadeIn();
+                                        }
+                                    }
+
                                 }
                             }
                         });
