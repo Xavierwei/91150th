@@ -72,6 +72,7 @@ class Home_Controller extends Base_Controller {
         $users = DB::table('user')
             ->where('tel', '=', $tel)
             ->or_where('email','=', $email)
+            ->or_where('address','=', $address)
             ->get();
         if(count($users) > 0)
         {
