@@ -69,15 +69,15 @@ class Home_Controller extends Base_Controller {
         $code = Input::get("code");
         $address = Input::get("address");
 
-        $users = DB::table('user')
-            ->where('tel', '=', $tel)
-            ->or_where('email','=', $email)
-            ->or_where('address','=', $address)
-            ->get();
-        if(count($users) > 0)
-        {
-            return Response::json(array("error" => "exist", "code" => 500, "data" => array()));
-        }
+//        $users = DB::table('user')
+//            ->where('tel', '=', $tel)
+//            ->or_where('email','=', $email)
+//            ->or_where('address','=', $address)
+//            ->get();
+//        if(count($users) > 0)
+//        {
+//            return Response::json(array("error" => "exist", "code" => 500, "data" => array()));
+//        }
 
         $tmpuser = array(
             "name" => $name,
@@ -99,7 +99,7 @@ class Home_Controller extends Base_Controller {
 
         $record = DB::table('game_record')
             ->join('user', 'user.uid', '=', 'game_record.uid')
-            ->order_by('game_record.time', 'asc')->take(20)->get();
+            ->order_by('game_record.time', 'desc')->take(20)->get();
         return Response::json(array("data" => $record, "code" => 200, "error" => ""));
     }
 

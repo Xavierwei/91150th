@@ -625,7 +625,7 @@ define(function(require, exports, module) {
                                     // 0 : failure
                                     // 1 : success
                                     var _status = result.result;
-                                    var _name = $('#username').val();
+                                    var _name = res.data.attributes.name;
                                     var _uid = res.data.attributes.uid;
                                     $.ajax({
                                         url: "data/public/index.php/home/record",
