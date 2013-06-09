@@ -814,12 +814,12 @@ define(function(require, exports, module) {
 
 
                     var $photoGallery = $('#gallery-mask').find('.photo-gallery');
-                    $photoGallery.each(function(){
+                    $photoGallery.each(function( index ){
                         var $photos = $(this).find('.photo');
                         var len = $photos.length;
                         // init slider
                         initSliderBtn( $('#gallery-mask').find('.photo-slider .slider-btn') ,
-                            $('#gallery-mask').find('.photo-gallery') , 0 , 1024 ,
+                            $('#gallery-mask').find('.photo-gallery').eq(index) , 0 , 1024 ,
                             Math.max( Math.ceil( len / 2) - 3 , 0 ) * 357 );
 
                         $photos.each( function( i ){
