@@ -178,7 +178,7 @@ define(function(require, exports, module) {
     */
     var _slideMousedown = function( $slider , $list , min , max , maxValue ){
           var slider = this
-           , off = $slider.offsetParent().offset();
+           , off = $slider.parent().offset();
           var $con = $list;
 
           var moveEvent = function( pageX ){
