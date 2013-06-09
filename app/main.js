@@ -802,49 +802,88 @@ define(function(require, exports, module) {
                             .hide()
                             .eq( index )
                             .fadeIn()
+                            .css({margin:0})
                             .end() //show sliders
                             .end()
                             .find('.photo-slider,.video-slider')
                             .hide()
                             .eq( index )
-                            .fadeIn();
+                            .fadeIn()
+                            .find('.slider-btn').css({left:0});
                     });
 
 
                     var $photoGallery = $('#gallery-mask').find('.photo-gallery');
-                    var $photos = $photoGallery.find('.photo');
-                    var len = $photos.length;
-                    // init slider
-                    initSliderBtn( $('#gallery-mask').find('.photo-slider .slider-btn') ,
-                     $('#gallery-mask').find('.photo-gallery') , 0 , 1024 ,
-                     Math.max( Math.ceil( len / 2) - 3 , 0 ) * 357 );
+                    $photoGallery.each(function(){
+                        var $photos = $(this).find('.photo');
+                        var len = $photos.length;
+                        // init slider
+                        initSliderBtn( $('#gallery-mask').find('.photo-slider .slider-btn') ,
+                            $('#gallery-mask').find('.photo-gallery') , 0 , 1024 ,
+                            Math.max( Math.ceil( len / 2) - 3 , 0 ) * 357 );
 
-                    $photos.each( function( i ){
-                      var half = Math.ceil( len / 2 );
-                      var left = ( i % half ) * 360;
-                      var top = parseInt( i / half ) * 219;
-                      if( i >= half && $('.csstransforms').length > 0 ){
-                          left -= 79;
-                      }
-                      $(this).css({left:left,top:top});
-                    } );
+                        $photos.each( function( i ){
+                            var half = Math.ceil( len / 2 );
+                            var left = ( i % half ) * 360;
+                            var top = parseInt( i / half ) * 219;
+                            if( i >= half && $('.csstransforms').length > 0 ){
+                                left -= 79;
+                            }
+                            $(this).css({left:left,top:top});
+                        } );
+
+
+
+                        $photos.find('a').fancybox({
+                            openMethod : 'dropIn',
+                            padding: 0,
+                            tpl: {
+                                wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
+                            },
+                            afterShow: function(){
+                                var picurl = $(this).attr('href');
+                                var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
+                                $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
+                                $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
+                                    '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
+                                    '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;rcontent='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
+                                    '<a target="_blank" href="http://v.t.qq.com/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
+                                    '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
+                                    '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
+
+                                if(_isIpad){
+                                    $('.fancybox-share-list').appendTo('.fancybox-outer');
+                                    $('.fancybox-share-list').append('<div class="share-close"></div>')
+                                }
+                                $('.fancybox-share').on('touchend',function(e){
+                                    e.preventDefault();
+                                    $('.fancybox-share-list').fadeIn();
+                                });
+                                $('.share-close').click(function(){
+                                    $('.fancybox-share-list').fadeOut();
+                                });
+
+                            }
+
+                        });
+                    })
 
                     var $videoGallery = $('#gallery-mask').find('.video-gallery');
                     var $vphotos = $videoGallery.find('.photo');
                     var vlen = $vphotos.length;
 
-                     initSliderBtn( $('#gallery-mask').find('.video-slider .slider-btn') ,
-                     $('#gallery-mask').find('.video-gallery') , 0 , 1024 ,
-                     Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
+                    initSliderBtn( $('#gallery-mask').find('.video-slider .slider-btn') ,
+                        $('#gallery-mask').find('.video-gallery') , 0 , 1024 ,
+                        Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
 
                     $vphotos.each( function( i ){
-                      var half = Math.ceil( vlen / 2 );
-                      var left = ( i % half ) * 360;
-                      var top = parseInt( i / half ) * 219;
-                      if( i >= half && $('.csstransforms').length > 0 ){
-                          left -= 79;
-                      }
-                      $(this).css({left:left,top:top});
+                        var half = Math.ceil( vlen / 2 );
+                        var left = ( i % half ) * 360;
+                        var top = parseInt( i / half ) * 219;
+                        if( i >= half && $('.csstransforms').length > 0 ){
+                            left -= 79;
+                        }
+                        $(this).css({left:left,top:top});
                     } );
 
                     $vphotos.find('a').fancybox({
@@ -854,39 +893,6 @@ define(function(require, exports, module) {
                         iframe: {scrolling:'no'},
                         openMethod : 'dropIn',
                         padding: 0
-                    });
-
-                    $photos.find('a').fancybox({
-                      openMethod : 'dropIn',
-                      padding: 0,
-                      tpl: {
-                          wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
-                      },
-                      afterShow: function(){
-                        var picurl = $(this).attr('href');
-                        var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
-                        $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
-                        $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
-                            '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
-                            '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;rcontent='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
-                            '<a target="_blank" href="http://v.t.qq.com/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
-                            '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
-                            '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
-
-                            if(_isIpad){
-                                $('.fancybox-share-list').appendTo('.fancybox-outer');
-                                $('.fancybox-share-list').append('<div class="share-close"></div>')
-                            }
-                            $('.fancybox-share').on('touchend',function(e){
-                                e.preventDefault();
-                                $('.fancybox-share-list').fadeIn();
-                            });
-                            $('.share-close').click(function(){
-                                $('.fancybox-share-list').fadeOut();
-                            });
-
-                      }
-
                     });
 
                     (function ($, F) {

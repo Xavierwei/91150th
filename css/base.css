@@ -1472,12 +1472,27 @@ span.lpn-ghost {
 #gallery-mask {background:rgba(0,0,0,0.7);}
 .no-rgba #gallery-mask {background:url(../images/fancybox_overlay.png)}
 #gallery-wrap {position:relative;width:1042px;height:501px;margin:0 auto;}
-#gallery-mask .title {background:url(../images/gallery-title.png) no-repeat;width:768px;height:55px;margin:0 0 0 50px;}
+#gallery-mask .title {background:url(../images/gallery-title.png) no-repeat;width:900px;height:55px;margin:0 0 0 50px;}
 
-#gallery-mask .btn1{background: url(../images/btn-bg1-dis.png) no-repeat;}
-#gallery-mask .btn1.selected,#gallery-mask .btn1:hover{
-  background: url(../images/btn-bg1.png) no-repeat;
-}
+#gallery-mask .btn1{background: url(../images/gallery_nav.png) no-repeat;position:relative;height:18px;text-indent:-999em;margin:0 34px 0 0;}
+#gallery-mask .btn1 span {display:none;background:url(../images/gallery-nav-light.png) no-repeat; width: 154px;height:50px; position: absolute;left:-23%;top:-72%;}
+.no-touch #gallery-mask .btn1:hover span,.no-touch #gallery-mask .btn1.selected span {display:block;}
+#gallery-mask .btn_1 span {left:-80%;}
+#gallery-mask .btn_5 span {left:-176%;}
+
+#gallery-mask .btn_1 {width:64px;background-position:0 -81px;}
+#gallery-mask .btn_2 {width:113px;background-position:-99px -81px;}
+#gallery-mask .btn_3 {width:112px;background-position:-249px -81px;}
+#gallery-mask .btn_4 {width:113px;background-position:-401px -81px;}
+#gallery-mask .btn_5 {width:32px;background-position:-551px -81px;}
+
+#gallery-mask .btn_1:hover,#gallery-mask .btn_1.selected {background-position:0 0;}
+#gallery-mask .btn_2:hover,#gallery-mask .btn_2.selected {background-position:-99px 0;}
+#gallery-mask .btn_3:hover,#gallery-mask .btn_3.selected {background-position:-249px 0;}
+#gallery-mask .btn_4:hover,#gallery-mask .btn_4.selected {background-position:-401px 0;}
+#gallery-mask .btn_5:hover,#gallery-mask .btn_5.selected {background-position:-551px 0;}
+
+
 #gallery-mask .close {cursor:pointer;opacity:0.7;background:url(../images/gallery_close.png) no-repeat;width:62px;height:37px; position: absolute;bottom:-38px;right:30px;}
 #gallery-mask .close:hover {opacity:1;}
 #gallery-mask .photo-gallery , #gallery-mask .video-gallery{position: relative;margin:10px 0 0;height:436px;}
