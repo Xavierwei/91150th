@@ -837,6 +837,7 @@ define(function(require, exports, module) {
                         $photos.find('a').fancybox({
                             openMethod : 'dropIn',
                             padding: 0,
+                            maxWidth:'80%',
                             tpl: {
                                 wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
                             },
