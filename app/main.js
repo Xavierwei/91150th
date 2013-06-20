@@ -406,7 +406,7 @@ define(function(require, exports, module) {
             */
 
             p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
-            $carDot.css('left' , 21 + Math.min( p2  , 300 / 2 ) );
+            //$carDot.css('left' , 21 + Math.min( p2  , 300 / 2 ) );
             // change robot dot position
 
             // if game is not over
@@ -1047,6 +1047,7 @@ define(function(require, exports, module) {
         // show counter btn
         resetCounter( function(){
             game.start( );
+            $carDot.animate({'left':167},3000);
         } );
         // when count to four,  start the robot
         // set robot car in the middle of the page
