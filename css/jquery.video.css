@@ -1,0 +1,111 @@
+.ui-video-control {
+	width: 320px;
+	height: 40px;
+	position: absolute;
+	opacity: .8;
+}
+.ui-video-progress {
+	font-family: monospace;
+	position: absolute;
+	right: 10px;
+	top: 5px;
+	font-size: 10px;
+}
+
+.ui-video-mute {
+	position: absolute;
+	left: 10px;
+	top: 5px;
+}
+
+.ui-video-play {
+	position: absolute;
+	left: 0px;
+	top: 5px;
+}
+.ui-video-seek-prev {
+	position: absolute;
+	left: 130px;
+	top: 5px;
+}
+.ui-video-seek-next {
+	position: absolute;
+	left: 170px;
+	top: 5px;
+}
+.ui-video-volume-slider {
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+	width: 60px;
+}
+.ui-video-scrubber-slider {
+	position: absolute;
+	left: 52px;
+	bottom: 15px;
+	width: 460px;
+}
+
+.ui-video-scrubber-slider-hover {
+	font-family: monospace;
+	position: absolute;
+	font-size: 10px;
+}
+
+.ui-video-scrubber-slider, .ui-video-volume-slider {
+	height: .3em;
+}
+.ui-video-scrubber-slider .ui-slider-handle, .ui-video-volume-slider .ui-slider-handle {
+	width: .6em;
+	height: .4em;
+	top: -.1em;
+	margin-left: -.3em;
+}
+
+.ui-video-buffer-status {
+	position: absolute;
+	width: 0;
+	top: 0;
+	bottom: 0;
+	padding: 0;
+	margin: 0;
+	opacity: .2;
+	background: #000;
+}
+
+.ui-video-spinner {
+	position: absolute;
+	background-image: url("spinner32.png");
+	height: 32px;
+	width: 992px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.ui-video-spinner-container {
+	position: absolute;
+	height: 32px;
+	width: 32px;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	z-index: 9999;
+}
+
+.ui-video-widget {
+	position: relative;
+}
+
+
+.ui-video-control .ui-video-mute {cursor:pointer;right:30px;left:auto;top:3px;}
+.ui-video-control .ui-icon-volume-on {background:url(../video-img/sound1.png) no-repeat;width:46px;height:45px;}
+.ui-video-control .ui-icon-volume-off {background:url(../video-img/sound2.png) no-repeat;width:46px;height:45px;}
+.ui-video-scrubber-slider {background:#555;border:none;}
+.ui-slider-range {background:#f8f8f8;}
+.ui-slider-handle {background:#fff;border:none;}
+.ui-video-control {background:none;width:600px;left:60px;border:none;z-index:999;}
+.ui-video-scrubber-slider .ui-slider-handle, .ui-video-volume-slider .ui-slider-handle {background:#fff;border:none;height:10px;}
+.ui-video-fullscreen {cursor:pointer;width:29px;height: 29px;background:url(../video-img/full.png) no-repeat;position: absolute;right:0;top:9px;}
+.ui-video-control .ui-icon-pause {cursor:pointer;background:url(../video-img/pause.png) no-repeat;width:47px;height:44px;}
+.ui-video-control .ui-icon-play {cursor:pointer;background:url(../video-img/play.png) no-repeat;width:47px;height:44px;}
