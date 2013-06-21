@@ -78,6 +78,10 @@ seajs.config({
           src: '../../src/jquery.finger',
           deps: ['jquery']
       }
+      ,'jquery.swipe': {
+          src: '../../src/jquery.swipe',
+          deps: ['jquery']
+      }
   },
   alias : {
     'util' : '../src/util/util'
