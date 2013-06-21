@@ -19,6 +19,7 @@ define(function(require, exports, module) {
     // require jquery ani plugin
     require('jquery.hoverIntent');
     require('jquery.finger');
+    require('jquery.swipe');
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
@@ -86,6 +87,18 @@ define(function(require, exports, module) {
         }
     }
 
+    // Disable mobile version
+    if(!_isIpad && $('html.touch').length > 0)
+    {
+        $('head').append('<link href="./css/mobile.css" rel="stylesheet" type="text/css" />');
+    }
+
+    // Change iPad version icons
+    if(_isIpad)
+    {
+        $('.c-mouse').attr('src','images/mouse-show2.png');
+        $('.c-mouse-text').attr('src','images/mouse-show-text2.png');
+    }
 
 
     /*
@@ -840,6 +853,15 @@ define(function(require, exports, module) {
                             maxWidth:'80%',
                             tpl: {
                                 wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
+                            },
+                            afterLoad: function(){
+                                $('.fancybox-wrap').swipeEvents()
+                                    .bind("swipeLeft", function(){
+                                        $.fancybox.next();
+                                    })
+                                    .bind("swipeRight", function(){
+                                        $.fancybox.prev();
+                                    });
                             },
                             afterShow: function(){
 
