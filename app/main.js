@@ -19,6 +19,7 @@ define(function(require, exports, module) {
     // require jquery ani plugin
     require('jquery.hoverIntent');
     require('jquery.finger');
+    require('jquery.swipe');
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
@@ -86,6 +87,18 @@ define(function(require, exports, module) {
         }
     }
 
+    // Disable mobile version
+    if(!_isIpad && $('html.touch').length > 0)
+    {
+        $('head').append('<link href="./css/mobile.css" rel="stylesheet" type="text/css" />');
+    }
+
+    // Change iPad version icons
+    if(_isIpad)
+    {
+        $('.c-mouse').attr('src','images/mouse-show2.png');
+        $('.c-mouse-text').attr('src','images/mouse-show-text2.png');
+    }
 
 
     /*
@@ -406,7 +419,7 @@ define(function(require, exports, module) {
             */
 
             p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
-            $carDot.css('left' , 21 + Math.min( p2  , 300 / 2 ) );
+            //$carDot.css('left' , 21 + Math.min( p2  , 300 / 2 ) );
             // change robot dot position
 
             // if game is not over
@@ -747,8 +760,30 @@ define(function(require, exports, module) {
             onShow: function( $rankingPanel ){
                 pause();
                 // Get list
+                var _date = new Date();
+                var _month = _date.getMonth()+1;
+                $('#ranking-month .btn').remove();
+                for(var i = 6; i <= _month; i++)
+                {
+                    $('#ranking-month').append('<div data-month="'+i+'" class="btn">'+i+'月份<div class="btn-r"></div></div>');
+                }
+                $('#ranking-month .btn').last().addClass('selected');
+                $('#ranking-month .btn').click(function(){
+                    var _month = $(this).attr('data-month');
+                    $('#ranking-month .btn').removeClass('selected');
+                    $(this).addClass('selected');
+                    $.ajax({
+                        url: "data/public/index.php/home/getrecord",
+                        data: {'m':_month},
+                        dataType: "JSON",
+                        success: function(res){
+                            _renderList( res.data );
+                        }
+                    });
+                });
                 $.ajax({
                     url: "data/public/index.php/home/getrecord",
+                    data: {'m':_month},
                     dataType: "JSON",
                     success: function(res){
                         _renderList( res.data );
@@ -837,14 +872,31 @@ define(function(require, exports, module) {
                         $photos.find('a').fancybox({
                             openMethod : 'dropIn',
                             padding: 0,
+                            maxWidth:'80%',
                             tpl: {
                                 wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
                             },
+                            afterLoad: function(){
+                                $('.fancybox-wrap').swipeEvents()
+                                    .bind("swipeLeft", function(){
+                                        $.fancybox.next();
+                                    })
+                                    .bind("swipeRight", function(){
+                                        $.fancybox.prev();
+                                    });
+                            },
                             afterShow: function(){
+
+                                var desc = this.element.find('.desc');
+                                console.log(desc);
+                                if(desc.length > 0)
+                                {
+                                    desc.clone(true).appendTo('.fancybox-outer');
+                                }
                                 var picurl = $(this).attr('href');
                                 var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
                                 $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
-                                $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
+                                $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088&amp;url=http://50years911.porsche-events.cn" title="分享到新浪微博" class="sina"></a>' +
                                     '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
                                     '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;rcontent='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
                                     '<a target="_blank" href="http://v.t.qq.com/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
@@ -900,7 +952,6 @@ define(function(require, exports, module) {
                             var endPos = F._getPosition(true);
                             endPos.opacity = 0;
                             endPos.top = (parseInt(endPos.top, 10) - 400);
-
                             F.wrap.css(endPos).show().animate({
                                 top: endPos.top + 400,
                                 opacity: 1
@@ -1040,6 +1091,7 @@ define(function(require, exports, module) {
         // show counter btn
         resetCounter( function(){
             game.start( );
+            $carDot.animate({'left':167},3000);
         } );
         // when count to four,  start the robot
         // set robot car in the middle of the page
@@ -1714,4 +1766,120 @@ define(function(require, exports, module) {
     $('body').nodoubletapzoom();
 
 
+    //tracking
+    $('.main-logo').bind('click',function(){
+        ga('send', 'event', 'logo', 'BTN1', 'BTN1');
+    });
+
+    $('#start-btn').bind('click',function(){
+        ga('send', 'event', 'Act', 'BTN1', 'BTN1');
+    });
+
+    $('.btn-again').bind('click',function(){
+        ga('send', 'event', 'Act', 'BTN2', 'BTN2');
+    });
+
+    $('.btn-gallery').bind('click',function(){
+        ga('send', 'event', 'Act', 'BTN3', 'BTN3');
+    });
+
+    $('.btn-submit').bind('click',function(){
+        ga('send', 'event', 'Act', 'BTN5', 'BTN5');
+    });
+
+    $('#gallery').bind('click',function(){
+        ga('send', 'event', 'dis', 'BTN', 'BTN');
+    });
+
+    $('#official-site').bind('click',function(){
+        ga('send', 'event', 'porsche', 'BTN', 'BTN');
+    });
+
+    $('#rule').bind('click',function(){
+        ga('send', 'event', 'rule', 'BTN', 'BTN');
+    });
+
+    $('#ranking').bind('click',function(){
+        ga('send', 'event', 'score', 'BTN', 'BTN');
+    });
+
+    $('#share-con a').eq(0).bind('click',function(){
+        ga('send', 'event', 'share', 'BTN1', 'BTN1');
+    });
+
+    $('#share-con a').eq(1).bind('click',function(){
+        ga('send', 'event', 'share', 'BTN1', 'BTN1');
+    });
+
+    $('#share-con a').eq(2).bind('click',function(){
+        ga('send', 'event', 'share', 'BTN1', 'BTN1');
+    });
+
+    $('#share-con a').eq(3).bind('click',function(){
+        ga('send', 'event', 'share', 'BTN1', 'BTN1');
+    });
+
+    $('.follow_sina').bind('click',function(){
+        ga('send', 'event', 'sina', 'BTN', 'BTN');
+    });
+
+    $('#gallery-wrap .btn1').eq(0).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN1', 'BTN1');
+    });
+
+    $('#gallery-wrap .btn1').eq(1).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN2', 'BTN2');
+    });
+
+    $('#gallery-wrap .btn1').eq(2).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN3', 'BTN3');
+    });
+
+    $('#gallery-wrap .btn1').eq(3).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN4', 'BTN4');
+    });
+
+    $('#gallery-wrap .btn1').eq(4).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN5', 'BTN5');
+    });
+
+    $('#gallery-wrap .btn1').eq(5).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN6', 'BTN6');
+    });
+
+    $('#gallery-wrap .btn1').eq(6).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN7', 'BTN7');
+    });
+
+    $('#gallery-wrap .btn1').eq(7).bind('click',function(){
+        ga('send', 'event', 'Pic', 'BTN8', 'BTN8');
+    });
+
+    $('.video-gallery a').eq(0).bind('click',function(){
+        ga('send', 'event', 'Mov', 'BTN1', 'BTN1');
+    });
+
+    $('.video-gallery a').eq(1).bind('click',function(){
+        ga('send', 'event', 'Mov', 'BTN2', 'BTN2');
+    });
+
+    $('.video-gallery a').eq(2).bind('click',function(){
+        ga('send', 'event', 'Mov', 'BTN3', 'BTN3');
+    });
+
+    $('.video-gallery a').eq(3).bind('click',function(){
+        ga('send', 'event', 'Mov', 'BTN4', 'BTN4');
+    });
+
+    $('.video-gallery a').eq(4).bind('click',function(){
+        ga('send', 'event', 'Mov', 'BTN5', 'BTN5');
+    });
+
+    $('.video-gallery a').eq(5).bind('click',function(){
+        ga('send', 'event', 'Mov', 'BTN6', 'BTN6');
+    });
+
+    $('.video-gallery a').eq(6).bind('click',function(){
+        ga('send', 'event', 'Mov', 'BTN7', 'BTN7');
+    });
 });

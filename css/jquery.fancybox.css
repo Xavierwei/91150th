@@ -45,6 +45,16 @@
 	position: relative;
 }
 
+.fancybox-outer .desc {
+    background:url(../images/fancybox_overlay.png);
+    font-size:12px;
+    color:#fff;
+    padding:10px 5%;
+    position: absolute;
+    bottom:0;
+    width:91%;
+}
+
 .fancybox-inner {
 	overflow: hidden;
 }
@@ -99,7 +109,7 @@
 .fancybox-close {
     background:url(../images/gallery_close.png);
 	position: absolute;
-	top: 0px;
+	bottom: 0px;
 	right: -67px;
 	width: 62px;
 	height: 39px;
@@ -123,15 +133,15 @@
 }
 
 .fancybox-prev {
-	left: 0;
+	left: -95px;
     background:url(../images/fancybox_prev.png) no-repeat center left;
-    opacity:0.3;
+    opacity:0.6;
 }
 
 .fancybox-next {
-	right: 0;
+	right: -95px;
     background:url(../images/fancybox_next.png) no-repeat center right;
-    opacity:0.3;
+    opacity:0.6;
 }
 
 .fancybox-nav span {
@@ -181,8 +191,7 @@
 	left: 0;
 	overflow: hidden;
 	display: none;
-	z-index: 999999;
-	background: url('../images/fancybox_overlay.png');
+	z-index: 9999998;
 }
 
 .fancybox-overlay-fixed {
@@ -196,6 +205,7 @@
 	overflow-y: scroll;
 }
 
+.fancybox-mobile {z-index:999999999;}
 /* Title helper */
 
 .fancybox-title {
