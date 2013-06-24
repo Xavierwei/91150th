@@ -760,8 +760,30 @@ define(function(require, exports, module) {
             onShow: function( $rankingPanel ){
                 pause();
                 // Get list
+                var _date = new Date();
+                var _month = _date.getMonth()+1;
+                $('#ranking-month .btn').remove();
+                for(var i = 6; i <= _month; i++)
+                {
+                    $('#ranking-month').append('<div data-month="'+i+'" class="btn">'+i+'月份<div class="btn-r"></div></div>');
+                }
+                $('#ranking-month .btn').last().addClass('selected');
+                $('#ranking-month .btn').click(function(){
+                    var _month = $(this).attr('data-month');
+                    $('#ranking-month .btn').removeClass('selected');
+                    $(this).addClass('selected');
+                    $.ajax({
+                        url: "data/public/index.php/home/getrecord",
+                        data: {'m':_month},
+                        dataType: "JSON",
+                        success: function(res){
+                            _renderList( res.data );
+                        }
+                    });
+                });
                 $.ajax({
                     url: "data/public/index.php/home/getrecord",
+                    data: {'m':_month},
                     dataType: "JSON",
                     success: function(res){
                         _renderList( res.data );

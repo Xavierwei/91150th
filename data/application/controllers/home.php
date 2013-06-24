@@ -97,9 +97,12 @@ class Home_Controller extends Base_Controller {
 
     public function action_getrecord() {
 
+        $month = Input::get("m");
         $record = DB::table('game_record')
             ->join('user', 'user.uid', '=', 'game_record.uid')
+            ->where(\DB::raw("DATE_FORMAT(game_record.created_at, '%c')"),'=',$month)
             ->order_by('game_record.time', 'desc')->take(20)->get();
+
         return Response::json(array("data" => $record, "code" => 200, "error" => ""));
     }
 
