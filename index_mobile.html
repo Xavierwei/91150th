@@ -1,0 +1,550 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>保时捷911-50周年</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=0.84, maximum-scale=0.84, user-scalable=no" />
+  <script type="text/javascript" src="./src/modernizr-2.5.3.min.js"></script>
+  <script type="text/javascript"
+    src="./lib/sea/sea-debug.js"
+    data-config="../../app/config"
+    data-main="../../m/main"></script>
+  <!--[if lt IE 9]><script>for(var a=['section','article','nav','header','footer','aside'],i=0,j=a.length;i<j;++i){document.createElement(a[i]);}</script>
+  <style type="text/css">
+    .vml{behavior:url(#default#VML);display:inline-block;}
+  </style>
+  <![endif]-->
+  <!--[if lt IE 8]>
+     <link href="./css/lowie.css" rel="stylesheet" type="text/css" />
+  <![endif]-->
+
+ <link href="./css/base.css" rel="stylesheet" type="text/css" />
+ <link href="./css/animate.css" rel="stylesheet" type="text/css" />
+ <link href="./css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+ <link rel="stylesheet" media="all and (orientation:portrait)" href="./css/portrait.css">
+  <!--[if IE]>
+  <link href="./css/ie.css" rel="stylesheet" type="text/css" />
+  <![endif]-->
+<script type="text/javascript">
+    window.mobile = true;
+ /*
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40136895-1']);
+  _gaq.push(['_setDomainName', 'porsche-event.cn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+*/
+</script>
+ </head>
+ <body onselectstart="return false">
+    <!---// loading start -->
+    <section id="loading-mask" class="lpn-mask">
+      <span class="lpn-ghost"></span>
+      <div class="lpn-panel">
+        <div class="lpn-content">
+          <img style="margin-top:30px;" src="images/com-logo.png" width="609" height="21" />
+          <div class="process-wrap">
+            <div id="process-bar"></div>
+          </div>
+          <div id="process-num">0%</div>
+        </div>
+      </div>
+    </section>
+    <!--login panel-->
+    <!--
+    <section id="login-mask" style="display:none;" class="login-panel lpn-mask">
+      <span class="lpn-ghost"></span>
+      <div class="lpn-panel">
+        <div class="lpn-content">
+          <form class="login-form clearfix" action="###">
+            <label class="username"><input name="name" spellcheck="false" type="text" id="uname" />
+            </label>
+            <label class="email"><input name="email" spellcheck="false" type="text" id="email" />
+            </label>
+            <div style="margin-top:64px;">
+                <input type="submit" value=" " class="btn btn-ok" />
+                <div class="btn btn-back"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="lpn-register">
+          <a href="https://api.weibo.com/oauth2/authorize?client_id=2935559718&redirect_uri=http%3A%2F%2F50years911.porsche-events.cn%2Fdata%2Fpublic%2Findex.php%2Fhome%2Fcallback&response_type=code" class="login-weibo"></a>
+          <a href="javascript:void(0);" class="login-local"></a>
+      </div>
+    </section>
+    -->
+    <!--video panel-->
+    <!--
+    <section id="video-mask" class="video-mask lpn-mask">
+      <span class="lpn-ghost"></span>
+      <div class="lpn-panel">
+        <div class="video-wrap">
+          <div id="FlashContent"></div>
+        </div>
+        <div class="video-skip"></div>
+      </div>
+    </section>
+    -->
+    <script type="text/tpl" id="rule-mask-tpl">
+<!--game rule-->
+        <section id="rule-mask" class="rule-mask lpn-mask">
+            <span class="lpn-ghost"></span>
+            <div class="lpn-panel">
+                <div class="rule-wrap">
+                    <div class="rule-title">游戏规则</div>
+                    <div class="rule-content">
+                        <div class="rule-content-link"></div>
+                    </div>
+
+                </div>
+                <div class="r-close"></div>
+            </div>
+        </section>
+    </script>
+    <script type="text/tpl" id="ranking-mask-tpl">
+<!-- ranking panel -->
+<section id="ranking-mask" class="ranking-mask lpn-mask">
+    <span class="lpn-ghost"></span>
+    <div class="lpn-panel">
+        <div class="ranking">
+            <div class="r-close"></div>
+            <div class="r-head">
+              <div class="btn selected">6月份<div class="btn-r"></div></div>
+              <!--<div class="btn">7月份<div class="btn-r"></div></div>-->
+              <!--<div class="btn">8月份<div class="btn-r"></div></div>-->
+              <span class='r-head-title'>排行榜</span>
+            </div>
+            <div class="r-list">
+            </div>
+        </div>
+    </div>
+</section>
+    </script>
+    <script type="text/tpl" id="spirit-mask-tpl">
+<!-- spirit-mask -->
+<section id="spirit-mask" class="lpn-mask" >
+  <span class="lpn-ghost"></span>
+  <div class="lpn-panel">
+    <div class="spirit-wrap">
+        <div class="spirit-con">五十年来，保时捷911始终坚持不断超越自我，以筑就新的传奇典范。<br/>惟有真正的梦想勇士，愿追随保时捷，不断前进。</div>
+    </div>
+  </div>
+</section>
+    </script>
+    <script type="text/tpl" id="gallery-mask-tpl">
+<section id="gallery-mask" class="gallery-mask lpn-mask">
+  <span class="lpn-ghost"></span>
+  <div class="lpn-panel" style="overflow:visible;">
+    <div id="gallery-wrap">
+      <div class="title">
+          <div class="btn1 btn_1 selected" style="margin-left: 269px;margin-top: 20px;" ><span></span></div>
+          <div class="btn1 btn_2" style="margin-top: 20px;"><span></span></div>
+          <div class="btn1 btn_3" style="margin-top: 20px;"><span></span></div>
+          <div class="btn1 btn_4" style="margin-top: 20px;"><span></span></div>
+          <div class="btn1 btn_5" style="margin-top: 20px;"><span></span></div>
+      </div>
+      <!--//gallery1-->
+      <div class="photo-gallery" init='true'>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b1.jpg"><img src="pic/g1/s1.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b2.jpg"><img src="pic/g1/s2.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b3.jpg"><img src="pic/g1/s3.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b4.jpg"><img src="pic/g1/s4.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b5.jpg"><img src="pic/g1/s5.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b6.jpg"><img src="pic/g1/s6.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b7.jpg"><img src="pic/g1/s7.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b8.jpg"><img src="pic/g1/s8.jpg" /></a>
+        </div>
+        <div class="photo">
+        <a rel="gallery" href="pic/g1/b9.jpg"><img src="pic/g1/s9.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b10.jpg"><img src="pic/g1/s10.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b11.jpg"><img src="pic/g1/s11.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b12.jpg"><img src="pic/g1/s12.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b13.jpg"><img src="pic/g1/s13.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b14.jpg"><img src="pic/g1/s14.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b15.jpg"><img src="pic/g1/s15.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b16.jpg"><img src="pic/g1/s16.jpg" /></a>
+        </div>
+        <div class="photo">
+          <a rel="gallery" href="pic/g1/b17.jpg"><img src="pic/g1/s17.jpg" /></a>
+        </div>
+      </div>
+      <!--\\gallery1-->
+
+        <!--//gallery2-->
+        <div class="photo-gallery" init='true' style="display:none;">
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b1.jpg"><img src="pic/g2/s1.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b2.jpg"><img src="pic/g2/s2.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b3.jpg"><img src="pic/g2/s3.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b4.jpg"><img src="pic/g2/s4.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b5.jpg"><img src="pic/g2/s5.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b6.jpg"><img src="pic/g2/s6.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b7.jpg"><img src="pic/g2/s7.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b8.jpg"><img src="pic/g2/s8.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b9.jpg"><img src="pic/g2/s9.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b10.jpg"><img src="pic/g2/s10.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b11.jpg"><img src="pic/g2/s11.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b12.jpg"><img src="pic/g2/s12.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b13.jpg"><img src="pic/g2/s13.jpg" /></a>
+            </div>
+        </div>
+        <!--\\gallery2-->
+
+      <!--//gallery3-->
+      <div class="photo-gallery" init='true' style="display:none;">
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b1.jpg"><img src="pic/g3/s1.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b2.jpg"><img src="pic/g3/s2.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b3.jpg"><img src="pic/g3/s3.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b4.jpg"><img src="pic/g3/s4.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b5.jpg"><img src="pic/g3/s5.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b6.jpg"><img src="pic/g3/s6.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b7.jpg"><img src="pic/g3/s7.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b8.jpg"><img src="pic/g3/s8.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b9.jpg"><img src="pic/g3/s9.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b10.jpg"><img src="pic/g3/s10.jpg" /></a>
+          </div>
+      </div>
+      <!--\\gallery3-->
+
+      <!--//gallery4-->
+      <div class="photo-gallery" init='true' style="display:none;">
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b1.jpg"><img src="pic/g4/s1.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b2.jpg"><img src="pic/g4/s2.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b3.jpg"><img src="pic/g4/s3.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b4.jpg"><img src="pic/g4/s4.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b5.jpg"><img src="pic/g4/s5.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b6.jpg"><img src="pic/g4/s6.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b7.jpg"><img src="pic/g4/s7.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b8.jpg"><img src="pic/g4/s8.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b9.jpg"><img src="pic/g4/s9.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b10.jpg"><img src="pic/g4/s10.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b11.jpg"><img src="pic/g4/s11.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b12.jpg"><img src="pic/g4/s12.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b13.jpg"><img src="pic/g4/s13.jpg" /></a>
+          </div>
+      </div>
+      <!--\\gallery4-->
+
+      <!--//video-->
+      <div class="video-gallery" init='false' style="display:none;">
+            <div class="photo">
+              <a href="video.php?id=1"><img src="pic/v1.jpg" /><span>播放</span></a>
+            </div>
+            <div class="photo">
+              <a href="video.php?id=2"><img src="pic/v2.jpg" /><span>播放</span></a>
+            </div>
+            <div class="photo">
+              <a href="video.php?id=3"><img src="pic/v3.jpg" /><span>播放</span></a>
+            </div>
+            <div class="photo">
+              <a href="video.php?id=4"><img src="pic/v4.jpg" /><span>播放</span></a>
+            </div>
+            <div class="photo">
+              <a href="video.php?id=5"><img src="pic/v5.jpg" /><span>播放</span></a>
+            </div>
+            <div class="photo">
+              <a href="video.php?id=6"><img src="pic/v6.jpg" /><span>播放</span></a>
+            </div>
+            <div class="photo">
+              <a href="video.php?id=7"><img src="pic/v7.jpg" /><span>播放</span></a>
+            </div>
+      </div>
+      <!--//video-->
+
+      <div class="slider-wrap">
+          <div class="photo-slider">
+            <div class="slider-btn"><div class="slider-btn-inner"></div></div>
+          </div>
+          <div class="photo-slider" style="display:none;">
+              <div class="slider-btn"><div class="slider-btn-inner"></div></div>
+          </div>
+          <div class="photo-slider" style="display:none;">
+              <div class="slider-btn"><div class="slider-btn-inner"></div></div>
+          </div>
+          <div class="photo-slider" style="display:none;">
+              <div class="slider-btn"><div class="slider-btn-inner"></div></div>
+          </div>
+          <div class="video-slider" style="display:none;">
+            <div class="slider-btn"><div class="slider-btn-inner"></div></div>
+          </div>
+      </div>
+      <div class="close"></div>
+    </div>
+  </div>
+</section>
+    </script>
+    <script type="text/tpl" id="result-mask-tpl">
+<!--result panel-->
+<section id="result-mask" class="result-mask lpn-mask">
+  <span class="lpn-ghost"></span>
+  <div class="lpn-panel">
+    <div class="result">
+      <div class="result-head">
+        <span class="time1 time00"></span><span class="time2 time10"></span>
+        <span class="time3 time00"></span><span class="time4 time10"></span>
+        <span class="time5 time00"></span><span class="time6 time10"></span>
+      </div>
+      <div class="result-con">
+        <div class="result-tit" style="display:none;">
+            <div class="result-con-title"></div>
+            <div class="btn1 btn-again" style="margin-top: 21px;margin-left: 12px;margin-right: 30px;">再玩一次</div>
+            <div class="btn1 btn-submit" style="margin-top: 21px;">提交信息</div>
+        </div>
+        <form class="result-form" style="display:none;">
+            <label>姓名<input name="name" type="text"></label>
+            <label>手机<input name="tel" type="text"></label>
+            <label>邮箱<input name="email" type="text"></label>
+            <label>邮编<input name="code" type="text"></label>
+            <label>地址<input name="address" type="text"></label>
+        </form>
+        <div class="result-form-suc" style="display:none;">
+            <br/>
+            <div class="btn1 btn-again" style="margin-top: 68px;margin-left:0px;">再玩一次</div><div class="btn1 btn-gallery" style="margin-top: 68px;margin-left:15px;">探索<span class="stren">911</span></div>
+        </div>
+        <div class="result-form-exist">您已提交相关信息</div>
+        <div class="result-failure">
+            <div class="result-failure-content"></div>
+            <div class="btn1 btn-again" style="margin-top: 28px;margin-left: 161px;">再玩一次</div><div class="btn1 btn-gallery" style="margin-top: 28px;margin-left:15px;">探索<span class="stren">911</span></div>
+        </div>
+      </div>
+      <div class="r-share">
+          <span style="float:left;">与好友一起分享：</span>
+          <a id="share_sina" target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82&amp;url=http://50years911.porsche-events.cn%2f&amp;pic=http://50years911.porsche-events.cn/91150th.jpg" title="分享到新浪微博" class="sina"></a>
+          <!--<a id="share_qzone" target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title=911%2050th" title="分享到QQ空间" class="qzone"></a>
+          <a id="share_kaixin" target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;amp;rcontent=911%2050th" title="分享到开心网" class="kaixing"></a>-->
+          <a id="share_qq" target="_blank" href="http://v.t.qq.com/share/share.php?title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82&amp;pic=http://50years911.porsche-events.cn/91150th.jpg" title="分享到QQ微博" class="qqwb"></a>
+          <a id="share_renren" target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82" title="分享到人人网" class="renren"></a>
+          <a id="share_douban" target="_blank" href="http://shuo.douban.com/!service/share?&amp;href=http://50years911.porsche-events.cn%2f&amp;name=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82" title="分享到豆瓣" class="douban"></a>
+          <!--<a id="share_sohu" target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th" title="分享到搜狐微博" class="tt"></a>-->
+      </div>
+      <div class="r-close"></div>
+    </div>
+  </div>
+</section>
+    </script>
+    <div class="icon-pause"></div>
+    <div class="bg-pause"></div>
+    <!--- \\ loading end -->
+    <!---// moving start -->
+    <section class="main">
+      <div class="main-bg">
+        <span id="fps" style="display:none;position:absolute;top:0;left:0;color:yellow;z-index:9999999999;">fps: 0</span>
+        <img src="images/bg1-2.jpg" style="display:none;" />
+        <img src="images/bg2-3.jpg" style="display:none;" />
+        <img src="images/bg3-1.jpg" style="display:none;" />
+        <img src="images/bg2.jpg" style="display:none;" />
+        <img src="images/bg3.jpg" style="display:none;" />
+        <img src="images/bg1.jpg" class="bg" id="bg" />
+        <div class="road" id="road"></div>
+      </div>
+      <div class="main-top">
+          <a href="http://www.porsche.com/china/" target="_blank"><img class="main-logo" src="images/m-logo.png" /></a>
+        <img class="main-com-logo" src="images/m-com-logo.png" />
+      </div>
+      <div class="main-board">
+        <div class="main-board-con" >
+          <div class="board-l" id="speed-board"><em class="speed00"></em><em class="speed10"></em><em class="speed20"></em></div>
+          <div class="board-time" id="time-board">00:00:0</div>
+          <div class="board-m-t">
+            <div id="b-bar" class="b-bar0"></div>
+            <img src="images/cardot.png" class="b-car" id="car-dot" />
+            <img src="images/cardot.png" class="b-robot" id="robot-dot" />
+          </div>
+          <div class="board-m-b">
+            <a href="javascript:void(0);" id="gallery">探索<span class="stren">911</span></a>
+            <a target="_blank" id="official-site" href="http://www.porsche.com/china/">保时捷官网</a>
+            <a id="rule" href="javascript:void(0);">活动规则</a>
+            <a id="ranking" href="javascript:void(0);">排行榜</a>
+          </div>
+          <div id="share-wrap">
+            <span class="board-r" id="share-btn">分享</span>
+            <div class="board-share" id="share-con">
+                <a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82&amp;url=http://50years911.porsche-events.cn%2f&amp;pic=http://50years911.porsche-events.cn/91150th.jpg" title="分享到新浪微博" class="sina"></a>
+                <!--<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title=911%2050th" title="分享到QQ空间" class="qzone"></a>
+                <a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;amp;rcontent=911%2050th" title="分享到开心网" class="kaixing"></a>-->
+                <a target="_blank" href="http://shuo.douban.com/!service/share?&amp;href=http://50years911.porsche-events.cn%2f&amp;name=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82" title="分享到豆瓣" class="douban"></a>
+                <a target="_blank" href="http://v.t.qq.com/share/share.php?title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82&amp;pic=http://50years911.porsche-events.cn/91150th.jpg" title="分享到QQ微博" class="qqwb"></a>
+                <a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82" title="分享到人人网" class="renren"></a>
+                <!--<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title=911%2050th" title="分享到搜狐微博" class="tt"></a>-->
+            </div>
+          </div>
+        </div>
+        <div id="main-board-bg-r" class="main-board-bg-r">
+          <div class="follow_sina">
+              <div class="inner">
+                <a target="_blank" href="http://e.weibo.com/porschechina" title="关注新浪微博" class="sina"></a>
+                <span>关注</span>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="main-bottom">
+        <a target="_blank" href="http://www.porsche.com/china/">©2013保时捷中国</a> <a target="_blank" href="http://www.porsche.com/china/zh/legal-notice/">法律公告</a>
+      </div>
+      <!--<div id="login-status"></div>-->
+      <div class="main-cars">
+        <div class="car my-car">
+          <img src="images/car.png" />
+          <div class="front-wheel"></div>
+          <div class="end-wheel"></div>
+        </div>
+        <div class="car">
+          <img src="images/robot.png" />
+          <div class="front-wheel"></div>
+          <div class="end-wheel"></div>
+        </div>
+      </div>
+      <div class="main-metas">
+        <img class="start" id="start-btn" src="images/start.png" />
+        <!--<img src="images/goon.png" id="goon-btn" class="goon" />-->
+        <div class="counter" id="counter">
+          <img class="c-bg" src="images/ready.png" />
+          <img class="c-mouse" src="images/mouse-show.png" /><br/>
+          <img class="c-mouse-text" src="images/mouse-show-text.png" />
+          <img class="num" src="images/c0.png" />
+          <img class="num" src="images/c1.png" />
+          <img class="num" src="images/c2.png" />
+          <img class="num" src="images/c3.png" />
+        </div>
+      </div>
+    </section>
+    <!--<input type="hidden" name="username" id="username" />-->
+    <!---\\ moving end -->
+    <!--load jquery and plugin-->
+    <script type="text/javascript" src="./lib/jquery/jquery-1.10.js"></script>
+    <script type="text/javascript" src="./src/jquery-plugin/easing/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="./src/jquery-plugin/jquery.queryloader2.js"></script>
+    <script type="text/javascript">
+    // query loading
+    var $probar = $('#process-bar');
+    var $pronum = $('#process-num');
+    // query loading
+    $(document.body).queryLoader2({
+        minimumTime: 1000,
+        onLoading : function( percentage ){
+            $probar.css( 'width' , percentage + '%' );
+            $pronum.html( percentage + '%' );
+        },
+        onComplete: function(){
+            $('#loading-mask .lpn-panel').animate({padding:0, height:1},300,'easeOutQuart');
+            $('#loading-mask')
+                .delay(300).animate({'opacity':0},1000,'easeOutQuart',function(){
+                    $(this).hide();
+                });
+            $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
+              var interval = setInterval(function(){
+                if( window.readyForGame ){
+                  $(window).trigger('game-start');
+                  clearInterval( interval );
+                }
+              } , 50);
+            });
+        }
+    });
+
+    </script>
+ </body>
+</html>
