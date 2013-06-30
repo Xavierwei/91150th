@@ -1,0 +1,406 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>保时捷911-50周年</title>
+  <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
+  <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" name="viewport" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta content="telephone=no" name="format-detection" />
+  <link rel="apple-touch-icon" href="custom_icon.png">
+  <!--
+  <script type="text/javascript" src="./src/modernizr-2.5.3.min.js"></script>
+  -->
+  <script type="text/javascript"
+    src="../lib/sea/sea-debug.js"
+    data-config="../../app/config"
+    data-main="../../m/main"></script>
+ <link href="./css/base.css" rel="stylesheet" type="text/css" />
+ <!--
+ <link href="./css/animate.css" rel="stylesheet" type="text/css" />
+ <link href="./css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+ <link rel="stylesheet" media="all and (orientation:portrait)" href="./css/portrait.css">
+ -->
+ </head>
+ <body onselectstart="return false">
+    <!---// loading start -->
+    <section id="loading-mask" class="lpn-mask">
+      <span class="lpn-ghost"></span>
+      <div class="lpn-panel">
+        <div class="lpn-content">
+          <img style="margin-top:30px;" src="images/com-logo.png" width="609" height="21" />
+          <div class="process-wrap">
+            <div id="process-bar"></div>
+          </div>
+          <div id="process-num">0%</div>
+        </div>
+      </div>
+    </section>
+    <!--- \\ loading end -->
+    <!---// moving start -->
+    <section class="main">
+      <div class="main-bg" >
+        <div class="bg"></div>
+        <div class="road" id="road"></div>
+      </div>
+      <div class="main-top">
+          <a href="http://www.porsche.com/china/" target="_blank"><img class="main-logo" src="images/m-logo.png" /></a>
+          <img class="main-com-logo" src="images/m-com-logo.png" />
+          <div class="nav-wrap">
+              <div class="nav-b ">
+                <div class="nav-item-wrap">
+                  <div class="nav-item nav-main">
+                    <div class="btn-wrap">
+                      <a href="javascript:;" id="gallery">探索911<span></span></a>
+                      <a href="javascript:;" id="rule">活动规则<span></span></a>
+                      <a href="javascript:;" id="ranking">排行榜<span></span></a>
+                      <a target="_blank" href="http://e.weibo.com/porschechina">关注微博<span></span></a>
+                      <a href="javascript:;" id="J_share">分享<span></span></a>
+                      <a target="_blank" href="http://www.porsche.com/china/">保时捷官网<span></span></a>
+                    </div>
+                    <em class="nav-up" id="J_nav-up"></em>
+                  </div>
+                  <div class="nav-item nav-share">
+                      <div class="btn-wrap btn-share-wrap">
+                        <a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82&amp;url=http://50years911.porsche-events.cn%2f&amp;pic=http://50years911.porsche-events.cn/91150th.jpg" title="分享到新浪微博" class="sina"><i></i><span></span></a>
+                        <a target="_blank" href="http://v.t.qq.com/share/share.php?title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82&amp;pic=http://50years911.porsche-events.cn/91150th.jpg" title="分享到QQ微博" class="qqwb"><i></i><span></span></a>
+                        <a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82" title="分享到人人网" class="renren"><i></i><span></span></a>
+                        <a target="_blank" href="http://shuo.douban.com/!service/share?&amp;href=http://50years911.porsche-events.cn%2f&amp;name=%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e5%88%9a%e5%8f%82%e5%8a%a0%e4%ba%86%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e7%9a%84%e7%89%b9%e5%88%ab%e6%b4%bb%e5%8a%a8%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e8%af%95%e8%af%95%e5%90%a7%e3%80%82" title="分享到豆瓣" class="douban"><i></i><span></span></a>
+                      </div>
+                      <em class="nav-back" id="J_nav-back"></em>
+                  </div>
+                </div>
+              </div>
+              <div class="nav" id="J_nav"></div>
+          </div>
+      </div>
+      <div class="main-board">
+        <div class="main-board-con" >
+          <div class="board-l" id="speed-board"><em class="speed00"></em><em class="speed10"></em><em class="speed20"></em></div>
+          <div class="board-time" id="time-board">00:00:0</div>
+          <div class="board-m-t">
+            <div id="b-bar" class="b-bar0"></div>
+            <i class="b-car" id="car-dot"></i>
+            <i class="b-robot" id="robot-dot"></i>
+          </div>
+        </div>
+      </div>
+      <div class="main-cars">
+        <div class="car my-car">
+          <img src="images/car.png" />
+          <div class="front-wheel"></div>
+          <div class="end-wheel"></div>
+        </div>
+        <div class="car">
+          <img src="images/robot.png" />
+          <div class="front-wheel"></div>
+          <div class="end-wheel"></div>
+        </div>
+      </div>
+      <div class="main-metas">
+        <img class="start" id="start-btn" src="images/start.png" />
+        <!--<img src="images/goon.png" id="goon-btn" class="goon" />-->
+        <div class="counter" id="counter">
+          <img class="c-bg" src="images/ready.png" /><br/>
+          <img class="c-mouse" src="images/mouse-show.png" /><br/>
+          <div class="c-mouse-text">请用手指连续点击开始游戏</div>
+          <img class="num" src="images/c0.png" />
+          <img class="num" src="images/c1.png" />
+          <img class="num" src="images/c2.png" />
+          <img class="num" src="images/c3.png" />
+        </div>
+      </div>
+    </section>
+    <!--<input type="hidden" name="username" id="username" />-->
+    <!---\\ moving end -->
+    <!--load jquery and plugin-->
+    <script type="text/javascript" src="../lib/jquery/jquery-1.10.js"></script>
+    <script type="text/javascript" src="../src/jquery-plugin/easing/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="../src/jquery-plugin/jquery.queryloader2.js"></script>
+    <script type="text/javascript">
+    // query loading
+    var $probar = $('#process-bar');
+    var $pronum = $('#process-num');
+    // query loading
+    $(document.body).queryLoader2({
+        minimumTime: 1000,
+        onLoading : function( percentage ){
+            $probar.css( 'width' , percentage + '%' );
+            $pronum.html( percentage + '%' );
+        },
+        onComplete: function(){
+            $('#loading-mask .lpn-panel').animate({padding:0, height:1},300,'easeOutQuart');
+            $('#loading-mask')
+                .delay(300).animate({'opacity':0},1000,'easeOutQuart',function(){
+                    $(this).hide();
+                });
+            $('.main').delay(1300).animate({'opacity':1},1000,'easeOutQuart',function(){
+              var interval = setInterval(function(){
+                if( window.readyForGame ){
+                  $(window).trigger('game-start');
+                  clearInterval( interval );
+                }
+              } , 50);
+            });
+        }
+    });
+
+    </script>
+
+
+
+    <script type="text/tpl" id="rule-mask-tpl">
+<!--game rule-->
+        <section id="rule-mask" class="rule-mask lpn-mask">
+            <span class="lpn-ghost"></span>
+            <div class="lpn-panel">
+                <div class="rule-wrap">
+                    <div class="rule-title">游戏规则</div>
+                    <div class="rule-content">
+                    </div>
+                    <div class="rule-meta">保时捷（中国）汽车销售有限公司保留获奖规则解释权。</div>
+                </div>
+                <div class="r-close"></div>
+            </div>
+        </section>
+    </script>
+    <script type="text/tpl" id="ranking-mask-tpl">
+<!-- ranking panel -->
+<section id="ranking-mask" class="ranking-mask lpn-mask">
+    <span class="lpn-ghost"></span>
+    <div class="lpn-panel">
+      <div class="r-close"></div>
+      <div class="ranking">
+        <div class="r-head">
+            <div id="ranking-month">
+              <div class="btn">7月份<div class="btn-r"></div></div>
+            </div>
+          <!--<div class="btn">7月份<div class="btn-r"></div></div>-->
+          <!--<div class="btn">8月份<div class="btn-r"></div></div>-->
+          <span class='r-head-title'>排行榜</span>
+        </div>
+        <div class="r-list">
+        </div>
+        <div class="r-sep"></div>
+      </div>
+    </div>
+</section>
+    </script>
+    <script type="text/tpl" id="spirit-mask-tpl">
+<!-- spirit-mask -->
+<section id="spirit-mask" class="lpn-mask" >
+  <span class="lpn-ghost"></span>
+  <div class="lpn-panel">
+    <div class="spirit-wrap">
+        <!--<div class="spirit-con">五十年来，保时捷911始终坚持不断超越自我，以筑就新的传奇典范。<br/>惟有真正的梦想勇士，愿追随保时捷，不断前进。</div>-->
+    </div>
+  </div>
+</section>
+    </script>
+    <script type="text/tpl" id="gallery-mask-tpl">
+<section id="gallery-mask" class="gallery-mask lpn-mask">
+  <span class="lpn-ghost"></span>
+  <div class="lpn-panel" >
+    <div class="r-close"></div>
+    <div id="gallery-wrap">
+      <div class="title">
+          <div class="btn1 btn_1" ><span></span></div>
+          <div class="btn1 btn_2" ><span></span></div>
+          <div class="btn1 btn_3" ><span></span></div>
+          <div class="btn1 btn_4" ><span></span></div>
+          <div class="btn1 btn_5" ><span></span></div>
+          <div class="btn1 btn_6" ><span></span></div>
+          <div class="btn1 btn_7" ><span></span></div>
+          <div class="btn1 btn_8 selected" ><span></span></div>
+      </div>
+      <div class="photo-wrap">
+        <div class="slide-left"></div>
+        <div class="slide-right"></div>
+        <div class="photo-wrap-inner">
+          <!--//gallery1-->
+          <div class="photo-gallery" init='true' style="display:none;">
+            <div class="photo">
+            <a rel="gallery" href="pic/g1/b2.jpg"><img src="pic/g1/s2.jpg" /><div class="desc">第一代911: 911原型车 － 跑车传奇诞生(1963 - 1973)<br/>作为保时捷 356 的继任车型，911 从诞生伊始就征服了全世界跑车爱好者。1963 年，911 原型车以“901”之名在德国法兰克福车展上面世。1964 年，它被重新命名为“911”推向市场。</div></a>
+            </div>
+            <div class="photo">
+            <a rel="gallery" href="pic/g1/b3.jpg"><img src="pic/g1/s3.jpg" /></a>
+            </div>
+            <div class="photo">
+              <a rel="gallery" href="pic/g1/b4.jpg"><img src="pic/g1/s4.jpg" /></a>
+            </div>
+          </div>
+          <!--\\gallery1-->
+
+            <!--//gallery2-->
+            <div class="photo-gallery" init='true' style="display:none;">
+
+                <div class="photo">
+
+                    <a rel="gallery" href="pic/g2/b1.jpg"><img src="pic/g2/s1.jpg" /><div class="desc">第二代911: G 系列 － 首次全面改进 (1973 – 1988)<br/>在 911 面世十年后，保时捷工程师们对 911 进行了更加全面的升级改造。新一代 911 被荣耀地称为“G 车型”，从 1973 年一直生产到 1989 年，市场周期超过以往任何一款前代车型。</div></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g2/b2.jpg"><img src="pic/g2/s2.jpg" /></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g2/b4.jpg"><img src="pic/g2/s4.jpg" /></a>
+                </div>
+            </div>
+            <!--\\gallery2-->
+
+          <!--//gallery3-->
+          <div class="photo-gallery" init='true' style="display:none;">
+              <div class="photo">
+
+                  <a rel="gallery" href="pic/g3/b1.jpg"><img src="pic/g3/s1.jpg" /><div class="desc">第三代911: 964 型 － 现代经典问世 (1988 – 1993) <br/>当许多人担忧一个时代或许即将结束时，保时捷于 1988 年适时推出了 911 Carrera 4 (964)。经过 15 年的发展，911 中 85% 的部件都已更新，成为了一款兼备时尚触觉与可持续性效能的保时捷旗舰车型。</div></a>
+              </div>
+              <div class="photo">
+                  <a rel="gallery" href="pic/g3/b2.jpg"><img src="pic/g3/s2.jpg" /></a>
+              </div>
+              <div class="photo">
+                  <a rel="gallery" href="pic/g3/b3.jpg"><img src="pic/g3/s3.jpg" /></a>
+              </div>
+              <div class="photo">
+                  <a rel="gallery" href="pic/g3/b4.jpg"><img src="pic/g3/s4.jpg" /></a>
+              </div>
+          </div>
+          <!--\\gallery3-->
+
+          <!--//gallery4-->
+          <div class="photo-gallery" init='true' style="display:none;">
+
+              <div class="photo">
+
+                  <a rel="gallery" href="pic/g4/b1.jpg"><img src="pic/g4/s1.jpg" /><div class="desc">第四代911: 993 型 － 风冷式 911 的谢幕 (1993 – 1997) <br/>内部编号为 993 的 911 车型，至今依然是众多保时捷车主的最爱。其出类拔萃的设计使得它堪称一代经典。一体式保险杠突出了平稳、优雅的风格；将圆形大灯改成椭圆形大灯，使其前部线条较前代车型更为平滑。</div></a>
+              </div>
+              <div class="photo">
+                  <a rel="gallery" href="pic/g4/b2.jpg"><img src="pic/g4/s2.jpg" /></a>
+              </div>
+              <div class="photo">
+                  <a rel="gallery" href="pic/g4/b3.jpg"><img src="pic/g4/s3.jpg" /></a>
+              </div>
+              <div class="photo">
+                  <a rel="gallery" href="pic/g4/b4.jpg"><img src="pic/g4/s4.jpg" /></a>
+              </div>
+          </div>
+          <!--\\gallery4-->
+
+            <!--//gallery5-->
+            <div class="photo-gallery" init='true' style="display:none;">
+                <div class="photo">
+
+                    <a rel="gallery" href="pic/g5/b1.jpg"><img src="pic/g5/s1.jpg" /><div class="desc">第五代911: 996 型 －水冷式车型登场 (1997 – 2004)<br/>于 1997 至 2005 年间投入生产的 996 型，堪称 911 发展史中的一大转折点。这一代保时捷 911 首次采用水冷式水平对置发动机，是全面技术改良的一大成果。其输出功率能够达到 300 hp，并在降低排放、噪音和耗油量方面均有所突破。</div></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g5/b2.jpg"><img src="pic/g5/s2.jpg" /></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g5/b3.jpg"><img src="pic/g5/s3.jpg" /></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g5/b4.jpg"><img src="pic/g5/s4.jpg" /></a>
+                </div>
+            </div>
+            <!--\\gallery5-->
+
+            <!--//gallery6-->
+            <div class="photo-gallery" init='true' style="display:none;">
+                <div class="photo">
+
+                    <a rel="gallery" href="pic/g6/b1.jpg"><img src="pic/g6/s1.jpg" /><div class="desc">第六代911: 997 型 － 经典与时尚的完美融合 (2004 – 2011)<br/>2004 年 7 月，保时捷发布了新一代 911 Carrera 和 911 Carrera S，内部编号为 997。前裙板配备了带有独立辅助车灯模组的透明玻璃大灯，彰显了传统 911 的蛙眼设计风格。997 型拥有醒目的造型和出色的行驶性能，令人折服。</div></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g6/b2.jpg"><img src="pic/g6/s2.jpg" /></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g6/b3.jpg"><img src="pic/g6/s3.jpg" /></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g6/b4.jpg"><img src="pic/g6/s4.jpg" /></a>
+                </div>
+            </div>
+            <!--\\gallery6-->
+
+            <!--//gallery7-->
+            <div class="photo-gallery" init='true' style="display:none;">
+                <div class="photo">
+                    <a rel="gallery" href="pic/g7/b1.jpg"><img src="pic/g7/s1.jpg" /> <div class="desc">第七代911: 991 型 － 散发成熟魅力的梦想跑车 (2011 至今)<br/>这款跑车在保时捷内部被称为 991 型，反映了 911 发展中重大的技术飞跃。全新的悬挂结合加长轴距、加宽轮距、加大轮胎以及经过人体工程学优化的内饰，共同缔造了更具运动感及舒适性的驾驶体验。</div></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g7/b2.jpg"><img src="pic/g7/s2.jpg" /></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g7/b3.jpg"><img src="pic/g7/s3.jpg" /></a>
+                </div>
+                <div class="photo">
+                    <a rel="gallery" href="pic/g7/b4.jpg"><img src="pic/g7/s4.jpg" /></a>
+                </div>
+            </div>
+            <!--\\gallery7-->
+
+          <!--//video-->
+          <div class="video-gallery" init='false'>
+                <div class="photo">
+                  <a href="video.php?id=1"><img src="pic/v1.jpg" /><span>播放</span></a>
+                </div>
+                <div class="photo">
+                  <a href="video.php?id=2"><img src="pic/v2.jpg" /><span>播放</span></a>
+                </div>
+                <div class="photo">
+                  <a href="video.php?id=3"><img src="pic/v3.jpg" /><span>播放</span></a>
+                </div>
+                <div class="photo">
+                  <a href="video.php?id=4"><img src="pic/v4.jpg" /><span>播放</span></a>
+                </div>
+                <div class="photo">
+                  <a href="video.php?id=5"><img src="pic/v5.jpg" /><span>播放</span></a>
+                </div>
+                <div class="photo">
+                  <a href="video.php?id=6"><img src="pic/v6.jpg" /><span>播放</span></a>
+                </div>
+                <div class="photo">
+                  <a href="video.php?id=7"><img src="pic/v7.jpg" /><span>播放</span></a>
+                </div>
+            </div>
+          <!--//video-->
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+    </script>
+    <script type="text/tpl" id="result-mask-tpl">
+<!--result panel-->
+<section id="result-mask" class="result-mask lpn-mask">
+  <span class="lpn-ghost"></span>
+  <div class="lpn-panel">
+    <div class="r-close"></div>
+    <div class="result">
+      <div class="result-head">
+        <span class="time1 time00"></span><span class="time2 time10"></span>
+        <span class="time3 time00"></span><span class="time4 time10"></span>
+        <span class="time5 time00"></span><span class="time6 time10"></span>
+      </div>
+      <div class="result-con">
+        <form class="result-form" style="display:none;">
+            <label for="name"><input name="name" type="text"></label>
+            <label for="tel"><input name="tel" type="text"></label>
+            <label for="email"><input name="email" type="text"></label>
+            <label for="code"><input name="code" type="text"></label>
+            <label for="address"><input name="address" type="text"></label>
+        </form>
+        <div class="result-form-suc" style="display:none;" >
+            <br/>
+            <div class="btn1 btn-again" style="margin-top: 196px;margin-left:0px;">再玩一次</div><div class="btn1 btn-gallery" style="margin-top: 196px;margin-left:15px;">探索<span class="stren">911</span></div>
+        </div>
+        <div class="result-failure" style="display:none;">
+            <div class="btn1 btn-again" style="margin-top: 244px;margin-left: 161px;">再玩一次</div><div class="btn1 btn-gallery" style="margin-top: 244px;margin-left:15px;">探索<span class="stren">911</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+    </script>
+ </body>
+</html>

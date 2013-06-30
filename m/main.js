@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var selectTag = function($list , cb , selectClass , eventType){
         selectClass = selectClass || 'selected';
         eventType = eventType || 'click';
-        $list[eventType](function(ev){
+        $list.on( eventType , function(ev){
             $list.removeClass(selectClass);
             $(this).addClass(selectClass);
             cb && cb.call(this , $(this));
@@ -16,48 +16,42 @@ define(function(require, exports, module) {
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
     };
+    var eventName = 'click';
+    // ---------------------------------------------------------
+    // tap nav
+    // ---------------------------------------------------------
+    // slide down
+    $('#J_nav').on( eventName , function(){
+      $(this).prev().css('top' , -10);
+    });
+    // slide up
+    $('#J_nav-up').on( eventName , function(){
+      $(this).closest('.nav-b ').css('top' , -300 );
+    });
+    // click share btn
+    $('#J_share').on( eventName , function(){
+      $(this).closest('.nav-main').css('margin-left' , "-100%");
+    });
+
+    $('#J_nav-back').on( eventName , function(){
+      $(this).closest('.nav-b ').find('.nav-main').css('margin-left' , "0");
+    })
     // require jquery ani plugin
-    require('jquery.hoverIntent');
-    require('jquery.finger');
     // require('jquery.queryloader');
     // require('jquery.easing');
     // require('modernizr');
     // require('swfobject');
 
-    // extend jquery
-    if( !$.browser ){
-        $.browser = (function(){
-            var exp = /(msie) ([\w.]+)/.exec(navigator.userAgent.toLowerCase());
-            var r = {};
-            if( exp ){
-                r[ exp[1] ] = 1;
-                r['version'] = exp[2];
-            }
-            return r;
-        })();
-    }
     $.fn.rotate = function( deg ){
-        if( $.browser.msie && $.browser.version < 9 ){
-            var $t = $( this );
-            // use vml
-            var vmlObj = $t.data('vml');
-            if( !vmlObj ){
-                vmlObj = $('<vml:image style="position:absolute;width:94px;height:94px;" class=vml src="./images/wheel-ie8.png" />')[0];
-                $t.append(vmlObj);
-                $t.data('vml' , vmlObj);
-            }
-            vmlObj.style.cssText = 'position:absolute;width:94px;height:94px;rotation:' + deg;
-        } else {
-            deg = 'rotate(' + deg + 'deg)';
-            $( this )
-            .css({
-                '-webkit-transform' : deg,
-                   '-moz-transform' : deg,
-                    '-ms-transform' : deg,
-                     '-o-transform' : deg,
-                        'transform' : deg
-            });
-        }
+          deg = 'rotate(' + deg + 'deg)';
+          $( this )
+          .css({
+              '-webkit-transform' : deg,
+                 '-moz-transform' : deg,
+                  '-ms-transform' : deg,
+                   '-o-transform' : deg,
+                      'transform' : deg
+          });
         return this;
     }
     $.fn.translate = function( dis ){
@@ -73,109 +67,7 @@ define(function(require, exports, module) {
         return this;
     }
 
-    var _isIpad = (function(){
-        return !!navigator.userAgent.toLowerCase().match(/ipad/i) ;
-    })();
 
-    var _fixIpad = function(){
-        // fix ipad , it would scroll body left
-        if( _isIpad ){
-            $(document.body).animate({
-                scrollLeft: 0
-            }, 500 );
-        }
-    }
-
-
-
-    /*
-    var initSliderBtn = function( $slider , $list , min , max ){
-        $slider// when start to drag
-            .on('mousedown' , function( ev ){
-                _slideMousedown.call( this , $slider , $list , min , max , ev );
-            })
-            .on('touchstart' , function( ev ){
-                _slideMousedown.call( this , $slider , $list , min , max , ev );
-            });
-
-
-        $list
-            .mousewheel(function(event, delta, deltaX, deltaY){
-                var $con = $(this);
-                var scrollTop = $con.scrollTop();
-                var height = $list.height();
-                var conHeight = $list[0].scrollHeight;
-                if( delta > 0 ) {// up
-                    scrollTop -= height * 5 / 10;
-                } else { //down
-                    scrollTop += height * 5 / 10;
-                }
-                var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
-                $slider
-                    .stop( true , false )
-                    .animate({
-                        'top': Math.max( Math.min( top , max ) , min )
-                    } , 500 );
-                // change the scroll value
-                $con.stop( true , false )
-                    .animate({
-                        scrollTop: scrollTop
-                    } , 500 );
-            });
-
-        if( _isIpad ){ // bind touch move event
-            var py ;
-            $list
-                .on('touchstart' , function( ev ){
-                    py = ev.originalEvent.pageY;
-                })
-                .on('touchmove' , function( ev ){
-                    var dis = ev.originalEvent.pageY - py;
-                    var scrollTop = $(this).scrollTop();
-                    var height = $list.height();
-                    var conHeight = $list[0].scrollHeight;
-
-                    scrollTop = Math.max( Math.min( scrollTop - dis , conHeight - height ) , 0 );
-                    $(this).scrollTop( scrollTop );
-
-                    var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
-                    // move the slider
-                    $slider
-                        .stop( true , false )
-                        .animate({
-                            'top': Math.max( Math.min( top , max ) , min )
-                        } , 500 );
-                });
-        }
-    }
-    var _slideMousedown = function( $slider , $list , min , max , ev ){
-        var slider = this
-         , off = $slider.offsetParent().offset();
-        var $con = $list;
-        var height = $con.height();
-        var conHeight = $con.find('table').height();
-        var moveEvent = function( pageY ){
-            var value = Math.max( Math.min( pageY - off.top , max ) , min );
-            slider.style.top = value + 'px';
-            // change the scroll value
-            $con.scrollTop( ( conHeight - height ) * ( value - min ) / ( max - min )  );
-        }
-        var endEvent = function(ev){
-                $(this)
-                    .off('.slide-drag');
-            }
-        // bind mouse move event
-        $(document)
-            .on('mousemove.slide-drag', function( ev ){
-                moveEvent( ev.pageY );
-            })
-            .on('touchmove.slide-drag', function( ev ){
-                moveEvent( ev.originalEvent.pageY );
-            })
-            .on('touchend.slide-drag', endEvent )
-            .on('mouseup.slide-drag', endEvent );
-    }
-    */
     var _slideMousedown = function( $slider , $list , min , max , maxValue ){
           var slider = this
            , off = $slider.parent().offset();
@@ -214,85 +106,37 @@ define(function(require, exports, module) {
       }
       */
       var initSliderBtn = function( $slider , $list , min , max , maxValue){
-          $slider// when start to drag
-            .on('mousedown' , function( ev ){
-                _slideMousedown.call( this , $slider , $list , min , max , maxValue );
-            })
-            .on('touchstart' , function( ev ){
-                _slideMousedown.call( this , $slider , $list , min , max , maxValue );
-            });
+        $slider// when start to drag
+          .on('touchstart' , function( ev ){
+              _slideMousedown.call( this , $slider , $list , min , max , maxValue );
+          });
 
-          if( _isIpad ){ // bind touch move event
-            var px , marginLeft = 0;
-            $list
-              .on('touchstart' , function( ev ){
-                px = ev.originalEvent.pageX;
-                marginLeft = parseInt( $(this).css('marginLeft') );
-              })
-              .on('touchmove' , function( ev ){
-                var dis = ev.originalEvent.pageX - px;
-                var mleft = marginLeft + dis;
+        var px , marginLeft = 0;
+        $list
+          .on('touchstart' , function( ev ){
+            px = ev.originalEvent.pageX;
+            marginLeft = parseInt( $(this).css('marginLeft') );
+          })
+          .on('touchmove' , function( ev ){
+            var dis = ev.originalEvent.pageX - px;
+            var mleft = marginLeft + dis;
 
-                mleft = - Math.min( maxValue , Math.abs( Math.min( mleft, 0 ) ) );
+            mleft = - Math.min( maxValue , Math.abs( Math.min( mleft, 0 ) ) );
 
-                $(this).css('marginLeft' , mleft);
+            $(this).css('marginLeft' , mleft);
 
-                var left = min + ( max - min ) * - mleft / maxValue ;
+            var left = min + ( max - min ) * - mleft / maxValue ;
 
-                // move the slider
-                $slider
-                  .stop( true , false )
-                  .animate({
-                      'left': Math.max( Math.min( left , max ) , min )
-                  } , 500 );
-              });
-          } else {
-            seajs.use('jquery.mousewheel' , function(){
-              $list
-                .mousewheel(function(event, delta, deltaX, deltaY){
-                  var $con = $(this);
-                  var marginLeft = parseInt( $con.css('marginLeft') );
-                  var width = $con.width();
-                  var photoLen = 357;
-                  var maxWidth = maxValue + width;
-                  if( delta > 0 ) {// up
-                    marginLeft += photoLen;
-                  } else {
-                    marginLeft -= photoLen;
-                  }
-
-                  marginLeft = - Math.min( maxValue , Math.abs( Math.min( marginLeft, 0 ) ) );
-                  /*
-                  var scrollTop = $con.scrollTop();
-                  var height = $list.height();
-                  var conHeight = $list[0].scrollHeight;
-                  if( delta > 0 ) {// up
-                      scrollTop -= height * 5 / 10;
-                  } else { //down
-                      scrollTop += height * 5 / 10;
-                  }
-                  var top = min + ( ( conHeight - height <= 0 ) ? 0 : ( max - min ) * scrollTop / ( conHeight - height ) );
-                  */
-                  var left = min + ( ( maxWidth - width <= 0 ) ? 0 : ( max - min ) * -marginLeft / ( maxWidth - width ) )
-                  $slider
-                      .stop( true , false )
-                      .animate({
-                          'left': Math.max( Math.min( left , max ) , min )
-                      } , 500 );
-                  // change the scroll value
-                  $con.stop( true , false )
-                      .animate({
-                          marginLeft: marginLeft
-                      } , 500 );
-                });
-            });
-          }
+            // move the slider
+            $slider
+              .stop( true , false )
+              .animate({
+                  'left': Math.max( Math.min( left , max ) , min )
+              } , 500 );
+          });
       }
 
-    // disabled contextmenu
-    $(document).contextmenu(function(){return false;});
-    // disabled scroll the body
-    $(document).scroll(function(){return false;});
+
 
     // game logic application
     var game = require('../m/game');
@@ -513,6 +357,9 @@ define(function(require, exports, module) {
      */
     var panelData = {};
     var showPanel = function( cfg , data ){
+        // slideup nav panel
+        $('#J_nav-up').trigger( eventName );
+
         panelData = data;
         var $panel = $( '#' + cfg.id );
         if( !$panel.length ){
@@ -790,34 +637,37 @@ define(function(require, exports, module) {
                 goon();
             },
             init: function( $gallery ){
+                // init tabs
+                selectTag($('#gallery-mask').find('.btn1') , function(){
+                    var index = $(this).index();
+                    // show gallery photos
+                    $('#gallery-mask').find('.photo-gallery,.video-gallery')
+                        .hide()
+                        .eq( index )
+                        .fadeIn(refreshSlideStatus);
+                        /*
+                        //.css({margin:0})
+                        .end() //show sliders
+                        .end()
+                        .find('.photo-slider,.video-slider')
+                        .hide()
+                        .eq( index )
+                        .fadeIn( 500 , function(){
+                            refreshSlideStatus();
+                        });
+                        //.find('.slider-btn').css({left:0});
+                        */
+                } , 'selected' , eventName);
                 // Gallery
                 // require jquery ani plugin
                 seajs.use( 'jquery.fancybox' , function(){
-
-                    // init tabs
-                     selectTag($('#gallery-mask').find('.btn1') , function(){
-                        var index = $(this).index();
-                        // show gallery photos
-                        $('#gallery-mask').find('.photo-gallery,.video-gallery')
-                            .hide()
-                            .eq( index )
-                            .fadeIn()
-                            .css({margin:0})
-                            .end() //show sliders
-                            .end()
-                            .find('.photo-slider,.video-slider')
-                            .hide()
-                            .eq( index )
-                            .fadeIn()
-                            .find('.slider-btn').css({left:0});
-                    });
-
 
                     var $photoGallery = $('#gallery-mask').find('.photo-gallery');
                     $photoGallery.each(function( index ){
                         var $photos = $(this).find('.photo');
                         var len = $photos.length;
                         // init slider
+                        /*
                         initSliderBtn( $('#gallery-mask').find('.photo-slider .slider-btn') ,
                             $('#gallery-mask').find('.photo-gallery').eq(index) , 0 , 1024 ,
                             Math.max( Math.ceil( len / 2) - 3 , 0 ) * 357 );
@@ -831,7 +681,7 @@ define(function(require, exports, module) {
                             }
                             $(this).css({left:left,top:top});
                         } );
-
+                        */
 
 
                         $photos.find('a').fancybox({
@@ -850,11 +700,6 @@ define(function(require, exports, module) {
                                     '<a target="_blank" href="http://v.t.qq.com/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
                                     '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
                                     '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
-
-                                if(_isIpad){
-                                    $('.fancybox-share-list').appendTo('.fancybox-outer');
-                                    $('.fancybox-share-list').append('<div class="share-close"></div>')
-                                }
                                 $('.fancybox-share').on('touchend',function(e){
                                     e.preventDefault();
                                     $('.fancybox-share-list').fadeIn();
@@ -871,7 +716,7 @@ define(function(require, exports, module) {
                     var $videoGallery = $('#gallery-mask').find('.video-gallery');
                     var $vphotos = $videoGallery.find('.photo');
                     var vlen = $vphotos.length;
-
+                    /*
                     initSliderBtn( $('#gallery-mask').find('.video-slider .slider-btn') ,
                         $('#gallery-mask').find('.video-gallery') , 0 , 1024 ,
                         Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
@@ -885,6 +730,7 @@ define(function(require, exports, module) {
                         }
                         $(this).css({left:left,top:top});
                     } );
+                    */
 
                     $vphotos.find('a').fancybox({
                         width: 720,
@@ -922,6 +768,42 @@ define(function(require, exports, module) {
 
                     }(jQuery, jQuery.fancybox));
                 });
+
+
+                // init slider
+                var $inner = $('.photo-wrap-inner');
+                var $left = $('.slide-left').on( eventName , function(){
+                    slideFunc( true );
+                } );
+                var $right = $('.slide-right').on( eventName , function(){
+                    slideFunc( false );
+                } );
+                var slideFunc = function( bLeft ){
+                    var $gallery = $inner.children(':visible');
+                    var index = ~~($gallery.attr('index') || 0);
+                    var $photos = $gallery.find('.photo');
+
+                    index = index + ( bLeft ? -3 : 3 );
+                    $gallery.attr( 'index' , index );
+                    $gallery.css( 'marginLeft' , - index * ( 209 + 40 ) );
+                    refreshSlideStatus();
+                }
+                var refreshSlideStatus = function(){
+                    var $gallery = $inner.children(':visible');
+                    var $photos = $gallery.find('.photo');
+                    if( $photos.length <= 3 ){
+                        // hide all sliders
+                        $left.hide();
+                        $right.hide();
+                        return;
+                    }
+                    var index = ~~($gallery.attr('index') || 0);
+
+                    $left[ index == 0 ? "hide" : "show" ]();
+                    $right[ index >= $photos.length - 3 ? "hide" : "show" ]();
+                }
+
+                refreshSlideStatus();
             },
             onShow: function( $gallery ){
                 //Pause the game
@@ -1062,16 +944,7 @@ define(function(require, exports, module) {
 
 
         // pre motion road
-        if( !_isIpad && isSupportCanvas){
-            if( !$roadCan )
-                $roadCan = $('<canvas>')
-                    .attr({
-                        id: 'can-road'
-                        , width: screenWidth
-                        , height: 256
-                    })
-                    .insertBefore($road.hide());
-        }
+
         motionRoad( 0 );
     }
     var resetCounter = function( cb ){
@@ -1087,14 +960,13 @@ define(function(require, exports, module) {
                   opacity   : 1
                 , marginLeft: 0
             })
-            .addClass('shake')
+            //.addClass('shake')
             .end()
             .find('.c-mouse-text')
             .css({
                 opacity   : 1
                 , marginLeft: 0
             });
-
         counter( cb );
     }
     var reset = function(){
@@ -1133,8 +1005,6 @@ define(function(require, exports, module) {
         bgIndex = 0;
 
         $road.css('background-image' , 'url(./images/' + roadConfig[currRoadIndex].src + ')');
-        // reset body or window scroll left , fix ipad , input fouce bug
-        _fixIpad();
         // reset road
         motionRoad( 0 );
     }
@@ -1365,11 +1235,13 @@ define(function(require, exports, module) {
         }
 
         // move the road
-        if( _isIpad || !isSupportCanvas ){
+        $road[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
+        /*if( _isIpad || !isSupportCanvas ){
             $road[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
         } else {
             $roadCan[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
         }
+        */
     }
     /*
      * motion the road, dur to the game status and radius
@@ -1401,13 +1273,7 @@ define(function(require, exports, module) {
         currRoadConfig = roadConfig[currRoadIndex];
 
         var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 3 ) * currRoadConfig.width;
-        if( _isIpad || !isSupportCanvas){
-            $road.width( width );
-            if( bGetNext ){
-                $road.css('background-image' , 'url(./images/' + currRoadConfig.src + ')');
-            }
-            return;
-        }
+
         var canvas = $roadCan[0];
 
         // reset road width and height
@@ -1452,8 +1318,7 @@ define(function(require, exports, module) {
             var img = document.createElement('img');
             img.id = roadConfig[i].id;
             img.onload = function(){
-                if( !_isIpad && isSupportCanvas)
-                    cacheMotionBlur( img );
+                cacheMotionBlur( img );
                 roadConfig[i].width = this.width;
             }
             img.setAttribute( 'src' , './images/' + roadConfig[i].src );
@@ -1487,6 +1352,7 @@ define(function(require, exports, module) {
                     } );
             });
         }
+        /*
         var $shareBgR = $('#main-board-bg-r');
         var $shareBtn = $('#share-btn');
         var $shareCon = $('#share-con');
@@ -1518,7 +1384,7 @@ define(function(require, exports, module) {
               goon();
             } , 50 );
           });
-
+        */
         // 2. ranking panel
         // main panel click event init
         $('#ranking').click(function(){
@@ -1537,130 +1403,14 @@ define(function(require, exports, module) {
 
     })();
 
-    // user login
-    /*
-    $('#login-mask .login-local')
-        .click(function(){
-            $('.lpn-register').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
-                $(this).hide();
-                $('#login-mask .lpn-panel').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},500,'easeOutQuart');
-            })
-        });
-
-    $('#login-mask .btn-back')
-        .click(function(){
-            $('#login-mask .lpn-panel').animate({'margin-left':-600,opacity:0},500,'easeOutQuart',function(){
-                $(this).hide();
-                $('#login-mask .lpn-register').css({display:'inline-block'}).animate({'margin-left':0,opacity:1},500,'easeOutQuart');
-            })
-        });
-
-    $('.login-form').validate({
-        rules: {
-            email: {
-                required: true,
-                email: true
-            },
-            name: "required"
-        },
-        messages: {
-            email: "请输入正确的邮箱",
-            name: "请输入用户名"
-        },
-        submitHandler: function (form) {
-            var name = $(form).find('#uname').val();
-            var email = $(form).find('#email').val();
-            $.ajax({
-                url: "data/public/index.php/home/register",
-                dataType: "JSON",
-                type: "POST",
-                data: {name:name,email:email},
-                success: function(res){
-                    if(res.code == 200)
-                    {
-                        var username = res.data.original.name;
-                        $('#username').val(username);
-                        $('#login-status').html(username + ' <a href="javascript:void(0)" id="logout">退出</a>');
-                        $('#login-mask .lpn-panel').animate({'margin-left':600,opacity:0},500,'easeOutQuart',function(){
-
-                            $('#login-mask').hide();
-                        });
-                    }
-                }
-            });
-            return false;
-        }
-    });
- */
-
-
-  /*
-    $('body').delegate('#logout','click',function(){
-        $.ajax({
-            url: "data/public/index.php/home/logout",
-            success: function(res){
-                location.reload();
-            }
-        });
-    });
-   */
-
     window.readyForGame = true;
     $(window).on( 'game-start' , function(){
-        $('.main-metas').animate({left:'50%'},500,'easeInOutQuart', function(){
-            _fixIpad();
-        });
+        $('.main-metas').animate({left:'50%'},500,'easeInOutQuart');
     });
-   // render video
-   /*
-
-   // loading bar
-    var $videoPanel = $('#video-mask');
-
-    // bind skip event
-    $videoPanel.find('.video-skip')
-        .click(function(){
-            $videoPanel.find('.lpn-panel').animate({'margin-top':-300,opacity:0},500,'easeInQuart',function(){
-                $videoPanel.hide();
-                $videoPanel.find('*').remove();
-                $('.main-metas').animate({left:'50%'},500,'easeInOutQuart', function(){
-                    _fixIpad();
-                });
-                //$('#login-mask').show();
-                //$('.lpn-register').css({'margin-left':-600,opacity:0,display:'inline-block'}).animate({'margin-left':0,opacity:1},600,'easeOutQuart');
-            });
-
-            //$('.main-metas').animate({left:'50%'},500,'easeOutQuart');
-        });
-   window.readyForVideo = true;
-   window.playfinished = function(){
-      $videoPanel.find('.video-skip').click();
-   }
-
-   // bind play video event
-   $(window).on( 'play-video' , function(){
-      $('.main-com-logo').css({display:'block', opacity:0}).delay(100).animate({opacity:1},800,'easeOutQuart');
-        $('.main-logo').delay(900).animate({left:0},400,'easeOutQuart');
-
-        $videoPanel.delay(900).fadeIn(400);
-        $videoPanel.find('.video-wrap').delay(1300).animate({height:359},400,'easeOutQuart');
-        $videoPanel.find('.video-skip').css({display:'block',opacity:0}).delay(1700).animate({'opacity':0.7}).hover(function(){
-            $(this).animate({'opacity':1});
-        },function(){
-            $(this).animate({'opacity':.7});
-        });
-
-        showVideo( 'FlashContent' , "./videos/en_desk.flv" , 720 , 305 );
-   } );
-  */
 
    function showVideo( id , src , w , h ){
-    if( _isIpad ){
-      src = src.replace(/\.[^.]+$/ , '.mp4');
-      initVideo( id , src , w , h );
-    } else {
-      initFlash( id , src , w , h );
-    }
+    src = src.replace(/\.[^.]+$/ , '.mp4');
+    initVideo( id , src , w , h );
    }
    var initVideo = function( id , src , w , h ){
     var $wrap = $( '#' + id );
@@ -1710,8 +1460,4 @@ define(function(require, exports, module) {
         swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
       });
     }
-
-    $('body').nodoubletapzoom();
-
-
 });
