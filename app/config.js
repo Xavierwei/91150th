@@ -17,8 +17,7 @@ seajs.config({
         deps: ['jquery']
     }
     ,'jquery.validate' : {
-        src: '../../src/jquery-plugin/validate/jquery.validate',
-        deps: ['jquery']
+        src: '../../src/jquery-plugin/validate/jquery.validate'
     }
     /*,'jquery.queryloader' :{
         src: '../../src/jquery-plugin/jquery.queryloader22',

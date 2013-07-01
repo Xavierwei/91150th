@@ -23,6 +23,8 @@ define(function(require, exports, module) {
     // slide down
     $('#J_nav').on( eventName , function(){
       $(this).prev().css('top' , -10);
+      // TODO ..pause the game
+
     });
     // slide up
     $('#J_nav-up').on( eventName , function(){
@@ -140,10 +142,10 @@ define(function(require, exports, module) {
 
     // game logic application
     var game = require('../m/game');
-    var M = require('../app/motion-blur');
+    //var M = require('../app/motion-blur');
     var A = require('../src/Animate');
     var Animate = A.Animate;
-    var isSupportCanvas = M.isSupportCanvas;
+    //var isSupportCanvas = M.isSupportCanvas;
     // save the game status
     var gStatus = game.status;
     var winWidth = $(window)
@@ -658,8 +660,181 @@ define(function(require, exports, module) {
                         //.find('.slider-btn').css({left:0});
                         */
                 } , 'selected' , eventName);
+                var $fancybox = null;
+                var tpl =  '<section class="fancy-slider-mask lpn-mask">\
+                                <span class="lpn-ghost"></span>\
+                                <div class="lpn-panel">\
+                                    <div class="r-close"></div>\
+                                    <div class="fancy-slider-wrap">\
+                                        <div class="img-wrap clearfix"></div>\
+                                        <div class="slider-left"></div>\
+                                        <div class="slider-right"></div>\
+                                        <div class="r-share"></div>\
+                                        <div class="r-share-con btn-share-wrap">\
+                                            <div class="r-share-inner">\
+                                                <a href="" class="sina"><i></i></a>\
+                                                <a href="" class="qqwb"><i></i></a>\
+                                                <a href="" class="renren"><i></i></a>\
+                                                <a href="" class="douban"><i></i></a>\
+                                                <div class="r-share-close">关闭</div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </section>';
+                var $thumbImg = null;
+                var $imgWrap = null;
+                var $currBigImgWrap = null;
+
+                var showImage = function( $img ){
+                    if( !$fancybox ){ // create $fancybox
+                        $fancybox = $(tpl).appendTo( document.body )
+                            .find('.r-close')
+                            .on( eventName , function(){
+                                $fancybox.fadeOut();
+                                imagePairs = {};
+                                $currBigImgWrap = null;
+                            })
+                            .end()
+                            .find( '.slider-left' )
+                            .on( eventName ,slideLeft )
+                            .end()
+                            .find( '.slider-right' )
+                            .on( eventName ,slideRight )
+                            .end()
+                            .find( '.r-share' )
+                            .on( eventName , function(){
+                                var $shareCon = $fancybox.find(".r-share-con")
+                                    .fadeIn();
+                                // init all the link href
+                                // TODO....... share title
+                                var path = location.href.replace(/\/[^\/]*/ , '/');
+                                var pic = path + $currBigImgWrap.find('img').attr('src');
+                                var title = "";
+                                var url = "http://50years911.porsche-events.cn%2f";
+                                $shareCon.find('.sina')
+                                    .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
+                                $shareCon.find('.qqwb')
+                                    .attr('href' , 'http://v.t.qq.com/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
+                                $shareCon.find('.renren')
+                                    .attr('href' , 'http://share.renren.com/share/buttonshare.do?title='+title+'&link=' + url + '&pic=' + pic);
+                                $shareCon.find('.douban')
+                                    .attr('href' , 'http://shuo.douban.com/!service/share?name='+title+'&url=' + url + '&pic=' + pic);
+                            })
+                            .end()
+                            .find( '.r-share-close' )
+                            .on( eventName , function(){
+                                $fancybox.find(".r-share-con")
+                                    .fadeOut();
+                            })
+                            .end();
+                        $imgWrap = $fancybox.find('.img-wrap');
+                    }
+                    $fancybox.fadeIn();
+                    $imgWrap.html('');
+
+                    $thumbImg = $img;
+                    var $bigImgWrap = bigImgLoad( $img , function(){
+                        $bigImgWrap.appendTo( $imgWrap );
+                        afterShowImg( $bigImgWrap );
+                    } );
+                }
+                var getThumbPhotoWrap = function( $big ){
+                    var index = $big.attr('index');
+                    return $thumbImg.closest(".photo-gallery,.video-gallery")
+                        .find('.photo')
+                        .eq( index );
+                }
+                var afterShowImg = function( $big ){
+                    $currBigImgWrap = $big;
+                    var $photo = getThumbPhotoWrap($big);
+                    // hide slide btns
+                    $fancybox.find(".slider-left")
+                        [ $photo.prev().length ?
+                        "show" : "hide"]()
+                        .end()
+                        .find(".slider-right")
+                        [ $photo.next().length ?
+                        "show" : "hide"]();
+                }
+                var getNextImg = function(){
+                    var $next = getThumbPhotoWrap($currBigImgWrap).next();
+                    return $next.length ? $next.find('img') : null;
+                }
+                var getPrevImg = function(){
+                    var $prev = getThumbPhotoWrap($currBigImgWrap).prev();
+                    return $prev.length ? $prev.find('img') : null;
+                }
+                var bigImgLoad = function( $img , cb ){
+                    return $('<div class="img-item"></div>').append(
+                        $('<img/>')
+                        .load( cb )
+                        .attr( 'src' , $img.closest('a').attr('href') )
+                        .css('width' , '100%' )
+                        ).append(
+                            // get desc cloned
+                            $img.closest('.photo')
+                            .find('.desc')
+                            .clone()
+                        )
+                        .css('width' , winWidth )
+                        .attr('index' , $img.closest('.photo').index());
+                }
+                var slideLeft = function(){
+                    if( $currBigImgWrap.prev().length ){
+                        $imgWrap.css({
+                            'left': "+=" + winWidth
+                        })
+                        $currBigImgWrap =  $currBigImgWrap.prev();
+                        afterShowImg( $currBigImgWrap );
+                    } else {
+                        var $img = getPrevImg();
+                        if( $img ){
+                            var $bigImgWrap = bigImgLoad( $img , function(){
+                                var $imgs = $imgWrap.find( 'img' );
+                                $imgWrap.css({
+                                        'width': winWidth * ( $imgs.length + 1 )
+                                        ,'margin-left': "-=" + winWidth
+                                        ,'left': "+=" + winWidth
+                                    })
+                                    .prepend( $bigImgWrap );
+                                afterShowImg( $bigImgWrap);
+                            } );
+                        }
+                    }
+                }
+                var slideRight = function(){
+                    if( $currBigImgWrap.next().length ){
+                        $imgWrap.css({
+                            'left': "-=" + winWidth
+                        })
+                        $currBigImgWrap =  $currBigImgWrap.next();
+                        afterShowImg( $currBigImgWrap );
+                    } else {
+                        var $img = getNextImg();
+                        if( $img ){
+                            var $bigImgWrap = bigImgLoad( $img , function(){
+                                var $imgs = $fancybox.find( '.img-wrap img' );
+                                $fancybox.find( '.img-wrap' )
+                                    .css({
+                                        'width': winWidth * ( $imgs.length + 1 )
+                                        ,'left': "-=" + winWidth
+                                    })
+                                    .append( $bigImgWrap );
+                                afterShowImg( $bigImgWrap);
+                            } );
+                        }
+                    }
+                }
+                $gallery.on('click' , '.photo a' , function(){
+                    return false;
+                });
+                $gallery.on('click' , '.photo img' , function(){
+                    showImage( $(this) );
+                });
                 // Gallery
                 // require jquery ani plugin
+                /*
                 seajs.use( 'jquery.fancybox' , function(){
 
                     var $photoGallery = $('#gallery-mask').find('.photo-gallery');
@@ -667,21 +842,7 @@ define(function(require, exports, module) {
                         var $photos = $(this).find('.photo');
                         var len = $photos.length;
                         // init slider
-                        /*
-                        initSliderBtn( $('#gallery-mask').find('.photo-slider .slider-btn') ,
-                            $('#gallery-mask').find('.photo-gallery').eq(index) , 0 , 1024 ,
-                            Math.max( Math.ceil( len / 2) - 3 , 0 ) * 357 );
 
-                        $photos.each( function( i ){
-                            var half = Math.ceil( len / 2 );
-                            var left = ( i % half ) * 360;
-                            var top = parseInt( i / half ) * 219;
-                            if( i >= half && $('.csstransforms').length > 0 ){
-                                left -= 79;
-                            }
-                            $(this).css({left:left,top:top});
-                        } );
-                        */
 
 
                         $photos.find('a').fancybox({
@@ -707,30 +868,14 @@ define(function(require, exports, module) {
                                 $('.share-close').click(function(){
                                     $('.fancybox-share-list').fadeOut();
                                 });
-
-                            }
-
+                            }                    })
                         });
-                    })
+
 
                     var $videoGallery = $('#gallery-mask').find('.video-gallery');
                     var $vphotos = $videoGallery.find('.photo');
                     var vlen = $vphotos.length;
-                    /*
-                    initSliderBtn( $('#gallery-mask').find('.video-slider .slider-btn') ,
-                        $('#gallery-mask').find('.video-gallery') , 0 , 1024 ,
-                        Math.max( Math.ceil( vlen / 2) - 3 , 0 ) * 357 );
 
-                    $vphotos.each( function( i ){
-                        var half = Math.ceil( vlen / 2 );
-                        var left = ( i % half ) * 360;
-                        var top = parseInt( i / half ) * 219;
-                        if( i >= half && $('.csstransforms').length > 0 ){
-                            left -= 79;
-                        }
-                        $(this).css({left:left,top:top});
-                    } );
-                    */
 
                     $vphotos.find('a').fancybox({
                         width: 720,
@@ -767,8 +912,9 @@ define(function(require, exports, module) {
                         };
 
                     }(jQuery, jQuery.fancybox));
-                });
 
+                });
+*/
 
                 // init slider
                 var $inner = $('.photo-wrap-inner');
@@ -859,6 +1005,13 @@ define(function(require, exports, module) {
                 callback && callback();
                 return;
             }
+
+            counterTimer = setTimeout(function(){
+                $t.hide();
+                showNum();
+            } , 1000 );
+
+            /*
             M.motionBlur( $t[0] , 0 );
             counterTimer = setTimeout( function(){
                 counterAnimate = new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
@@ -868,6 +1021,7 @@ define(function(require, exports, module) {
                     showNum();
                 });
             } , 800 );
+            */
         })();
     }
 
@@ -1098,10 +1252,10 @@ define(function(require, exports, module) {
                 $(this).hide();
                 ready();
             });
-            $('.follow_sina').fadeOut();
+           //$('.follow_sina').fadeOut();
 
             // run the robot car
-            // setTimeout(runRobot,2000);
+            setTimeout(runRobot,2000);
 
         })
         .hover(function(){
@@ -1109,8 +1263,6 @@ define(function(require, exports, module) {
         },function(){
             $(this).removeClass('animated tada');
         });
-
-
     /*
      * bg config
      */
@@ -1214,7 +1366,7 @@ define(function(require, exports, module) {
             setTimeout(function(){
                 // pre set bg
                 $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
-                $bg[0].style.marginLeft = '0px';
+                $bg.css('marginLeft' , 0);
                 // .. motion road ,
                 // run motionRoad function, change the road to next type.
                 motionRoad( status.speed == 0 ? 0 :
@@ -1222,7 +1374,7 @@ define(function(require, exports, module) {
             } , 1000 );
         } else {
             if( !changeSence ){
-                $bg[0].style.marginLeft = - ( status.distance - lastBgDistance ) * 1.2 + 'px';
+                $bg.css("background-position-x" ,  - ( status.distance - lastBgDistance ) * 1.2 + 'px');
             }
             // .. motion road ,
             if( lastMotionValue != motionValue ){
@@ -1235,13 +1387,7 @@ define(function(require, exports, module) {
         }
 
         // move the road
-        $road[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
-        /*if( _isIpad || !isSupportCanvas ){
-            $road[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
-        } else {
-            $roadCan[0].style.marginLeft = - status.distance * 150 % currRoadConfig.width + 'px';
-        }
-        */
+        $road.css('background-position-x' , - status.distance * 150 % currRoadConfig.width + 'px' );
     }
     /*
      * motion the road, dur to the game status and radius
@@ -1267,18 +1413,18 @@ define(function(require, exports, module) {
     var currRoadConfig = roadConfig[0];
     var motionRoad = function( radius , bGetNext ){
         // city road
-        var motionCache = M.getMotionCache();
+        //var motionCache = M.getMotionCache();
         currRoadIndex = bGetNext ? ++currRoadIndex % roadConfig.length : currRoadIndex;
 
         currRoadConfig = roadConfig[currRoadIndex];
 
-        var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 3 ) * currRoadConfig.width;
+        //var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 3 ) * currRoadConfig.width;
 
-        var canvas = $roadCan[0];
+        //var canvas = $roadCan[0];
 
         // reset road width and height
-        canvas.width = width;
-        M.motionBlur( currRoadConfig.img , radius , 0 , canvas );
+        // canvas.width = width;
+        // M.motionBlur( currRoadConfig.img , radius , 0 , canvas );
     }
 
 
@@ -1302,23 +1448,13 @@ define(function(require, exports, module) {
             } , time );
     }
     // save road cache
-    !(function(){
 
-        var motionStart = 5 , motionMax = 20 , motionStep = 5;
-        var cacheMotionBlur = function( img ){
-            for (var i = motionStart; i <= motionMax; i+=motionStep ) {
-                (function( radius ){
-                    setTimeout( function(){
-                        M.motionBlur( img , radius , 0 , false , true );
-                    } , radius * 200 );
-                })(i);
-            };
-        }
+    !(function(){
         $.each(roadConfig , function( i ){
             var img = document.createElement('img');
             img.id = roadConfig[i].id;
             img.onload = function(){
-                cacheMotionBlur( img );
+                //cacheMotionBlur( img );
                 roadConfig[i].width = this.width;
             }
             img.setAttribute( 'src' , './images/' + roadConfig[i].src );
@@ -1329,62 +1465,6 @@ define(function(require, exports, module) {
 
     // main board init
     !!(function(){
-        // 1.0   share btn
-        // click share btn to pause the game
-        var showShareBtns = function(){
-            $shareBgR.stop( true , false )
-                .animate({
-                    right: -118
-                } , 500 , 'easeOutQuart' , function(){
-                    $shareCon.css('opacity' , 1).stop(true , false).fadeIn();
-                    setTimeout(function(){
-                        $shareBtn.stop(true , false).fadeOut();
-                    } , 100);
-                });
-        }
-        var hideShareBtns = function(){
-            $shareCon.stop(true , false).fadeOut( function(){
-                $shareBgR.stop( true , false )
-                    .animate({
-                        right: -75
-                    } , 500 , 'easeOutQuart' , function(){
-                        $shareBtn.stop(true , false).fadeIn();
-                    } );
-            });
-        }
-        /*
-        var $shareBgR = $('#main-board-bg-r');
-        var $shareBtn = $('#share-btn');
-        var $shareCon = $('#share-con');
-        var _pauseTimer = null;
-        var _goonTimer = null;
-        $('#share-wrap')
-            .hoverIntent(function(){
-              clearTimeout( _goonTimer );
-              _pauseTimer = setTimeout(function(){
-                  pause();
-                  showShareBtns()
-                } , 50 );
-            } , function(){
-              clearTimeout( _pauseTimer );
-              _goonTimer = setTimeout( function(){
-                  goon();
-                  hideShareBtns();
-                } , 50 );
-            });
-        $shareBgR.find('.inner')
-          .hoverIntent(function(){
-            clearTimeout( _goonTimer );
-            _pauseTimer = setTimeout(function(){
-              pause();
-            } , 50 );
-          } , function(){
-            clearTimeout( _pauseTimer );
-            _goonTimer = setTimeout(function(){
-              goon();
-            } , 50 );
-          });
-        */
         // 2. ranking panel
         // main panel click event init
         $('#ranking').click(function(){
@@ -1421,43 +1501,4 @@ define(function(require, exports, module) {
       });
     $video[0].play();
    }
-   var initFlash = function( wrapId , src , stageW , stageH ){
-      // JAVASCRIPT VARS
-
-      var cacheBuster = "?t=" + Date.parse(new Date());
-
-      // PARAMS
-      var params = {};
-      params.allowfullscreen = "true";
-      params.allowScriptAccess = "always";
-      params.scale = "noscale";
-      params.wmode = "transparent";
-      //params.wmode = "transparent";
-
-      // ATTRIBUTES
-      var attributes = {};
-      attributes.id = wrapId;
-
-
-      /* FLASH VARS */
-      var flashvars = {};
-
-      // PLAYER DIMENSIONS inside the SWF
-      // if this are not defined then the player will take the stage dimensions defined in the "JAVASCRIPT VARS" section above
-      flashvars.componentW = stageW;
-      flashvars.componentH = stageH;  // if controller under is set to true then you must change this variable(substract the controller height)
-
-      // if you don't define these then the one defined in the XML file will be taken in consideration
-      flashvars.previewFilePath = "video.jpg";
-      flashvars.videoFilePath = "videos/en_desk.flv";
-
-      // player settings(if not defined then the player will have the default settings defined in AS)
-      flashvars.settingsXMLFile = "settings.xml";
-
-
-      /** EMBED CODE **/
-      seajs.use('swfobject' , function(){
-        swfobject.embedSWF("preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "expressInstall.swf", flashvars, params, attributes);
-      });
-    }
 });

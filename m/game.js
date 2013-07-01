@@ -205,7 +205,6 @@ define(function( require , exports , model ){
                 && + new Date() - __gameControll.over200StartTime + __gameControll.over200Duration > 2000 // and speed duratin more then 5000ms
                 && duration > 80 ){ // and the two cars' duration is more than 80
                 // start to controll the robot speed
-                console.log(' start to controll robot ' , duration , __gameControll );
                 __bRobotControll = true;
                 __gameControll.over200Times--;
             }
@@ -315,13 +314,11 @@ define(function( require , exports , model ){
 
                 //var speed = Math.round( spx + spy ) / _winWidth * 1.4;
                 var screenWidth = Math.sqrt(_winWidth)*15;
-                //console.log(screenWidth);
                 var speed = Math.round( spx + spy ) / _winWidth * 4.5;
-                //console.log(speed);
                 // count robot
                 // var tmp = _caTimes > 50 ? 0.4 + Math.random() * 0.5 : 2 ;
                 */
-                var speed = Math.min( ( _touchTimes - _lastTimes ) / 10 , 1 );
+                var speed = Math.min( ( _touchTimes - _lastTimes ) / 7 , 1 );
                 var tmp = Math.random();
 
 
@@ -333,7 +330,6 @@ define(function( require , exports , model ){
                     //__robotExchange( );
                     _caSpeeds /= _caCollectTimes;
                     _roSpeeds /= _caCollectTimes;
-                    console.log( _caSpeeds );
                     __carExchange( myCarCb );
                     _caSpeeds = 0;
                     _roSpeeds = 0;
