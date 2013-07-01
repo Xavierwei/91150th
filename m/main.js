@@ -24,11 +24,12 @@ define(function(require, exports, module) {
     $('#J_nav').on( eventName , function(){
       $(this).prev().css('top' , -10);
       // TODO ..pause the game
-
+      pause();
     });
     // slide up
     $('#J_nav-up').on( eventName , function(){
       $(this).closest('.nav-b ').css('top' , -300 );
+      goon();
     });
     // click share btn
     $('#J_share').on( eventName , function(){
@@ -691,7 +692,12 @@ define(function(require, exports, module) {
                         $fancybox = $(tpl).appendTo( document.body )
                             .find('.r-close')
                             .on( eventName , function(){
-                                $fancybox.fadeOut();
+                                $fancybox.fadeOut(function(){
+                                    $imgWrap.css({
+                                        left: 0,
+                                        marginLeft: 0
+                                    })
+                                });
                                 imagePairs = {};
                                 $currBigImgWrap = null;
                             })
