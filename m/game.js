@@ -87,10 +87,12 @@ define(function( require , exports , model ){
         var _touchEvent = function( ev ){
             _touchTimes ++;
 
+            /*
             if( ev.preventDefault )
                 ev.preventDefault();
             if( window.event )
                 window.event.returnValue =  false;
+            */
         }
 
 
