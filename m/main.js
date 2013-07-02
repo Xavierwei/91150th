@@ -73,77 +73,6 @@ define(function(require, exports, module) {
         return this;
     }
 
-
-    var _slideMousedown = function( $slider , $list , min , max , maxValue ){
-          var slider = this
-           , off = $slider.parent().offset();
-          var $con = $list;
-
-          var moveEvent = function( pageX ){
-              var value = Math.max( Math.min( pageX - off.left , max ) , min );
-              slider.style.left = value + 'px';
-              // change the scroll value
-              $con.css('marginLeft' ,  - maxValue * ( value - min ) / ( max - min )  );
-          }
-          var endEvent = function(ev){
-                  $(this)
-                      .off('.slide-drag');
-              }
-          // bind mouse move event
-          $(document)
-              .on('mousemove.slide-drag', function( ev ){
-                  moveEvent( ev.pageX );
-              })
-              .on('touchmove.slide-drag', function( ev ){
-                  moveEvent( ev.originalEvent.pageX );
-              })
-              .on('touchend.slide-drag', endEvent )
-              .on('mouseup.slide-drag', endEvent );
-      }
-
-      /*var initSliderBtn = function( $sliderWrap , $sliderBtn , $slider ){
-        $sliderBtn// when start to drag
-          .on('mousedown' , function( ev ){
-              _slideMousedown.call( this , $sliderWrap );
-          })
-          .on('touchstart' , function( ev ){
-              _slideMousedown.call( this , $sliderWrap );
-          });
-      }
-      */
-      var initSliderBtn = function( $slider , $list , min , max , maxValue){
-        $slider// when start to drag
-          .on('touchstart' , function( ev ){
-              _slideMousedown.call( this , $slider , $list , min , max , maxValue );
-          });
-
-        var px , marginLeft = 0;
-        $list
-          .on('touchstart' , function( ev ){
-            px = ev.originalEvent.pageX;
-            marginLeft = parseInt( $(this).css('marginLeft') );
-          })
-          .on('touchmove' , function( ev ){
-            var dis = ev.originalEvent.pageX - px;
-            var mleft = marginLeft + dis;
-
-            mleft = - Math.min( maxValue , Math.abs( Math.min( mleft, 0 ) ) );
-
-            $(this).css('marginLeft' , mleft);
-
-            var left = min + ( max - min ) * - mleft / maxValue ;
-
-            // move the slider
-            $slider
-              .stop( true , false )
-              .animate({
-                  'left': Math.max( Math.min( left , max ) , min )
-              } , 500 );
-          });
-      }
-
-
-
     // game logic application
     var game = require('../m/game');
     //var M = require('../app/motion-blur');
@@ -195,30 +124,6 @@ define(function(require, exports, module) {
             p = dur / GAME_MAX_DISTANCE;
 
 
-            // change car position
-            // GAME_PLAYING  and GAME_OVER all need to modify the car position
-            // and car wheel blur status
-            //if( status.gameStatus == game.GAME_PLAYING || status.gameStatus == game.GAME_OVER ){
-                //l = ( winWidth - car1width ) / 2 + ~~ ( status.speed / GAME_MAX_SPEED * 100 );
-                //l = ( winWidth - car1width ) / 2;
-                //$cars.eq(0)
-                    //.stop( true , false )
-                    //.css('left' , l )
-                //    [ status.speed > 30 ? 'addClass' : 'removeClass' ]('wheelblur');
-                // change car wheels
-                //$car1Wheels.rotate( status.distance * 80 );
-            //}
-
-            // change robot car position
-
-            // need to reduce car2width for first starting
-            /*if( status.gameStatus == game.GAME_READY ){
-                rl = - car2width / 2 + Math.min( 10 * Math.sqrt( Math.abs(p) ) * GAME_MAX_DISTANCE  , 2 * screenWidth );
-            } else {
-                var _tmpRl = - car2width / 2 + 20 * p * GAME_MAX_DISTANCE;
-                rl = _tmpRl + ( rl - _tmpRl ) * 9 / 10;
-            }
-            */
 
             //rl = 10 * p * GAME_MAX_DISTANCE + winWidth / 2;
             rl =  - (  status.speed - 100 ) / ( GAME_MAX_SPEED - 100) * car2width / 2 - 85
@@ -738,6 +643,36 @@ define(function(require, exports, module) {
                             })
                             .end();
                         $imgWrap = $fancybox.find('.img-wrap');
+
+
+                        // init swip
+                        initSwipEvent( $fancybox.find('.fancy-slider-wrap') ,
+                            function( pxgeX , ev){
+                                if( $(ev.target).hasClass('slider-right') || $(ev.target).hasClass('slider-left') )
+                                    return false;
+                                cacheData.startX = pxgeX;
+                                cacheData.$dom = $imgWrap.addClass( noAni );
+                                cacheData.left = parseInt( $imgWrap.css('left') ) || 0;
+                            },
+                            function( pageX ){
+                                cacheData.lastX = pageX;
+                                cacheData.$dom.css('left' ,
+                                    cacheData.left + pageX - cacheData.startX );
+                            },
+                            function( pageX ){
+                                cacheData.$dom.removeClass( noAni );
+                                setTimeout(function(){
+                                    // move too little
+                                    if( Math.abs( cacheData.lastX - cacheData.startX ) < 20 ){
+                                        cacheData.$dom.css("left" , cacheData.left );
+                                    } else {
+                                        if( cacheData.lastX > cacheData.startX )
+                                            slideLeft();
+                                        else
+                                            slideRight();
+                                    }
+                                })
+                            });
                     }
                     $fancybox.fadeIn();
                     $imgWrap.html('');
@@ -790,9 +725,11 @@ define(function(require, exports, module) {
                         .attr('index' , $img.closest('.photo').index());
                 }
                 var slideLeft = function(){
+                    var index = $currBigImgWrap.index();
+                    index += ( parseInt( $imgWrap.css('margin-left') ) || 0 ) / winWidth;
                     if( $currBigImgWrap.prev().length ){
                         $imgWrap.css({
-                            'left': "+=" + winWidth
+                            'left': - ( index - 1 ) * winWidth
                         })
                         $currBigImgWrap =  $currBigImgWrap.prev();
                         afterShowImg( $currBigImgWrap );
@@ -804,18 +741,24 @@ define(function(require, exports, module) {
                                 $imgWrap.css({
                                         'width': winWidth * ( $imgs.length + 1 )
                                         ,'margin-left': "-=" + winWidth
-                                        ,'left': "+=" + winWidth
+                                        ,'left': - ( index - 1 ) * winWidth
                                     })
                                     .prepend( $bigImgWrap );
                                 afterShowImg( $bigImgWrap);
                             } );
+                        } else {
+                            $imgWrap.css({
+                                'left': - index * winWidth
+                            })
                         }
                     }
                 }
                 var slideRight = function(){
+                    var index = $currBigImgWrap.index();
+                    index += ( parseInt( $imgWrap.css('margin-left') ) || 0 ) / winWidth;
                     if( $currBigImgWrap.next().length ){
                         $imgWrap.css({
-                            'left': "-=" + winWidth
+                            'left': - ( index + 1 ) * winWidth
                         })
                         $currBigImgWrap =  $currBigImgWrap.next();
                         afterShowImg( $currBigImgWrap );
@@ -827,11 +770,15 @@ define(function(require, exports, module) {
                                 $fancybox.find( '.img-wrap' )
                                     .css({
                                         'width': winWidth * ( $imgs.length + 1 )
-                                        ,'left': "-=" + winWidth
+                                        ,'left': - ( index + 1 ) * winWidth
                                     })
                                     .append( $bigImgWrap );
                                 afterShowImg( $bigImgWrap);
                             } );
+                        } else {
+                            $imgWrap.css({
+                                'left': - index * winWidth
+                            })
                         }
                     }
                 }
@@ -845,6 +792,60 @@ define(function(require, exports, module) {
 
                 // init slider
                 var $inner = $('.photo-wrap-inner');
+                var noAni = "no-animate";
+
+                var _getMarginLeft = function( $dom ){
+                    return -( ~~ ($dom.attr('index')) || 0 ) * ( 209 + 40 );
+                }
+
+                var initSwipEvent = function( $dom , touchStartFun , touchMoveFun , touchEndFun ){
+                    var mevent = function( ev ){
+                        if( touchStartFun( ev.originalEvent.targetTouches[0].pageX , ev ) === false )
+                            return;
+                        var moveEvent = function( pageX ){
+                            touchMoveFun( pageX )
+                        }
+                        var endEvent = function(ev){
+                            touchEndFun( );
+                            $(document)
+                              .off('.slide-drag');
+                        }
+                        // bind mouse move event
+                        $(document)
+                            .on('touchmove.slide-drag', function( ev ){
+                              moveEvent( ev.originalEvent.targetTouches[0].pageX );
+                            })
+                            .on('touchend.slide-drag', endEvent )
+                    }
+                    $dom.on('touchstart' , function( ev ){
+                        mevent( ev );
+                    })
+                }
+
+                var cacheData = {};
+                initSwipEvent( $inner ,
+                    function( pxgeX ){
+                        cacheData.startX = pxgeX;
+                        cacheData.$gallery = $inner.children(':visible').addClass( noAni );
+                        cacheData.marginLeft = _getMarginLeft( cacheData.$gallery );
+                    },
+                    function( pageX ){
+                        cacheData.lastX = pageX;
+                        cacheData.$gallery.css('margin-left' ,
+                            cacheData.marginLeft + pageX - cacheData.startX );
+                    },
+                    function( pageX ){
+                        cacheData.$gallery.removeClass( noAni );
+                        setTimeout(function(){
+                            // move too little
+                            if( Math.abs( cacheData.lastX - cacheData.startX ) < 20 ){
+                                cacheData.$gallery.css("marginLeft" , cacheData.marginLeft );
+                            } else {
+                                slideFunc( cacheData.lastX > cacheData.startX );
+                            }
+                        })
+                    });
+
                 var $left = $('.slide-left').on( eventName , function(){
                     slideFunc( true );
                 } );
@@ -857,6 +858,7 @@ define(function(require, exports, module) {
                     var $photos = $gallery.find('.photo');
 
                     index = index + ( bLeft ? -3 : 3 );
+                    index = Math.min( ~~( ($gallery.children().length - 1 ) / 3) * 3 ,  Math.max( index , 0 ) );
                     $gallery.attr( 'index' , index );
                     $gallery.css( 'marginLeft' , - index * ( 209 + 40 ) );
                     refreshSlideStatus();
@@ -901,15 +903,6 @@ define(function(require, exports, module) {
         var _status = result.result;
         var _name = $('#username').val();
 
-//        $.ajax({
-//            url: "data/public/index.php/home/record",
-//            dataType: "JSON",
-//            type: "POST",
-//            data: {month:_time,distance:_distance,status:_status,name:_name},
-//            success: function(res){
-//
-//            }
-//        });
     }
 
     var counterTimer = null;
@@ -938,17 +931,7 @@ define(function(require, exports, module) {
                 showNum();
             } , 1000 );
 
-            /*
-            M.motionBlur( $t[0] , 0 );
-            counterTimer = setTimeout( function(){
-                counterAnimate = new Animate( [ 0 ] , [ 100 ] , 200 , '' , function( arr ){
-                    M.motionBlur( $t[0] , ~~arr[ 0 ] );
-                } , function(){
-                    $t.hide();
-                    showNum();
-                });
-            } , 800 );
-            */
+
         })();
     }
 
@@ -1004,21 +987,7 @@ define(function(require, exports, module) {
         resetCounter( function(){
             game.start( );
         } );
-        // when count to four,  start the robot
-        // set robot car in the middle of the page
-        /*
-        $cars.eq(1)
-            .fadeIn()
-            .css({
-                'margin-left' : - car2width / 2
-            });
-        setTimeout( function(){
-            $robotDot.show().css('left' , '6%');
-            game.start();
-        } , 3000 );
-        */
-        // drive ’my car ‘ to sence
-        //_driveCarToSence( $cars.eq(0) );
+
         // show car dot
         $carDot.show().css('left' , 36);
         _driveCarToSence( $cars.eq(1) );
@@ -1147,37 +1116,10 @@ define(function(require, exports, module) {
     var $carDot = $('#car-dot');
     var $robotDot = $('#robot-dot');
     var $counter = $('#counter');
-    /*
-    var $goon = $('#goon-btn')
-        .click(function(){
-            $(this).animate({'margin-left':2000,opacity:0},500,'easeInQuart',function(){
-                $(this).hide();
-                goon();
-            });
-        })
-        .hover(function(){
-            $(this).addClass('animated tada');
-        },function(){
-            $(this).removeClass('animated tada');
-        });
-    */
+
     var $startBtn = $('#start-btn')
         .click(function(){
-//            var $t = $( this );
-//            if( $t.hasClass( lockClass ) ) return;
-//            $t.addClass( lockClass );
-//            var i = 0;
-//            // motion blur
-//            new Animate( [ 0 ] , [ 140 ] , 300 , '' , function( arr ){
-//                M.motionBlur( $t[0] , ~~arr[ 0 ] );
-//                i++;
-//                $t.css( 'opacity' , Math.pow( 1 / i , 1 / 4 ) );
-//            } , function(){
-//                // hide start btn
-//                $t.hide()
-//                    .addClass( lockClass );;
-//                ready();
-//            } );
+
             $(this).removeClass('animated');
             $(this).animate({'margin-left':2000,opacity:0},500,'easeInQuart',function(){
                 $(this).hide();
@@ -1355,13 +1297,7 @@ define(function(require, exports, module) {
             'background-image': 'url(./images/' + currRoadConfig.src + ')',
             'background-position-x': 0
             });
-        //var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 3 ) * currRoadConfig.width;
 
-        //var canvas = $roadCan[0];
-
-        // reset road width and height
-        // canvas.width = width;
-        // M.motionBlur( currRoadConfig.img , radius , 0 , canvas );
     }
 
 
