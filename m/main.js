@@ -48,12 +48,6 @@ define(function(require, exports, module) {
       $(this).closest('.nav-b ').find('.nav-main').css('margin-left' , "0");
     })
 
-    // require jquery ani plugin
-    // require('jquery.queryloader');
-    // require('jquery.easing');
-    // require('modernizr');
-    // require('swfobject');
-
     $.fn.rotate = function( deg ){
           deg = 'rotate(' + deg + 'deg)';
           $( this )
@@ -170,6 +164,8 @@ define(function(require, exports, module) {
 
     var maxDur = 0;
     var isBigThan100 = false;
+
+    var minLeft = 36;
     game.setConfig({
         duration  : 2000
         , maxSpeed : GAME_MAX_SPEED
@@ -261,8 +257,8 @@ define(function(require, exports, module) {
             }
             */
 
-            p2 = Math.min( Math.max( ( p1 - p ) * 300 + 21  , 21 ) , 300 / 2 + 21 ) - 21 ;
-            $carDot.css('left' , 21 + Math.min( p2  , 300 / 2 ) );
+            p2 = Math.min( Math.max( ( p1 - p ) * 300 + minLeft  , minLeft ) , 300 / 2 + minLeft ) - minLeft ;
+            $carDot.css('left' , minLeft + Math.min( p2  , 300 / 2 ) );
             // change robot dot position
 
             // if game is not over
@@ -439,6 +435,16 @@ define(function(require, exports, module) {
                 reset();
             },
             init: function( $resultPanel ){
+
+                // fille the form
+                $('#G_fill-form').on( eventName , function(){
+                    $(this).closest('.result-con')
+                        .find('.result-form-suc')
+                        .hide()
+                        .end()
+                        .find('.result-form')
+                        .fadeIn();
+                });
                 var validateConfig = {
                     rules: {
                         email: {
@@ -657,18 +663,6 @@ define(function(require, exports, module) {
                         .hide()
                         .eq( index )
                         .fadeIn(refreshSlideStatus);
-                        /*
-                        //.css({margin:0})
-                        .end() //show sliders
-                        .end()
-                        .find('.photo-slider,.video-slider')
-                        .hide()
-                        .eq( index )
-                        .fadeIn( 500 , function(){
-                            refreshSlideStatus();
-                        });
-                        //.find('.slider-btn').css({left:0});
-                        */
                 } , 'selected' , eventName);
                 var $fancybox = null;
                 var tpl =  '<section class="fancy-slider-mask lpn-mask">\
@@ -847,89 +841,7 @@ define(function(require, exports, module) {
                 $gallery.on('click' , '.photo img' , function(){
                     showImage( $(this) );
                 });
-                // Gallery
-                // require jquery ani plugin
-                /*
-                seajs.use( 'jquery.fancybox' , function(){
 
-                    var $photoGallery = $('#gallery-mask').find('.photo-gallery');
-                    $photoGallery.each(function( index ){
-                        var $photos = $(this).find('.photo');
-                        var len = $photos.length;
-                        // init slider
-
-
-
-                        $photos.find('a').fancybox({
-                            openMethod : 'dropIn',
-                            padding: 0,
-                            tpl: {
-                                wrap: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><a target="_blank" class="fancybox-download"></a><div class="fancybox-share"><div class="fancybox-share-list"></div></div><div class="fancybox-inner"></div></div></div></div>'
-                            },
-                            afterShow: function(){
-                                var picurl = $(this).attr('href');
-                                var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
-                                $('.fancybox-download').attr('href',picurl.replace('jpg','zip'));
-                                $('.fancybox-share-list').append('<a target="_blank" href="http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'&amp;appkey=2455498088" title="分享到新浪微博" class="sina"></a>' +
-                                    '<a target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://50years911.porsche-events.cn%2f&amp;amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ空间" class="qzone"></a>' +
-                                    '<a target="_blank" href="http://www.kaixin001.com/repaste/share.php?rtitle=Fascination+Porsche+2013&amp;amp;rurl=http://50years911.porsche-events.cn%2f&amp;rcontent='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到开心网" class="kaixing"></a>' +
-                                    '<a target="_blank" href="http://v.t.qq.com/share/share.php?title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到QQ微博" class="qqwb"></a>' +
-                                    '<a target="_blank" href="http://share.renren.com/share/buttonshare.do?link=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到人人网" class="renren"></a>' +
-                                    '<a target="_blank" href="http://t.sohu.com/third/post.jsp?&amp;url=http://50years911.porsche-events.cn%2f&amp;title='+sharecopy+'&amp;pic=http://50years911.porsche-events.cn/'+picurl+'" title="分享到搜狐微博" class="tt"></a>');
-                                $('.fancybox-share').on('touchend',function(e){
-                                    e.preventDefault();
-                                    $('.fancybox-share-list').fadeIn();
-                                });
-                                $('.share-close').click(function(){
-                                    $('.fancybox-share-list').fadeOut();
-                                });
-                            }                    })
-                        });
-
-
-                    var $videoGallery = $('#gallery-mask').find('.video-gallery');
-                    var $vphotos = $videoGallery.find('.photo');
-                    var vlen = $vphotos.length;
-
-
-                    $vphotos.find('a').fancybox({
-                        width: 720,
-                        height: 405,
-                        type: 'iframe',
-                        iframe: {scrolling:'no'},
-                        openMethod : 'dropIn',
-                        padding: 0
-                    });
-
-                    (function ($, F) {
-                        F.transitions.dropIn = function() {
-                            var endPos = F._getPosition(true);
-                            endPos.opacity = 0;
-                            endPos.top = (parseInt(endPos.top, 10) - 400);
-
-                            F.wrap.css(endPos).show().animate({
-                                top: endPos.top + 400,
-                                opacity: 1
-                            }, {
-                                easing: 'easeOutQuart',
-                                duration: 800,
-                                complete: F._afterZoomIn
-                            });
-                        };
-
-                        F.transitions.dropOut = function() {
-                            F.wrap.removeClass('fancybox-opened').animate({
-                                top: '-=200'
-                            }, {
-                                duration: F.current.closeSpeed,
-                                complete: F._afterZoomOut
-                            });
-                        };
-
-                    }(jQuery, jQuery.fancybox));
-
-                });
-*/
 
                 // init slider
                 var $inner = $('.photo-wrap-inner');
@@ -1064,9 +976,9 @@ define(function(require, exports, module) {
         var $dot = index == 0 ? $carDot : $robotDot;
         $dot.delay(delay)
             .fadeIn()
-            .css('left' , 21 )
+            .css('left' , 36 )
             .animate({
-              'left': 300 / 2 + 21
+              'left': 300 / 2
             } , dur , 'easeInQuart');
 
         var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
@@ -1108,7 +1020,7 @@ define(function(require, exports, module) {
         // drive ’my car ‘ to sence
         //_driveCarToSence( $cars.eq(0) );
         // show car dot
-        $carDot.show().css('left' , 21);
+        $carDot.show().css('left' , 36);
         _driveCarToSence( $cars.eq(1) );
 
 
@@ -1166,16 +1078,20 @@ define(function(require, exports, module) {
         $speeds[2].className = 'speed20';
         $timeBoard.html('00:00:0');
         // reset bg
-        $bg.css( 'marginLeft' , 0 )
-            .attr('src' , './images/' + bgConfig[0].src);
-        lastBgDistance = 0;
 
+        lastBgDistance = 0;
         currRoadIndex = 0;
         bgIndex = 0;
-
-        $road.css('background-image' , 'url(./images/' + roadConfig[currRoadIndex].src + ')');
+        $bg.css({
+            'background-image': 'url(./images/' + bgConfig[bgIndex].src + ')',
+            'background-position-x': 0
+        });
+        $road.css({
+            'background-image': 'url(./images/' + roadConfig[currRoadIndex].src + ')',
+            'background-position-x': 0
+        });
         // reset road
-        motionRoad( 0 );
+        //motionRoad( 0 );
     }
 
     var goon = function(){
@@ -1380,8 +1296,10 @@ define(function(require, exports, module) {
 
             setTimeout(function(){
                 // pre set bg
-                $bg[0].setAttribute( 'src' , './images/' + bgConfig[bgIndex].src );
-                $bg.css('marginLeft' , 0);
+                $bg.css({
+                    "background-image": 'url(./images/' + bgConfig[bgIndex].src + ')',
+                    "background-position-x" : 0
+                });
                 // .. motion road ,
                 // run motionRoad function, change the road to next type.
                 motionRoad( status.speed == 0 ? 0 :
@@ -1433,6 +1351,10 @@ define(function(require, exports, module) {
 
         currRoadConfig = roadConfig[currRoadIndex];
 
+        $road.css({
+            'background-image': 'url(./images/' + currRoadConfig.src + ')',
+            'background-position-x': 0
+            });
         //var width = ( Math.ceil( screenWidth / currRoadConfig.width ) + 3 ) * currRoadConfig.width;
 
         //var canvas = $roadCan[0];
