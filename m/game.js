@@ -371,10 +371,10 @@ define(function( require , exports , model ){
     }
 
     var _bindEvent = function(){
-        bind( document , 'click' , speedExchange.move );
+        bind( document , 'touchstart' , speedExchange.move );
     }
     var _removeEvent = function(){
-        unbind( document , 'click' , speedExchange.move );
+        unbind( document , 'touchstart' , speedExchange.move );
     }
 
     var _getPlayTime = function(){

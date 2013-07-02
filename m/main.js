@@ -16,7 +16,15 @@ define(function(require, exports, module) {
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
     };
-    var eventName = 'click';
+    setTimeout( function () {
+        window.scrollTo( 0, 1 );
+    }, 0 );
+    document.ontouchmove = function(e){
+        window.scrollTo( 0, 1 );
+        e.preventDefault();
+    }
+
+    var eventName = 'touchstart';
     // ---------------------------------------------------------
     // tap nav
     // ---------------------------------------------------------
@@ -39,6 +47,7 @@ define(function(require, exports, module) {
     $('#J_nav-back').on( eventName , function(){
       $(this).closest('.nav-b ').find('.nav-main').css('margin-left' , "0");
     })
+
     // require jquery ani plugin
     // require('jquery.queryloader');
     // require('jquery.easing');
@@ -456,7 +465,7 @@ define(function(require, exports, module) {
                     },
                     submitHandler: function (form) {
                         $.ajax({
-                            url: "data/public/index.php/home/register",
+                            url: "../data/public/index.php/home/register",
                             dataType: "JSON",
                             type: "POST",
                             data: $(form).serialize(),
@@ -598,7 +607,7 @@ define(function(require, exports, module) {
                 pause();
                 // Get list
                 $.ajax({
-                    url: "data/public/index.php/home/getrecord",
+                    url: "../data/public/index.php/home/getrecord",
                     dataType: "JSON",
                     success: function(res){
                         _renderList( res.data );
@@ -1508,3 +1517,4 @@ define(function(require, exports, module) {
     $video[0].play();
    }
 });
+
