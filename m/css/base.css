@@ -1675,19 +1675,19 @@ margin-top: -2px;}
   margin: 25px auto;
 }
 #gallery-mask .photo-wrap .slide-left,#gallery-mask .photo-wrap .slide-right{
-  background: url(../images/icons.png) no-repeat;
-  width: 20px;
-  height: 29px;
+  background: url(../images/icons.png?a) no-repeat;
+  width: 60px;
+  height: 60px;
   position: absolute;
   top: 50%;
-  margin-top: -15px;
-  background-position: 0 -100px;
-  left: 30px;
+  margin-top: -30px;
+  background-position: 16px -110px;
+  left: 9px;
 }
 #gallery-mask .photo-wrap .slide-right{
-  background-position: -27px -100px;
+  background-position: -50px -148px;
   left: auto;
-  right: 30px;
+  right: 9px;
 }
 #gallery-mask .photo-gallery , #gallery-mask .video-gallery{
   height: 211px;
@@ -1787,14 +1787,13 @@ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
 }
 .fancy-slider-wrap .slider-left,
 .fancy-slider-wrap .slider-right{
-  background: rgba(0,0,0,0.4);
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
   position: absolute;
   top: 50%;
-  margin-top: -37px;
+  margin-top: -50px;
   left: 0;
-  background: url(../images/fancy-bg.png) no-repeat 0 -75px;
+  background: rgba(0,0,0,0.4) url(../images/fancy-bg.png) no-repeat 18px -64px
 }
 .fancy-slider-wrap .slider-right{
   left: auto;

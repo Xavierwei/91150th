@@ -29,7 +29,7 @@ define(function(require, exports, module) {
     // tap nav
     // ---------------------------------------------------------
     // slide down
-    $('#J_nav').on( eventName , function(){
+    $('#J_nav').on( "click" , function(){
       $(this).prev().css('top' , -10);
       // TODO ..pause the game
       pause();
