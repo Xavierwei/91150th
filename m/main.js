@@ -24,29 +24,50 @@ define(function(require, exports, module) {
         }, 0 );
     }
 
+    $(window).on('touchstart', function(){
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
 
+    });
 
     $(window).on('resize', function(){
-        if ($(this).height() > 600 &&
-            (window.orientation == 90 || window.orientation == -90)) {
+        if (($(this).height() > 600 && (window.orientation == 90 || window.orientation == -90)) || !navigator.userAgent.toLowerCase().match(/iphone/i)) {
             $('body').height('100%');
         } else {
             var height = $(window).height();
             $('body').height(height+125);
-            setTimeout( function () {
-                window.scrollTo( 0, 1 );
-            }, 0 );
         }
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
+
     });
     $(window).resize();
+
+    $(window).on('orientationchange', function(){
+        if(window.orientation == 0)
+        {
+            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=device-width');
+        }
+        else
+        {
+            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=960');
+        }
+    });
+    $(window).trigger('orientationchange');
 
     var eventName = 'touchstart';
     // ---------------------------------------------------------
     // tap nav
     // ---------------------------------------------------------
     // slide down
-    $('#J_nav').on( "click" , function(){
+    $('#J_nav').on( "click" , function(e){
+        e.preventDefault();
       $(this).prev().css('top' , -10);
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
       // TODO ..pause the game
       pause();
     });
@@ -56,9 +77,9 @@ define(function(require, exports, module) {
       goon();
     });
     // click share btn
-    $('#J_share').on( eventName , function(){
-      $(this).closest('.nav-main').css('margin-left' , "-100%");
-    });
+//    $('#J_share').on( eventName , function(){
+//      $(this).closest('.nav-main').css('margin-left' , "-100%");
+//    });
 
     $('#J_nav-back').on( eventName , function(){
       $(this).closest('.nav-b ').find('.nav-main').css('margin-left' , "0");
@@ -594,7 +615,7 @@ define(function(require, exports, module) {
                                         <div class="img-wrap clearfix"></div>\
                                         <div class="slider-left"></div>\
                                         <div class="slider-right"></div>\
-                                        <div class="r-share"></div>\
+                                        <a target="_blank" class="r-share"></a>\
                                         <div class="r-share-con btn-share-wrap">\
                                             <div class="r-share-inner">\
                                                 <a href="" class="sina"><i></i></a>\
@@ -613,6 +634,8 @@ define(function(require, exports, module) {
 
                 var showImage = function( $img ){
                     if( !$fancybox ){ // create $fancybox
+                        var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
+
                         $fancybox = $(tpl).appendTo( document.body )
                             .find('.r-close')
                             .on( eventName , function(){
@@ -633,24 +656,25 @@ define(function(require, exports, module) {
                             .on( eventName ,slideRight )
                             .end()
                             .find( '.r-share' )
-                            .on( eventName , function(){
-                                var $shareCon = $fancybox.find(".r-share-con")
-                                    .fadeIn();
-                                // init all the link href
-                                // TODO....... share title
-                                var path = location.href.replace(/\/[^\/]*/ , '/');
-                                var pic = path + $currBigImgWrap.find('img').attr('src');
-                                var title = "";
-                                var url = "http://50years911.porsche-events.cn%2f";
-                                $shareCon.find('.sina')
-                                    .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
-                                $shareCon.find('.qqwb')
-                                    .attr('href' , 'http://v.t.qq.com/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
-                                $shareCon.find('.renren')
-                                    .attr('href' , 'http://share.renren.com/share/buttonshare.do?title='+title+'&link=' + url + '&pic=' + pic);
-                                $shareCon.find('.douban')
-                                    .attr('href' , 'http://shuo.douban.com/!service/share?name='+title+'&url=' + url + '&pic=' + pic);
-                            })
+//                            .on( eventName , function(){
+//                                var $shareCon = $fancybox.find(".r-share-con")
+//                                    .fadeIn();
+//                                // init all the link href
+//                                // TODO....... share title
+//                                var path = location.href.replace(/\/[^\/]*/ , '/');
+//                                var pic = path + $currBigImgWrap.find('img').attr('src');
+//                                var title = "";
+//                                var url = "http://50years911.porsche-events.cn%2f";
+//                                $shareCon.find('.sina')
+//                                    .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
+//                                $shareCon.find('.qqwb')
+//                                    .attr('href' , 'http://v.t.qq.com/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
+//                                $shareCon.find('.renren')
+//                                    .attr('href' , 'http://share.renren.com/share/buttonshare.do?title='+title+'&link=' + url + '&pic=' + pic);
+//                                $shareCon.find('.douban')
+//                                    .attr('href' , 'http://shuo.douban.com/!service/share?name='+title+'&url=' + url + '&pic=' + pic);
+//                            })
+                            .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&url=http://50years911.porsche-events.cn&pic=http://50years911.porsche-events.cn/' + $(this).attr('src'))
                             .end()
                             .find( '.r-share-close' )
                             .on( eventName , function(){
@@ -730,7 +754,7 @@ define(function(require, exports, module) {
                         $('<img/>')
                         .load( cb )
                         .attr( 'src' , $img.closest('a').attr('href') )
-                        .css('width' , '100%' )
+                        .css('height' , '100%' )
                         ).append(
                             // get desc cloned
                             $img.closest('.photo')

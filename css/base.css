@@ -882,6 +882,7 @@ span.lpn-ghost {
 .ranking .r-list-l tr:nth-child(3){
   color: red;
 }
+.ranking .validation {position: absolute;bottom:69px;right:265px;font-size:12px;}
 /*
 .result .r-slider,.ranking .r-slider{
   position: absolute;
