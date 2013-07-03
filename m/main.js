@@ -16,21 +16,62 @@ define(function(require, exports, module) {
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
     };
-    setTimeout( function () {
-        window.scrollTo( 0, 1 );
-    }, 0 );
-    document.ontouchmove = function(e){
-        window.scrollTo( 0, 1 );
-        e.preventDefault();
+    if(!navigator.userAgent.toLowerCase().match(/iphone/i))
+    {
+        $('body').addClass('andriod');
     }
+
+    document.ontouchmove = function(e){
+        e.preventDefault();
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
+    }
+
+    $(window).on('touchstart', function(){
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
+
+    });
+
+    $(window).on('resize', function(){
+        if (($(this).height() > 600 && (window.orientation == 90 || window.orientation == -90)) || !navigator.userAgent.toLowerCase().match(/iphone/i)) {
+            $('body').height('100%');
+        } else {
+            var height = $(window).height();
+            $('body').height(height+125);
+        }
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
+
+    });
+    $(window).resize();
+
+    $(window).on('orientationchange', function(){
+        if(window.orientation == 0)
+        {
+            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=device-width');
+        }
+        else
+        {
+            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=960');
+        }
+    });
+    $(window).trigger('orientationchange');
 
     var eventName = 'touchstart';
     // ---------------------------------------------------------
     // tap nav
     // ---------------------------------------------------------
     // slide down
-    $('#J_nav').on( "click" , function(){
+    $('#J_nav').on( "click" , function(e){
+        e.preventDefault();
       $(this).prev().css('top' , -10);
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
       // TODO ..pause the game
       pause();
     });
@@ -40,9 +81,9 @@ define(function(require, exports, module) {
       goon();
     });
     // click share btn
-    $('#J_share').on( eventName , function(){
-      $(this).closest('.nav-main').css('margin-left' , "-100%");
-    });
+//    $('#J_share').on( eventName , function(){
+//      $(this).closest('.nav-main').css('margin-left' , "-100%");
+//    });
 
     $('#J_nav-back').on( eventName , function(){
       $(this).closest('.nav-b ').find('.nav-main').css('margin-left' , "0");
@@ -191,7 +232,7 @@ define(function(require, exports, module) {
                 if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    var isWin = time >= 3 * 60 * 1000;
+                    var isWin = time >= .3 * 60 * 1000;
                     game.over( isWin );
 
                     var r = {};
@@ -342,7 +383,7 @@ define(function(require, exports, module) {
             init: function( $resultPanel ){
 
                 // fille the form
-                $('#G_fill-form').on( eventName , function(){
+                $('#G_fill-form').on( 'click' , function(){
                     $(this).closest('.result-con')
                         .find('.result-form-suc')
                         .hide()
@@ -375,12 +416,15 @@ define(function(require, exports, module) {
                         address: "请输入地址"
                     },
                     submitHandler: function (form) {
+                        $('.btn-submit').fadeOut();
                         $.ajax({
                             url: "../data/public/index.php/home/register",
                             dataType: "JSON",
                             type: "POST",
                             data: $(form).serialize(),
                             success: function(res){
+
+                                $('.btn-submit').fadeIn();
                                 if(res.code == 200){
                                     var result = panelData.result;
                                     //result.time = 8338367;
@@ -398,7 +442,7 @@ define(function(require, exports, module) {
                                     var _name = res.data.attributes.name;
                                     var _uid = res.data.attributes.uid;
                                     $.ajax({
-                                        url: "data/public/index.php/home/record",
+                                        url: "../data/public/index.php/home/record",
                                         dataType: "JSON",
                                         type: "POST",
                                         data: {uid:_uid, time:_time,distance:_distance,status:_status,name:_name},
@@ -410,7 +454,7 @@ define(function(require, exports, module) {
                                         .parent()
                                         .children()
                                         .hide()
-                                        .filter('.result-form-suc')
+                                        .filter('.result-form-suc2')
                                         .fadeIn();
                                 }
                                 else
@@ -458,7 +502,7 @@ define(function(require, exports, module) {
                 $resultPanel.find('.result-con')
                     .children()
                     .hide()
-                    .filter( isWin ? '.result-tit,.result-form' : '.result-failure')
+                    .filter( isWin ? '.result-form-suc' : '.result-failure')
                     .fadeIn();
 
                 var _time = result.time;
@@ -517,8 +561,30 @@ define(function(require, exports, module) {
             onShow: function( $rankingPanel ){
                 pause();
                 // Get list
+                var _date = new Date();
+                var _month = _date.getMonth()+1;
+                $('#ranking-month .btn').remove();
+                for(var i = 6; i <= _month; i++)
+                {
+                    $('#ranking-month').append('<div data-month="'+i+'" class="btn">'+i+'月份<div class="btn-r"></div></div>');
+                }
+                $('#ranking-month .btn').last().addClass('selected');
+                $('#ranking-month .btn').click(function(){
+                    var _month = $(this).attr('data-month');
+                    $('#ranking-month .btn').removeClass('selected');
+                    $(this).addClass('selected');
+                    $.ajax({
+                        url: "../data/public/index.php/home/getrecord",
+                        data: {'m':_month},
+                        dataType: "JSON",
+                        success: function(res){
+                            _renderList( res.data );
+                        }
+                    });
+                });
                 $.ajax({
                     url: "../data/public/index.php/home/getrecord",
+                    data: {'m':_month},
                     dataType: "JSON",
                     success: function(res){
                         _renderList( res.data );
@@ -578,7 +644,7 @@ define(function(require, exports, module) {
                                         <div class="img-wrap clearfix"></div>\
                                         <div class="slider-left"></div>\
                                         <div class="slider-right"></div>\
-                                        <div class="r-share"></div>\
+                                        <a target="_blank" class="r-share"></a>\
                                         <div class="r-share-con btn-share-wrap">\
                                             <div class="r-share-inner">\
                                                 <a href="" class="sina"><i></i></a>\
@@ -597,6 +663,8 @@ define(function(require, exports, module) {
 
                 var showImage = function( $img ){
                     if( !$fancybox ){ // create $fancybox
+                        var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
+
                         $fancybox = $(tpl).appendTo( document.body )
                             .find('.r-close')
                             .on( eventName , function(){
@@ -617,24 +685,25 @@ define(function(require, exports, module) {
                             .on( eventName ,slideRight )
                             .end()
                             .find( '.r-share' )
-                            .on( eventName , function(){
-                                var $shareCon = $fancybox.find(".r-share-con")
-                                    .fadeIn();
-                                // init all the link href
-                                // TODO....... share title
-                                var path = location.href.replace(/\/[^\/]*/ , '/');
-                                var pic = path + $currBigImgWrap.find('img').attr('src');
-                                var title = "";
-                                var url = "http://50years911.porsche-events.cn%2f";
-                                $shareCon.find('.sina')
-                                    .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
-                                $shareCon.find('.qqwb')
-                                    .attr('href' , 'http://v.t.qq.com/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
-                                $shareCon.find('.renren')
-                                    .attr('href' , 'http://share.renren.com/share/buttonshare.do?title='+title+'&link=' + url + '&pic=' + pic);
-                                $shareCon.find('.douban')
-                                    .attr('href' , 'http://shuo.douban.com/!service/share?name='+title+'&url=' + url + '&pic=' + pic);
-                            })
+//                            .on( eventName , function(){
+//                                var $shareCon = $fancybox.find(".r-share-con")
+//                                    .fadeIn();
+//                                // init all the link href
+//                                // TODO....... share title
+//                                var path = location.href.replace(/\/[^\/]*/ , '/');
+//                                var pic = path + $currBigImgWrap.find('img').attr('src');
+//                                var title = "";
+//                                var url = "http://50years911.porsche-events.cn%2f";
+//                                $shareCon.find('.sina')
+//                                    .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
+//                                $shareCon.find('.qqwb')
+//                                    .attr('href' , 'http://v.t.qq.com/share/share.php?title='+title+'&url=' + url + '&pic=' + pic);
+//                                $shareCon.find('.renren')
+//                                    .attr('href' , 'http://share.renren.com/share/buttonshare.do?title='+title+'&link=' + url + '&pic=' + pic);
+//                                $shareCon.find('.douban')
+//                                    .attr('href' , 'http://shuo.douban.com/!service/share?name='+title+'&url=' + url + '&pic=' + pic);
+//                            })
+                            .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&url=http://50years911.porsche-events.cn&pic=http://50years911.porsche-events.cn/' + $(this).attr('src'))
                             .end()
                             .find( '.r-share-close' )
                             .on( eventName , function(){
@@ -714,7 +783,7 @@ define(function(require, exports, module) {
                         $('<img/>')
                         .load( cb )
                         .attr( 'src' , $img.closest('a').attr('href') )
-                        .css('width' , '100%' )
+                        .css('height' , '100%' )
                         ).append(
                             // get desc cloned
                             $img.closest('.photo')

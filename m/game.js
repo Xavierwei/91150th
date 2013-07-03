@@ -80,13 +80,16 @@ define(function( require , exports , model ){
     // --------------------private var end-------------------------------
 
     // private function
-    var speedExchange = (function(){
+    var speedExchange = (function(e){
 
         var _touchTimes = 0;
         var _lastTimes = 0;
         var _touchEvent = function( ev ){
             _touchTimes ++;
-
+            if(ev.target.id != 'J_nav')
+            {
+                ev.preventDefault();
+            }
             /*
             if( ev.preventDefault )
                 ev.preventDefault();

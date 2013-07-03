@@ -99,7 +99,7 @@ a {
   z-index: 99999;
   text-align : center;
   white-space: nowrap;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.5);
 }
 
 .no-rgba .lpn-mask {background:url(../images/fancybox_overlay.png)}
@@ -116,8 +116,14 @@ span.lpn-ghost {
   border-radius: 4px;
   white-space: normal;
   position: relative;
-  padding-top: 63px;
+  padding-top: 60px;
   overflow: hidden;
+}
+.andriod #ranking-mask .lpn-panel,.andriod #gallery-mask .lpn-panel,.andriod #result-mask .lpn-panel,.andriod #rule-mask .lpn-panel
+{
+    -moz-transform: scale(0.8);
+    -webkit-transform: scale(0.8);
+    padding-top:0px;
 }
 .lpn-panel .r-close{
   background: url(../images/result_close.png) no-repeat;
@@ -153,7 +159,6 @@ span.lpn-ghost {
 #process-num{
   color: red;
   text-align: center;
-  font-family: PorscheNewsGothic-Bold;
   font-style: italic;
   font-weight: bold;
 }
@@ -236,7 +241,7 @@ span.lpn-ghost {
 }
 .main-bg .bg{
   height: 100%;
-  bottom: 244px;
+  bottom: 160px;
   position: absolute;
   width: 100%;
   background: url(../images/bg1.jpg) left bottom;
@@ -246,7 +251,7 @@ span.lpn-ghost {
   width: 100%;
 }
 .main-bg .road , .main-bg #can-road{
-  height: 256px;
+  height: 180px;
   position: absolute;
   z-index: 1001;
   bottom: 0;
@@ -259,9 +264,9 @@ span.lpn-ghost {
   left: 0;
 }
 .nav{
-  width: 176px;
-  height: 70px;
-  background: url(../images/m-nav.png);
+  width: 226px;
+  height: 90px;
+  background: url(../images/m-nav.png) no-repeat center top;
   position: absolute;
   left: 50%;
   margin-left: -88px;
@@ -269,18 +274,18 @@ span.lpn-ghost {
   z-index: 10001;
 }
 .nav-wrap .btn-wrap{
-  margin: 34px 38px;
+  margin: 20px 64px;
   font-size: 31px;
 }
 .nav-wrap .btn-wrap a{
   display: inline-block;
   position: relative;
   color: #FFF;
-  height: 86px;
-  line-height: 86px;
+  height: 82px;
+  line-height: 82px;
   background: url(../images/btn-bg.png);
   padding-left: 25px;
-  width: 213px;
+  width: 186px;
   text-align: center;
 }
 .nav-wrap .btn-wrap a:first-child{
@@ -323,11 +328,11 @@ span.lpn-ghost {
   background-position: -185px -75px;
 }
 .nav-up{
-  background: url(../images/icons.png) no-repeat 0 -60px;
-  width: 43px;
-  height: 25px;
+  background: url(../images/icons.png) no-repeat center -57px;
+  width: 100%;
+  height: 40px;
   display: block;
-  margin: -10px auto;
+  margin: -17px auto 0 auto;
 }
 .nav-back{
   background: url(../images/icons.png) no-repeat 0 0;
@@ -409,7 +414,7 @@ span.lpn-ghost {
   font-style: italic;
   float: left;
   margin-top: 26px;
-  margin-left: 14px;
+  margin-left: 5px;
   width:85px;
 }
 .main-board .board-m-t{
@@ -679,6 +684,7 @@ span.lpn-ghost {
   text-align: center;
 }
 .main-metas .start {
+  margin-top:10%;
   cursor: pointer;
 }
 .main-metas .goon {
@@ -694,7 +700,9 @@ span.lpn-ghost {
   margin-top: -10px;
 }
 .main-metas .c-mouse-text{
-  font-family: 黑体;
+  font-size:22px;
+  width:500px;
+  text-align: center;
   text-shadow: 1px 1px 1px #000;
 }
 .shake {
@@ -777,7 +785,8 @@ span.lpn-ghost {
   margin-top: 54px;
 }
 .result .btn1{
-  background: url(../images/btn2.png) no-repeat;
+  background: url(../images/btn2.png) repeat-x;
+  border:1px solid #555;
   width: 245px;
   height: 65px;
   display: inline-block;
@@ -892,6 +901,7 @@ span.lpn-ghost {
   border: none;
   color: #9d9d9d;
   width: 290px;
+  font-size:18px;
 }
 .result-form > label{
   position: absolute;
@@ -910,12 +920,13 @@ span.lpn-ghost {
   left: 500px;
   top: 88px;
 }
-.result-form label.error{
+.result-form label label.error{
   position: absolute;
-  left: 44px;
+  top: 50px;
+  left:5px;
   margin-bottom: 0;
-  color: #6b6b6b;
-    font-size:12px;
+  color: #c90000;
+  font-size:18px;
 }
 .result-form-suc{
   background:url(../images/success-text.png) no-repeat center top;
@@ -946,6 +957,14 @@ span.lpn-ghost {
     top:243px;
     left:275px;
     color:#eb151f;
+}
+.result-form-submited {
+    position: absolute;
+    top:203px;
+    font-size:36px;
+    color:#fff;
+    width:88%;
+    text-align: center;
 }
 
 .ranking {
@@ -1137,7 +1156,7 @@ span.lpn-ghost {
   width: 45px;
   height: 63px;
   margin-right: -3px;
-  background-position: 3px 0;
+  background-position: 0px 0;
 }
 .speed01{
   background-position: -70px 0px;
@@ -1146,7 +1165,7 @@ span.lpn-ghost {
   background-position: -140px 0px;
 }
 .speed03{
-  background-position: -210px 0px;
+  background-position: -216px 0px;
 }
 .speed04{
   background-position: -285px 0px;
@@ -1758,6 +1777,7 @@ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
 /*for fancy-slider-wrap img-wrap */
 .fancy-slider-mask{
   z-index: 2000000;
+    background: #000;
 }
 .fancy-slider-mask .lpn-panel{
   width: 100%;
@@ -1787,6 +1807,8 @@ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
   z-index: 10000;
   text-align: left;
   padding: 20px 5%;
+    font-size:22px;
+    line-height:150%;
 }
 .fancy-slider-wrap .slider-left,
 .fancy-slider-wrap .slider-right{
@@ -1796,21 +1818,20 @@ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
   top: 50%;
   margin-top: -50px;
   left: 0;
-  background: rgba(0,0,0,0.4) url(../images/fancy-bg.png) no-repeat 18px -64px
+  background: url(../images/fancybox_prev.png) no-repeat;
 }
 .fancy-slider-wrap .slider-right{
   left: auto;
   right: 0;
-  background-position: 0 -150px;
+  background: url(../images/fancybox_next.png) no-repeat;
 }
 .fancy-slider-wrap .r-share{
   position: absolute;
-  background: rgba(0,0,0,0.5) url(../images/fancy-bg.png) no-repeat -8px -8px;
-  width: 60px;
-  height: 60px;
-  -webkit-transform: skew( -20deg );
-  top: 20px;
-  right: 20px;
+  background:url(../images/gallery_share_weibo.png) no-repeat;
+    width:92px;
+    height:62px;
+top:0;right:150px;
+    display:block;
 }
 .fancy-slider-wrap .r-share-con{
   top: 0;
@@ -1836,6 +1857,8 @@ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
 .fancy-slider-wrap .btn-share-wrap a{
   margin: 0 20px;
 }
+.fancy-slider-mask .r-close {position: absolute;background:url(../images/gallery_close.png) no-repeat;width:160px;height:62px;z-index:999;}
+.fancy-slider-mask .lpn-panel {margin:0;padding:0;}
 
 .no-rgba .bg-pause {background:url(../images/fancybox_overlay.png)}
 
