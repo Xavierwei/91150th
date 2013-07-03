@@ -16,13 +16,29 @@ define(function(require, exports, module) {
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
     };
-    setTimeout( function () {
-        window.scrollTo( 0, 1 );
-    }, 0 );
+
     document.ontouchmove = function(e){
-        window.scrollTo( 0, 1 );
         e.preventDefault();
+        setTimeout( function () {
+            window.scrollTo( 0, 1 );
+        }, 0 );
     }
+
+
+
+    $(window).on('resize', function(){
+        if ($(this).height() > 600 &&
+            (window.orientation == 90 || window.orientation == -90)) {
+            $('body').height('100%');
+        } else {
+            var height = $(window).height();
+            $('body').height(height+125);
+            setTimeout( function () {
+                window.scrollTo( 0, 1 );
+            }, 0 );
+        }
+    });
+    $(window).resize();
 
     var eventName = 'touchstart';
     // ---------------------------------------------------------

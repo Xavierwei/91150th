@@ -236,7 +236,7 @@ span.lpn-ghost {
 }
 .main-bg .bg{
   height: 100%;
-  bottom: 244px;
+  bottom: 160px;
   position: absolute;
   width: 100%;
   background: url(../images/bg1.jpg) left bottom;
@@ -246,7 +246,7 @@ span.lpn-ghost {
   width: 100%;
 }
 .main-bg .road , .main-bg #can-road{
-  height: 256px;
+  height: 180px;
   position: absolute;
   z-index: 1001;
   bottom: 0;
