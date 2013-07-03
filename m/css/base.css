@@ -99,7 +99,7 @@ a {
   z-index: 99999;
   text-align : center;
   white-space: nowrap;
-  background: #000;
+  background: rgba(0,0,0,0.5);
 }
 
 .no-rgba .lpn-mask {background:url(../images/fancybox_overlay.png)}
@@ -116,8 +116,14 @@ span.lpn-ghost {
   border-radius: 4px;
   white-space: normal;
   position: relative;
-  padding-top: 63px;
+  padding-top: 60px;
   overflow: hidden;
+}
+.andriod #ranking-mask .lpn-panel,.andriod #gallery-mask .lpn-panel,.andriod #result-mask .lpn-panel,.andriod #rule-mask .lpn-panel
+{
+    -moz-transform: scale(0.8);
+    -webkit-transform: scale(0.8);
+    padding-top:0px;
 }
 .lpn-panel .r-close{
   background: url(../images/result_close.png) no-repeat;
@@ -408,7 +414,7 @@ span.lpn-ghost {
   font-style: italic;
   float: left;
   margin-top: 26px;
-  margin-left: 14px;
+  margin-left: 5px;
   width:85px;
 }
 .main-board .board-m-t{
@@ -779,7 +785,8 @@ span.lpn-ghost {
   margin-top: 54px;
 }
 .result .btn1{
-  background: url(../images/btn2.png) no-repeat;
+  background: url(../images/btn2.png) repeat-x;
+  border:1px solid #555;
   width: 245px;
   height: 65px;
   display: inline-block;
@@ -894,6 +901,7 @@ span.lpn-ghost {
   border: none;
   color: #9d9d9d;
   width: 290px;
+  font-size:18px;
 }
 .result-form > label{
   position: absolute;
@@ -912,12 +920,13 @@ span.lpn-ghost {
   left: 500px;
   top: 88px;
 }
-.result-form label.error{
+.result-form label label.error{
   position: absolute;
-  left: 44px;
+  top: 50px;
+  left:5px;
   margin-bottom: 0;
-  color: #6b6b6b;
-    font-size:12px;
+  color: #c90000;
+  font-size:18px;
 }
 .result-form-suc{
   background:url(../images/success-text.png) no-repeat center top;
@@ -948,6 +957,14 @@ span.lpn-ghost {
     top:243px;
     left:275px;
     color:#eb151f;
+}
+.result-form-submited {
+    position: absolute;
+    top:203px;
+    font-size:36px;
+    color:#fff;
+    width:88%;
+    text-align: center;
 }
 
 .ranking {
@@ -1760,6 +1777,7 @@ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
 /*for fancy-slider-wrap img-wrap */
 .fancy-slider-mask{
   z-index: 2000000;
+    background: #000;
 }
 .fancy-slider-mask .lpn-panel{
   width: 100%;

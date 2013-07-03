@@ -16,6 +16,10 @@ define(function(require, exports, module) {
             return obj[$1] === undefined || obj[$1] === false ? "" : obj[$1];
         });
     };
+    if(!navigator.userAgent.toLowerCase().match(/iphone/i))
+    {
+        $('body').addClass('andriod');
+    }
 
     document.ontouchmove = function(e){
         e.preventDefault();
@@ -228,7 +232,7 @@ define(function(require, exports, module) {
                 if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    var isWin = time >= 3 * 60 * 1000;
+                    var isWin = time >= .3 * 60 * 1000;
                     game.over( isWin );
 
                     var r = {};
@@ -379,7 +383,7 @@ define(function(require, exports, module) {
             init: function( $resultPanel ){
 
                 // fille the form
-                $('#G_fill-form').on( eventName , function(){
+                $('#G_fill-form').on( 'click' , function(){
                     $(this).closest('.result-con')
                         .find('.result-form-suc')
                         .hide()
@@ -412,12 +416,15 @@ define(function(require, exports, module) {
                         address: "请输入地址"
                     },
                     submitHandler: function (form) {
+                        $('.btn-submit').fadeOut();
                         $.ajax({
                             url: "../data/public/index.php/home/register",
                             dataType: "JSON",
                             type: "POST",
                             data: $(form).serialize(),
                             success: function(res){
+
+                                $('.btn-submit').fadeIn();
                                 if(res.code == 200){
                                     var result = panelData.result;
                                     //result.time = 8338367;
@@ -435,7 +442,7 @@ define(function(require, exports, module) {
                                     var _name = res.data.attributes.name;
                                     var _uid = res.data.attributes.uid;
                                     $.ajax({
-                                        url: "data/public/index.php/home/record",
+                                        url: "../data/public/index.php/home/record",
                                         dataType: "JSON",
                                         type: "POST",
                                         data: {uid:_uid, time:_time,distance:_distance,status:_status,name:_name},
@@ -447,7 +454,7 @@ define(function(require, exports, module) {
                                         .parent()
                                         .children()
                                         .hide()
-                                        .filter('.result-form-suc')
+                                        .filter('.result-form-suc2')
                                         .fadeIn();
                                 }
                                 else
@@ -495,7 +502,7 @@ define(function(require, exports, module) {
                 $resultPanel.find('.result-con')
                     .children()
                     .hide()
-                    .filter( isWin ? '.result-tit,.result-form' : '.result-failure')
+                    .filter( isWin ? '.result-form-suc' : '.result-failure')
                     .fadeIn();
 
                 var _time = result.time;
@@ -554,8 +561,30 @@ define(function(require, exports, module) {
             onShow: function( $rankingPanel ){
                 pause();
                 // Get list
+                var _date = new Date();
+                var _month = _date.getMonth()+1;
+                $('#ranking-month .btn').remove();
+                for(var i = 6; i <= _month; i++)
+                {
+                    $('#ranking-month').append('<div data-month="'+i+'" class="btn">'+i+'月份<div class="btn-r"></div></div>');
+                }
+                $('#ranking-month .btn').last().addClass('selected');
+                $('#ranking-month .btn').click(function(){
+                    var _month = $(this).attr('data-month');
+                    $('#ranking-month .btn').removeClass('selected');
+                    $(this).addClass('selected');
+                    $.ajax({
+                        url: "../data/public/index.php/home/getrecord",
+                        data: {'m':_month},
+                        dataType: "JSON",
+                        success: function(res){
+                            _renderList( res.data );
+                        }
+                    });
+                });
                 $.ajax({
                     url: "../data/public/index.php/home/getrecord",
+                    data: {'m':_month},
                     dataType: "JSON",
                     success: function(res){
                         _renderList( res.data );
