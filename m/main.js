@@ -204,6 +204,7 @@ define(function(require, exports, module) {
             */
 
             p2 = Math.min( Math.max( ( p1 - p ) * 300 + minLeft  , minLeft ) , 300 / 2 + minLeft ) - minLeft ;
+            console.log( minLeft + Math.min( p2  , 300 / 2 ) );
             $carDot.css('left' , minLeft + Math.min( p2  , 300 / 2 ) );
             // change robot dot position
 
@@ -660,11 +661,39 @@ define(function(require, exports, module) {
                 var $thumbImg = null;
                 var $imgWrap = null;
                 var $currBigImgWrap = null;
+                var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
+                var videoTpl = '<section class="lpn-mask">\
+                                <span class="lpn-ghost"></span>\
+                                <div class="lpn-panel">\
+                                    <div class="r-close"></div>\
+                                    <div class="fancy-video-wrap">\
+                                    <video width="455" height="216" controls><source type="video/mp4" /></video>\
+                                    </div>\
+                                </div>\
+                                </section>';
+                var $videoMask = null;
+                var showVideo = function( $img ){
+                    if( !$videoMask ){
+                        $videoMask = $(videoTpl).appendTo( document.body )
+                            .find('.r-close')
+                            .on( eventName , function(){
+                                $videoMask.fadeOut()
+                                    .find('video')[0]
+                                    .pause();
+                            } )
+                            .end();
+                    }
+                    var videoSrc = $img.parent().attr('href');
+                    var video = $videoMask.fadeIn( )
+                        .find('source')
+                        .attr('src' , videoSrc )
+                        .parent()[0];
+                    video.load();
+                    video.play();
+                }
 
                 var showImage = function( $img ){
                     if( !$fancybox ){ // create $fancybox
-                        var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
-
                         $fancybox = $(tpl).appendTo( document.body )
                             .find('.r-close')
                             .on( eventName , function(){
@@ -703,7 +732,7 @@ define(function(require, exports, module) {
 //                                $shareCon.find('.douban')
 //                                    .attr('href' , 'http://shuo.douban.com/!service/share?name='+title+'&url=' + url + '&pic=' + pic);
 //                            })
-                            .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&url=http://50years911.porsche-events.cn&pic=http://50years911.porsche-events.cn/' + $(this).attr('src'))
+                            //.attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&url=http://50years911.porsche-events.cn&pic=http://50years911.porsche-events.cn/' + $currBigImgWrap.find('img').attr('src'))
                             .end()
                             .find( '.r-share-close' )
                             .on( eventName , function(){
@@ -743,6 +772,7 @@ define(function(require, exports, module) {
                                 })
                             });
                     }
+
                     $fancybox.fadeIn();
                     $imgWrap.html('');
 
@@ -750,6 +780,9 @@ define(function(require, exports, module) {
                     var $bigImgWrap = bigImgLoad( $img , function(){
                         $bigImgWrap.appendTo( $imgWrap );
                         afterShowImg( $bigImgWrap );
+                        // set share btn
+                    $fancybox.find( '.r-share' )
+                        .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&url=http://50years911.porsche-events.cn&pic=http://50years911.porsche-events.cn/' + $currBigImgWrap.find('img').attr('src'));
                     } );
                 }
                 var getThumbPhotoWrap = function( $big ){
@@ -854,8 +887,11 @@ define(function(require, exports, module) {
                 $gallery.on('click' , '.photo a' , function(){
                     return false;
                 });
-                $gallery.on('click' , '.photo img' , function(){
+                $gallery.on('click' , '.photo-gallery .photo img' , function(){
                     showImage( $(this) );
+                });
+                $gallery.on('click' , '.video-gallery .photo img' , function(){
+                    showVideo( $(this) );
                 });
 
 
@@ -1030,7 +1066,7 @@ define(function(require, exports, module) {
             .fadeIn()
             .css('left' , 36 )
             .animate({
-              'left': 300 / 2
+              'left': 36 + 300 / 2
             } , dur , 'easeInQuart');
 
         var $wheels = index == 0 ? $car1Wheels : $car2Wheels;
@@ -1384,10 +1420,12 @@ define(function(require, exports, module) {
         } );
 
         // run the car dot
+        /*
         $robotDot
             .animate({
                 'marginLeft' : 235 * robotStartDistancePercent - 11
             } , time );
+        */
     }
     // save road cache
 
@@ -1430,18 +1468,5 @@ define(function(require, exports, module) {
         $('.main-metas').animate({left:'50%'},500,'easeInOutQuart');
     });
 
-   function showVideo( id , src , w , h ){
-    src = src.replace(/\.[^.]+$/ , '.mp4');
-    initVideo( id , src , w , h );
-   }
-   var initVideo = function( id , src , w , h ){
-    var $wrap = $( '#' + id );
-    var $video = $('<video width="' + w + '" height="' + h + '" controls><source src="' + src + '" type="video/mp4" /></video>');
-    $video.appendTo( $wrap )
-      .on('ended' , function(){
-        window.playfinished();
-      });
-    $video[0].play();
-   }
 });
 
