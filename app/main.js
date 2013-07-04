@@ -447,7 +447,7 @@ define(function(require, exports, module) {
                 if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    var isWin = time >= 3 * 60 * 1000;
+                    var isWin = time >= .1 * 60 * 1000;
                     game.over( isWin );
 
                     var r = {};
@@ -608,22 +608,27 @@ define(function(require, exports, module) {
                             required: true,
                             number: true
                         },
-                        address: "required"
+                        address: "required",
+                        authcode: "required"
                     },
                     messages: {
                         email: "请输入正确的邮箱",
                         name: "请输入姓名",
                         tel: "请输入正确的手机号",
                         code: "请输入正确的邮编",
-                        address: "请输入地址"
+                        address: "请输入地址",
+                        authcode: "请输入验证码"
                     },
                     submitHandler: function (form) {
+                        $('.btn-submit').fadeOut();
+                        $('.autherror').fadeOut();
                         $.ajax({
                             url: "data/public/index.php/home/register",
                             dataType: "JSON",
                             type: "POST",
                             data: $(form).serialize(),
                             success: function(res){
+                                $('.btn-submit').fadeIn();
                                 if(res.code == 200){
                                     var result = panelData.result;
                                     //result.time = 8338367;
@@ -663,6 +668,10 @@ define(function(require, exports, module) {
                                         {
                                             $('.result-form-exist').fadeIn();
                                         }
+                                    }
+
+                                    if(res.code == 501){
+                                        $('.autherror').fadeIn();
                                     }
 
                                 }
@@ -732,6 +741,11 @@ define(function(require, exports, module) {
                     $times.each(function( i ,dom ){
                         this.className = 'time' + (i+1) + ' time' + (i%2?1:0) + str[i];
                     });
+                });
+                var $authcode = $resultPanel.find('.authcode img');
+                $authcode.attr('src',$authcode.attr('src')+'?'+new Date().getTime());
+                $resultPanel.find('.authcode a').click(function(){
+                    $authcode.attr('src',$authcode.attr('src')+'?'+new Date().getTime());
                 });
             }
         },

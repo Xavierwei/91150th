@@ -764,6 +764,15 @@ span.lpn-ghost {
   position: relative;
 }
 
+.result-form label.authcode {
+    position: absolute;
+    left:130px;bottom:45px;
+}
+
+.result-form label.authcode input {width:65px;}
+.result-form label.authcode * {float:left;margin:0 6px 0 0;}
+.result-form label.authcode .autherror {color:#ae1615;display:none;}
+.result-form label.authcode label.error {left:196px;width:140px;text-align: left;}
 .result-form input{
   width: 170px;
   padding: 4px 0 4px 7px;
