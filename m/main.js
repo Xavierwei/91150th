@@ -662,6 +662,13 @@ define(function(require, exports, module) {
                 var $imgWrap = null;
                 var $currBigImgWrap = null;
                 var sharecopy = '%23911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%23+%e6%88%91%e6%ad%a3%e5%9c%a8%e6%b5%8f%e8%a7%88%e4%bf%9d%e6%97%b6%e6%8d%b7911%e4%ba%94%e5%8d%81%e5%91%a8%e5%b9%b4%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%a0%e4%b9%9f%e6%9d%a5%e7%9c%8b%e7%9c%8b%e5%90%a7%ef%bc%81';
+                var refreshShareUrl = function( ){
+                    // set share btn
+                    $fancybox.find( '.r-share' )
+                        .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+
+                            sharecopy+'&url=http://50years911.porsche-events.cn&pic=http://50years911.porsche-events.cn/' +
+                            $currBigImgWrap.find('img').attr('src'));
+                }
                 var videoTpl = '<section class="lpn-mask">\
                                 <span class="lpn-ghost"></span>\
                                 <div class="lpn-panel">\
@@ -780,9 +787,6 @@ define(function(require, exports, module) {
                     var $bigImgWrap = bigImgLoad( $img , function(){
                         $bigImgWrap.appendTo( $imgWrap );
                         afterShowImg( $bigImgWrap );
-                        // set share btn
-                    $fancybox.find( '.r-share' )
-                        .attr('href' , 'http://v.t.sina.com.cn/share/share.php?title='+sharecopy+'&url=http://50years911.porsche-events.cn&pic=http://50years911.porsche-events.cn/' + $currBigImgWrap.find('img').attr('src'));
                     } );
                 }
                 var getThumbPhotoWrap = function( $big ){
@@ -802,6 +806,8 @@ define(function(require, exports, module) {
                         .find(".slider-right")
                         [ $photo.next().length ?
                         "show" : "hide"]();
+                    // refresh share url
+                    refreshShareUrl();
                 }
                 var getNextImg = function(){
                     var $next = getThumbPhotoWrap($currBigImgWrap).next();
