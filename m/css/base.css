@@ -124,7 +124,10 @@ span.lpn-ghost {
     -moz-transform: scale(0.8);
     -webkit-transform: scale(0.8);
     padding-top:0px;
+    overflow:visible;
 }
+
+.andriod #ranking-mask .lpn-panel .r-close,.andriod #gallery-mask .lpn-panel .r-close,.andriod #result-mask .lpn-panel .r-close,.andriod #rule-mask .lpn-panel .r-close{top:-62px;}
 .lpn-panel .r-close{
   background: url(../images/result_close.png) no-repeat;
   position: absolute;
@@ -900,25 +903,33 @@ span.lpn-ghost {
   background: black;
   border: none;
   color: #9d9d9d;
-  width: 290px;
+  width: 180px;
   font-size:18px;
 }
 .result-form > label{
   position: absolute;
   left: 64px;
+    top: -3px;
 }
 .result-form label[for="tel"]{
   top: 88px;
 }
 .result-form label[for="email"]{
-  top: 180px;
+    left: 622px;
+    top: -3px;
 }
 .result-form label[for="code"]{
-  left: 500px;
+  left: 350px;
+    top: -3px;
 }
 .result-form label[for="address"]{
-  left: 500px;
-  top: 88px;
+    left: 350px;
+    top: 88px;
+}
+.result-form label[for="authcode"]{
+    left: 665px;
+    top: 88px;
+    font-size:18px;
 }
 .result-form label label.error{
   position: absolute;
@@ -928,6 +939,12 @@ span.lpn-ghost {
   color: #c90000;
   font-size:18px;
 }
+
+.result-form label.authcode input {width:120px;}
+.result-form label.authcode * {text-align:left;margin:0 6px 3px 0;}
+.result-form label.authcode .autherror {color:#ae1615;display:none;}
+.result-form label.authcode label.error {top:125px;width:140px;text-align: left;}
+
 .result-form-suc{
   background:url(../images/success-text.png) no-repeat center top;
   width: 625px;
@@ -1041,6 +1058,8 @@ span.lpn-ghost {
 .ranking .r-list-l tr:nth-child(3){
   color: red;
 }
+
+.ranking .validation {position: absolute;bottom:20px;right:46px;font-size:18px;}
 /*
 .result .r-slider,.ranking .r-slider{
   position: absolute;
@@ -1771,6 +1790,10 @@ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
     -ms-transform: skew(20deg);
     -o-transform: skew(20deg);
     transform: skew(20deg);}
+
+.video-panel {width:100%;height:100%;background:#000;}
+.video-panel .r-close {background:url(../images/gallery_close.png) no-repeat;width:160px;height:62px;}
+
 
 #gallery-mask .video-gallery .photo:hover span {-webkit-transform: skew(0,0);transform: skew(0,0);}
 

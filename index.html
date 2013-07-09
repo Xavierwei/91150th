@@ -176,6 +176,15 @@
             <div class="photo">
                 <a rel="gallery" href="pic/g2/b4.jpg"><img src="pic/g2/s4.jpg" /></a>
             </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b5.jpg"><img src="pic/g2/s5.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b6.jpg"><img src="pic/g2/s6.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g2/b7.jpg"><img src="pic/g2/s7.jpg" /></a>
+            </div>
         </div>
         <!--\\gallery2-->
 
@@ -193,6 +202,13 @@
           </div>
           <div class="photo">
               <a rel="gallery" href="pic/g3/b4.jpg"><img src="pic/g3/s4.jpg" /></a>
+          </div>
+
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b5.jpg"><img src="pic/g3/s5.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g3/b6.jpg"><img src="pic/g3/s6.jpg" /></a>
           </div>
       </div>
       <!--\\gallery3-->
@@ -213,6 +229,15 @@
           <div class="photo">
               <a rel="gallery" href="pic/g4/b4.jpg"><img src="pic/g4/s4.jpg" /></a>
           </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b5.jpg"><img src="pic/g4/s5.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b6.jpg"><img src="pic/g4/s6.jpg" /></a>
+          </div>
+          <div class="photo">
+              <a rel="gallery" href="pic/g4/b7.jpg"><img src="pic/g4/s7.jpg" /></a>
+          </div>
       </div>
       <!--\\gallery4-->
 
@@ -230,6 +255,16 @@
             </div>
             <div class="photo">
                 <a rel="gallery" href="pic/g5/b4.jpg"><img src="pic/g5/s4.jpg" /></a>
+            </div>
+
+            <div class="photo">
+                <a rel="gallery" href="pic/g5/b5.jpg"><img src="pic/g5/s5.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g5/b6.jpg"><img src="pic/g5/s6.jpg" /></a>
+            </div>
+            <div class="photo">
+                <a rel="gallery" href="pic/g5/b7.jpg"><img src="pic/g5/s7.jpg" /></a>
             </div>
         </div>
         <!--\\gallery5-->
@@ -473,6 +508,10 @@
     <script type="text/javascript" src="./src/jquery-plugin/easing/jquery.easing.1.3.js"></script>
     <script type="text/javascript" src="./src/jquery-plugin/jquery.queryloader22.js"></script>
     <script type="text/javascript">
+    if(($('.touch').length > 0) && $(window).width() < 700)
+    {
+        window.location.href="m/";
+    }
     // query loading
     var $probar = $('#process-bar');
     var $pronum = $('#process-num');

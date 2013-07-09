@@ -407,17 +407,20 @@ define(function(require, exports, module) {
                             required: true,
                             number: true
                         },
-                        address: "required"
+                        address: "required",
+                        authcode: "required"
                     },
                     messages: {
                         email: "请输入正确的邮箱",
                         name: "请输入姓名",
                         tel: "请输入正确的手机号",
                         code: "请输入正确的邮编",
-                        address: "请输入地址"
+                        address: "请输入地址",
+                        authcode: "请输入验证码"
                     },
                     submitHandler: function (form) {
                         $('.btn-submit').fadeOut();
+                        $('.autherror').fadeOut();
                         $.ajax({
                             url: "../data/public/index.php/home/register",
                             dataType: "JSON",
@@ -465,6 +468,10 @@ define(function(require, exports, module) {
                                         {
                                             $('.result-form-exist').fadeIn();
                                         }
+                                    }
+
+                                    if(res.code == 501){
+                                        $('.autherror').fadeIn();
                                     }
 
                                 }
@@ -535,6 +542,11 @@ define(function(require, exports, module) {
                         this.className = 'time' + (i+1) + ' time' + (i%2?1:0) + str[i];
                     });
                 });
+                var $authcode = $resultPanel.find('.authcode img');
+                $authcode.attr('src',$authcode.attr('src')+'?'+new Date().getTime());
+                $resultPanel.find('.authcode a').click(function(){
+                    $authcode.attr('src',$authcode.attr('src')+'?'+new Date().getTime());
+                })
             }
         },
         'ranking-panel' : {
@@ -671,10 +683,10 @@ define(function(require, exports, module) {
                 }
                 var videoTpl = '<section class="lpn-mask">\
                                 <span class="lpn-ghost"></span>\
-                                <div class="lpn-panel">\
+                                <div class="lpn-panel video-panel">\
                                     <div class="r-close"></div>\
                                     <div class="fancy-video-wrap">\
-                                    <video width="455" height="216" controls><source type="video/mp4" /></video>\
+                                    <video width="100%" height="100%" controls><source type="video/mp4" /></video>\
                                     </div>\
                                 </div>\
                                 </section>';
@@ -748,7 +760,17 @@ define(function(require, exports, module) {
                             })
                             .end();
                         $imgWrap = $fancybox.find('.img-wrap');
-
+                        $imgWrap.on('touchstart',function(){
+                           $desc = $(this).find('.desc');
+                           if($desc.css('display') != 'none')
+                           {
+                               $desc.fadeOut();
+                           }
+                           else
+                           {
+                               $desc.fadeIn();
+                           }
+                        });
 
                         // init swip
                         initSwipEvent( $fancybox.find('.fancy-slider-wrap') ,
@@ -930,7 +952,7 @@ define(function(require, exports, module) {
                     }
                     $dom.on('touchstart' , function( ev ){
                         mevent( ev );
-                    })
+                    });
                 }
 
                 var cacheData = {};
