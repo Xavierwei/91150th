@@ -23,16 +23,21 @@ define(function(require, exports, module) {
 
     document.ontouchmove = function(e){
         e.preventDefault();
-        setTimeout( function () {
-            window.scrollTo( 0, 1 );
-        }, 0 );
+        if($('form').length == 0)
+        {
+            setTimeout( function () {
+                window.scrollTo( 0, 1 );
+            }, 0 );
+        }
     }
 
     $(window).on('touchstart', function(){
-        setTimeout( function () {
-            window.scrollTo( 0, 1 );
-        }, 0 );
-
+        if($('form').length == 0)
+        {
+            setTimeout( function () {
+                window.scrollTo( 0, 1 );
+            }, 0 );
+        }
     });
 
     $(window).on('resize', function(){
@@ -42,24 +47,17 @@ define(function(require, exports, module) {
             var height = $(window).height();
             $('body').height(height+125);
         }
-        setTimeout( function () {
-            window.scrollTo( 0, 1 );
-        }, 0 );
+        if($('form').length == 0)
+        {
+            setTimeout( function () {
+                window.scrollTo( 0, 1 );
+            }, 0 );
+        }
 
     });
     $(window).resize();
 
-    $(window).on('orientationchange', function(){
-        if(window.orientation == 0)
-        {
-            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=device-width');
-        }
-        else
-        {
-            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=960');
-        }
-    });
-    $(window).trigger('orientationchange');
+
 
     var eventName = 'touchstart';
     // ---------------------------------------------------------
@@ -136,6 +134,8 @@ define(function(require, exports, module) {
     var isBigThan100 = false;
 
     var minLeft = 36;
+
+
     game.setConfig({
         duration  : 2000
         , maxSpeed : GAME_MAX_SPEED
@@ -204,7 +204,7 @@ define(function(require, exports, module) {
             */
 
             p2 = Math.min( Math.max( ( p1 - p ) * 300 + minLeft  , minLeft ) , 300 / 2 + minLeft ) - minLeft ;
-            console.log( minLeft + Math.min( p2  , 300 / 2 ) );
+            //console.log( minLeft + Math.min( p2  , 300 / 2 ) );
             $carDot.css('left' , minLeft + Math.min( p2  , 300 / 2 ) );
             // change robot dot position
 
@@ -233,7 +233,7 @@ define(function(require, exports, module) {
                 if( dur > GAME_MAX_DISTANCE
                     // or the game is not running ,this used to computer controll the game
                     || status.result !=-1 ){
-                    var isWin = time >= .3 * 60 * 1000;
+                    var isWin = time >= 3 * 60 * 1000;
                     game.over( isWin );
 
                     var r = {};
@@ -1022,7 +1022,8 @@ define(function(require, exports, module) {
     }
     var gameOver = function( result , isWin){
         // show spirit panel
-        showPanel( panelConfigs['spirit-panel'] , {result:result , isWin:isWin} );
+        //showPanel( panelConfigs['spirit-panel'] , {result:result , isWin:isWin} );
+        showPanel( panelConfigs['result-panel'] ,  {result:result , isWin:isWin} );
         $('.follow_sina').fadeIn();
 
         // Save record
@@ -1237,7 +1238,7 @@ define(function(require, exports, module) {
     var $cars = $('.main-cars .car');
     var $car1Wheels = $cars.eq(0).find('.front-wheel,.end-wheel');
     var $car2Wheels = $cars.eq(1).find('.front-wheel,.end-wheel');
-    var car1width = $cars.eq(0).width() , car2width = $cars.eq(1).width();
+    var car1width = $cars.eq(0).width() , car2width = 921;
 
     var $speedBoard = $('#speed-board');
     var $bar = $('#b-bar');
@@ -1496,5 +1497,18 @@ define(function(require, exports, module) {
         $('.main-metas').animate({left:'50%'},500,'easeInOutQuart');
     });
 
+    $(window).on('orientationchange', function(){
+        if(window.orientation == 0)
+        {
+            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=device-width');
+        }
+        else
+        {
+            $('meta[name=viewport]').attr('content', 'initial-scale=0.5,user-scalable=yes,maximum-scale=0.5,width=960');
+
+
+        }
+    });
+    $(window).trigger('orientationchange');
 });
 
